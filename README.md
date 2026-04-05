@@ -1,2 +1,5 @@
-# blooket
-this is gonna be where my blooket cheat is gonna be
+---------------------
+
+# super secret website
+
+made by voided43566 on discord
