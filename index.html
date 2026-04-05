@@ -1648,6 +1648,8 @@ function updateStatusUI(s){
   if(s.running&&s.time_left!=null)checkAutoStopWarning(s.time_left);
   if(!s.running){_warnedAt5=false;_warnedAt1=false}
 }
+
+function refreshPanel(){
   if(curPage==="dashboard")loadBots();
   else if(curPage==="workspace"){
     if(curWsTab==="commands")loadCommands();
