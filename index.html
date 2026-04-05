@@ -221,6 +221,14 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
 .fn-desc{font-size:11.5px;color:var(--muted);line-height:1.5}
 .fn-cat{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:5px}
 .fn-cat-header{font-family:var(--fh);font-size:13px;font-weight:700;color:var(--muted2);margin:16px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--border)}
+.var-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 13px;cursor:pointer;transition:all .13s;display:flex;flex-direction:column;gap:3px}
+.var-card:hover{border-color:var(--accent);background:var(--surface2)}
+.var-card .vc-name{font-family:var(--fm);font-size:12px;color:var(--cyan);font-weight:500}
+.var-card .vc-desc{font-size:11.5px;color:var(--muted);line-height:1.45}
+.var-card .vc-ex{font-size:10.5px;color:var(--muted2);font-family:var(--fm);margin-top:2px;opacity:.8}
+.char-counter{font-size:11px;color:var(--muted);text-align:right;margin-top:4px}
+.char-counter.warn{color:var(--amber)}
+.char-counter.over{color:var(--red)}
 
 /* ── Fn popup ── */
 .fn-popup{max-width:520px}
@@ -465,6 +473,7 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
         <div class="ws-tab active" data-panel="overview" onclick="switchWsTab('overview')">Overview</div>
         <div class="ws-tab" data-panel="commands" onclick="switchWsTab('commands')">Commands</div>
         <div class="ws-tab" data-panel="functions" onclick="switchWsTab('functions')">Functions</div>
+        <div class="ws-tab" data-panel="variables" onclick="switchWsTab('variables')">Variables</div>
         <div class="ws-tab" data-panel="botsettings" onclick="switchWsTab('botsettings')">Bot Settings</div>
         <div class="ws-tab" data-panel="logs" onclick="switchWsTab('logs')">Logs</div>
       </div>
@@ -493,7 +502,14 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
         <div class="ws-panel" id="panel-commands">
           <div class="cmd-toolbar">
             <div><h3>Commands</h3><p>Edits apply live if bot is running.</p></div>
-            <button class="btn btn-primary btn-sm" onclick="openCmdEditor(null)">+ New Command</button>
+            <div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center">
+              <input class="input" id="cmd-search" placeholder="Search…" style="width:160px;padding:5px 10px;font-size:12px" oninput="filterCmds()">
+              <div style="position:relative">
+                <button class="btn btn-ghost btn-sm" onclick="toggleTemplates()">Templates ▾</button>
+                <div id="templates-menu" class="hidden" style="position:absolute;top:110%;right:0;background:var(--surface);border:1px solid var(--border2);border-radius:6px;z-index:50;min-width:210px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.4)"></div>
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="openCmdEditor(null)">+ New</button>
+            </div>
           </div>
           <div id="cmd-list" class="cmd-list"></div>
           <div id="cmd-editor" class="cmd-editor hidden">
@@ -512,13 +528,15 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
             </div>
             <div class="field">
               <label class="lbl">Response</label>
-              <textarea class="textarea" id="e-response" rows="5" placeholder="Hey {user}! Welcome to {server}."></textarea>
+              <textarea class="textarea" id="e-response" rows="5" placeholder="Hey {user}! Welcome to {server}." oninput="updCharCount()"></textarea>
+              <div class="char-counter" id="char-counter">0 chars</div>
               <div id="simple-chips"><div style="color:var(--muted);font-size:11px;margin-top:6px">Click to insert:</div><div class="var-chips"><span class="chip" onclick="insVar('{user}')">{user}</span><span class="chip" onclick="insVar('{username}')">{username}</span><span class="chip" onclick="insVar('{mention}')">{mention}</span><span class="chip" onclick="insVar('{server}')">{server}</span><span class="chip" onclick="insVar('{channel}')">{channel}</span><span class="chip" onclick="insVar('{members}')">{members}</span></div></div>
               <div id="bds-hint" class="hidden" style="font-size:11.5px;color:var(--muted);margin-top:7px">Use the <strong style="color:var(--cyan)">Functions</strong> tab to browse all available functions. Click any to open details and insert.</div>
             </div>
             <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:4px">
               <button class="btn btn-primary btn-sm" onclick="saveCommand()">Save command</button>
               <button class="btn btn-ghost btn-sm" onclick="closeCmdEditor()">Cancel</button>
+              <button class="btn btn-ghost btn-sm hidden" id="dup-cmd-btn" onclick="dupCmd()">Duplicate</button>
               <button class="btn btn-danger btn-sm hidden" id="del-cmd-btn" onclick="deleteCmd()">Delete</button>
             </div>
           </div>
@@ -540,6 +558,40 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
           </div>
           <div class="fn-search-wrap"><span class="si">🔍</span><input class="input" id="fn-search" placeholder="Search functions…" oninput="renderFns()"></div>
           <div id="fn-grid"></div>
+        </div>
+
+        <!-- Variables -->
+        <div class="ws-panel" id="panel-variables">
+          <h3 style="font-family:var(--fh);font-size:17px;font-weight:700;margin-bottom:4px">Variables</h3>
+          <p style="color:var(--muted);font-size:12px;margin-bottom:18px">All available variables you can use in command responses. Click any to insert into the editor.</p>
+
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px">
+            <div class="badge b-muted" style="cursor:pointer" onclick="filterVars('simple')">Simple</div>
+            <div class="badge b-cyan" style="cursor:pointer" onclick="filterVars('bds')">BDScript vars</div>
+            <div class="badge b-amber" style="cursor:pointer" onclick="filterVars('local')">Local ($let)</div>
+          </div>
+
+          <div id="var-simple-section">
+            <div class="fn-cat-header">Simple template variables — use in Simple script mode</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:7px;margin-bottom:20px" id="simple-var-grid"></div>
+          </div>
+
+          <div id="var-bds-section">
+            <div class="fn-cat-header">BDScript no-argument variables — available in BDScript and BDScript 2</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:7px;margin-bottom:20px" id="bds-var-grid"></div>
+          </div>
+
+          <div id="var-local-section">
+            <div class="fn-cat-header">Local variables — store and reuse values within one response</div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-bottom:14px">
+              <div style="font-size:13px;font-weight:600;margin-bottom:10px;font-family:var(--fh)">How local variables work</div>
+              <p style="color:var(--muted);font-size:12.5px;line-height:1.75;margin-bottom:12px">Local variables only exist within one command response. Use them to store calculated values so you don't have to repeat the expression.</p>
+              <div class="fp-ex">$let[score;$random[1;100]]
+Your score is $get[score] out of 100.
+$if[$get[score]>80;Amazing!;Keep trying!]</div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:7px" id="local-var-grid"></div>
+          </div>
         </div>
 
         <!-- Bot Settings -->
@@ -771,6 +823,7 @@ function switchWsTab(tab){
   if(tab==="logs"){loadLogs();startLogPoll()}else stopLogPoll();
   if(tab==="overview")loadStatus();
   if(tab==="functions")renderFns();
+  if(tab==="variables")initVarsTab();
 }
 
 /* ── Auth ── */
@@ -961,24 +1014,42 @@ function renderCmds(cmds){
   cmds.forEach(cmd=>{
     const row=document.createElement("div");row.className="cmd-row"+(cmd.enabled?"":" off");
     const st=cmd.script_type||"simple";
-    row.innerHTML=`<div class="cmd-trig">${esc(currentBot.prefix||"!")}${esc(cmd.trigger)}</div><div class="cmd-desc">${esc(cmd.description||cmd.response)}</div><div style="display:flex;gap:5px;align-items:center;flex-shrink:0">${SBADGE[st]||SBADGE.simple} ${cmd.enabled?'<span class="badge b-green">on</span>':'<span class="badge b-muted">off</span>'}</div><div class="cmd-acts"><button class="btn btn-ghost btn-xs" onclick="openCmdEditor(${JSON.stringify(cmd.id)})">Edit</button><button class="btn btn-ghost btn-xs" onclick="toggleCmd(${JSON.stringify(cmd.id)},${cmd.enabled?0:1})">${cmd.enabled?"Disable":"Enable"}</button></div>`;
+    const sid=String(cmd.id);
+    row.innerHTML=`<div class="cmd-trig">${esc(currentBot.prefix||"!")}${esc(cmd.trigger)}</div><div class="cmd-desc">${esc(cmd.description||cmd.response)}</div><div style="display:flex;gap:5px;align-items:center;flex-shrink:0">${SBADGE[st]||SBADGE.simple} ${cmd.enabled?'<span class="badge b-green">on</span>':'<span class="badge b-muted">off</span>'}</div><div class="cmd-acts"><button class="btn btn-ghost btn-xs" data-act="edit" data-id="${esc(sid)}">Edit</button><button class="btn btn-ghost btn-xs" data-act="toggle" data-id="${esc(sid)}" data-en="${cmd.enabled?0:1}">${cmd.enabled?"Disable":"Enable"}</button></div>`;
     el.appendChild(row);
+  });
+  el.querySelectorAll("[data-act]").forEach(btn=>{
+    btn.addEventListener("click",e=>{
+      e.stopPropagation();
+      const act=btn.dataset.act,cid=btn.dataset.id;
+      if(act==="edit")openCmdEditor(cid);
+      else if(act==="toggle")toggleCmd(cid,parseInt(btn.dataset.en));
+    });
   });
 }
 
 function openCmdEditor(cmdId){
-  editingCmdId=cmdId;
-  const editor=id("cmd-editor"),title=id("editor-title"),delBtn=id("del-cmd-btn");
+  editingCmdId=cmdId||null;
+  const editor=id("cmd-editor"),title=id("editor-title");
+  const delBtn=id("del-cmd-btn"),dupBtn=id("dup-cmd-btn");
   editor.classList.remove("hidden");
   if(!cmdId){
     title.textContent="New Command";
     id("e-trigger").value="";id("e-response").value="";id("e-desc").value="";
-    delBtn.classList.add("hidden");switchStype("simple");
+    delBtn.classList.add("hidden");dupBtn.classList.add("hidden");
+    switchStype("simple");
   }else{
-    title.textContent="Edit Command";delBtn.classList.remove("hidden");
-    const cmd=getCmds().find(c=>c.id===cmdId);
-    if(cmd){id("e-trigger").value=cmd.trigger;id("e-response").value=cmd.response;id("e-desc").value=cmd.description||"";switchStype(cmd.script_type||"simple")}
+    title.textContent="Edit Command";
+    delBtn.classList.remove("hidden");dupBtn.classList.remove("hidden");
+    const cmd=getCmds().find(c=>String(c.id)===String(cmdId));
+    if(cmd){
+      id("e-trigger").value=cmd.trigger;
+      id("e-response").value=cmd.response;
+      id("e-desc").value=cmd.description||"";
+      switchStype(cmd.script_type||"simple");
+    }
   }
+  updCharCount();
   editor.scrollIntoView({behavior:"smooth",block:"nearest"});
 }
 function closeCmdEditor(){id("cmd-editor").classList.add("hidden");editingCmdId=null}
@@ -1026,12 +1097,12 @@ async function saveCommand(){
     if(online){
       try{
         const res=await api("/commands/"+editingCmdId,{method:"PUT",body:JSON.stringify(data)});
-        const updated=lc.map(c=>c.id===editingCmdId?{...c,...data,updated_at:res.updated_at}:c);
+        const updated=lc.map(c=>String(c.id)===String(editingCmdId)?{...c,...data,updated_at:res.updated_at}:c);
         setCmds(updated);renderCmds(updated);closeCmdEditor();toast("Command updated!","ok");
       }catch(e){toast(e.message,"err")}
     }else{
       const now=new Date().toISOString();
-      const updated=lc.map(c=>c.id===editingCmdId?{...c,...data,updated_at:now}:c);
+      const updated=lc.map(c=>String(c.id)===String(editingCmdId)?{...c,...data,updated_at:now}:c);
       setCmds(updated);enq({action:"UPDATE_CMD",data:{id:editingCmdId,...data}});
       renderCmds(updated);closeCmdEditor();toast("Saved offline — will sync when reconnected","info");
     }
@@ -1039,107 +1110,290 @@ async function saveCommand(){
 }
 
 async function toggleCmd(cmdId,enabled){
-  const lc=getCmds(),cmd=lc.find(c=>c.id===cmdId);if(!cmd)return;
+  const lc=getCmds(),cmd=lc.find(c=>String(c.id)===String(cmdId));if(!cmd)return;
   const data={trigger:cmd.trigger,response:cmd.response,description:cmd.description,script_type:cmd.script_type||"simple",enabled};
   if(online){
-    try{await api("/commands/"+cmdId,{method:"PUT",body:JSON.stringify(data)});const u=lc.map(c=>c.id===cmdId?{...c,enabled}:c);setCmds(u);renderCmds(u)}
+    try{await api("/commands/"+cmdId,{method:"PUT",body:JSON.stringify(data)});const u=lc.map(c=>String(c.id)===String(cmdId)?{...c,enabled}:c);setCmds(u);renderCmds(u)}
     catch(e){toast(e.message,"err")}
   }else{
-    const u=lc.map(c=>c.id===cmdId?{...c,enabled}:c);setCmds(u);enq({action:"UPDATE_CMD",data:{id:cmdId,...data}});renderCmds(u);toast("Saved offline","info");
+    const u=lc.map(c=>String(c.id)===String(cmdId)?{...c,enabled}:c);setCmds(u);enq({action:"UPDATE_CMD",data:{id:cmdId,...data}});renderCmds(u);toast("Saved offline","info");
   }
 }
 
 async function deleteCmd(){
-  if(!editingCmdId||!confirm("Delete this command?"))return;
-  const lc=getCmds(),cmdId=editingCmdId;
+  if(!editingCmdId){toast("No command selected","err");return}
+  if(!confirm("Delete this command? This cannot be undone."))return;
+  const lc=getCmds();
+  const cmdId=editingCmdId;
+  const isLocal=String(cmdId).startsWith("local_");
+  if(isLocal){
+    const u=lc.filter(c=>String(c.id)!==String(cmdId));
+    setCmds(u);
+    setQ(getQ().filter(q=>!(q.action==="ADD_CMD"&&q.lid===cmdId)));
+    id("ov-cmds").textContent=u.length;id("ds-cmds").textContent=u.length;
+    renderCmds(u);closeCmdEditor();toast("Command deleted","info");
+    return;
+  }
   if(online){
     try{
       await api("/commands/"+cmdId,{method:"DELETE"});
-      const u=lc.filter(c=>c.id!==cmdId);setCmds(u);
-      id("ov-cmds").textContent=u.length;id("ds-cmds").textContent=u.length;
-      renderCmds(u);closeCmdEditor();toast("Deleted","info");
+      const u=lc.filter(c=>String(c.id)!==String(cmdId));
+      setCmds(u);id("ov-cmds").textContent=u.length;id("ds-cmds").textContent=u.length;
+      renderCmds(u);closeCmdEditor();toast("Command deleted","info");
     }catch(e){toast(e.message,"err")}
   }else{
-    const u=lc.filter(c=>c.id!==cmdId);setCmds(u);enq({action:"DELETE_CMD",data:{id:cmdId}});
-    id("ov-cmds").textContent=u.length;renderCmds(u);closeCmdEditor();toast("Deleted offline — will sync when reconnected","info");
+    const u=lc.filter(c=>String(c.id)!==String(cmdId));
+    setCmds(u);enq({action:"DELETE_CMD",data:{id:cmdId}});
+    id("ov-cmds").textContent=u.length;renderCmds(u);closeCmdEditor();
+    toast("Deleted offline — will sync when reconnected","info");
   }
 }
 
-/* ── Function reference data ── */
+async function dupCmd(){
+  if(!editingCmdId)return;
+  const cmd=getCmds().find(c=>String(c.id)===String(editingCmdId));
+  if(!cmd)return;
+  const trigger=cmd.trigger+"_copy";
+  const data={trigger,response:cmd.response,description:cmd.description,script_type:cmd.script_type||"simple"};
+  if(online){
+    try{
+      const newCmd=await api("/bots/"+currentBot.id+"/commands",{method:"POST",body:JSON.stringify(data)});
+      const lc=getCmds();const updated=[...lc,newCmd];setCmds(updated);
+      id("ov-cmds").textContent=updated.length;renderCmds(updated);
+      openCmdEditor(String(newCmd.id));toast("Duplicated — edit the trigger name","info");
+    }catch(e){toast(e.message,"err")}
+  }else{
+    const lid="local_"+Date.now();
+    const newCmd={id:lid,...data,enabled:1,created_at:new Date().toISOString(),updated_at:new Date().toISOString(),bot_id:currentBot.id};
+    const lc=getCmds();const updated=[...lc,newCmd];setCmds(updated);
+    enq({action:"ADD_CMD",data,lid});
+    renderCmds(updated);openCmdEditor(lid);toast("Duplicated offline — edit the trigger name","info");
+  }
+}
+
+function updCharCount(){
+  const ta=id("e-response"),cc=id("char-counter");
+  if(!ta||!cc)return;
+  const n=ta.value.length;cc.textContent=n+" chars";
+  cc.className="char-counter"+(n>1800?" over":n>1500?" warn":"");
+}
+
+/* ── Function reference data (comprehensive) ── */
 const FN_DATA=[
-  {sig:"$authorID",args:[],desc:"The author's Discord user ID.",ex:"Your ID is $authorID",cat:"User",v:1},
-  {sig:"$authorUsername",args:[],desc:"The author's username (without discriminator).",ex:"Hello $authorUsername!",cat:"User",v:1},
-  {sig:"$authorMention",args:[],desc:"Mentions the command author.",ex:"Hi $authorMention!",cat:"User",v:1},
-  {sig:"$authorNickname",args:[],desc:"The author's server nickname, or username if none.",ex:"Hey $authorNickname",cat:"User",v:1},
-  {sig:"$authorAvatar",args:[],desc:"URL of the author's avatar.",ex:"$thumbnail[$authorAvatar]",cat:"User",v:1},
-  {sig:"$accountAge[]",args:[{n:"userId",d:"User ID (optional, defaults to author)"}],desc:"How many days old the account is.",ex:"Your account is $accountAge[] days old",cat:"User",v:1},
+  // User
+  {sig:"$authorID",args:[],desc:"The command author's Discord user ID.",ex:"Your ID: $authorID",cat:"User",v:1},
+  {sig:"$authorUsername",args:[],desc:"The author's username (not nickname).",ex:"Hello $authorUsername!",cat:"User",v:1},
+  {sig:"$authorMention",args:[],desc:"Pings the command author.",ex:"Hi $authorMention!",cat:"User",v:1},
+  {sig:"$authorNickname",args:[],desc:"The author's server nickname, falls back to username.",ex:"Hey $authorNickname",cat:"User",v:1},
+  {sig:"$authorAvatar",args:[],desc:"URL of the author's avatar image.",ex:"$thumbnail[$authorAvatar]",cat:"User",v:1},
+  {sig:"$authorRoles",args:[],desc:"Comma-separated list of the author's role names.",ex:"Your roles: $authorRoles",cat:"User",v:1},
+  {sig:"$mentioned[n]",args:[{n:"n",d:"Position of the mention (1-based, optional — defaults to 1)"}],desc:"Returns the @mention of the nth mentioned user in the message.",ex:"You mentioned $mentioned[1]",cat:"User",v:1},
+  {sig:"$mentionedID[n]",args:[{n:"n",d:"Position of the mention (1-based, optional)"}],desc:"Returns the user ID of the nth mentioned user.",ex:"Mentioned ID: $mentionedID[1]",cat:"User",v:1},
+  {sig:"$mentionedName[n]",args:[{n:"n",d:"Position of the mention (1-based, optional)"}],desc:"Returns the username of the nth mentioned user.",ex:"You mentioned $mentionedName[1]",cat:"User",v:1},
+  {sig:"$noMentionMessage",args:[],desc:"The message content with all @mentions replaced by plain usernames.",ex:"You said: $noMentionMessage",cat:"User",v:1},
+  {sig:"$userID[name]",args:[{n:"name",d:"Username to look up"}],desc:"Returns the ID of a user by their username.",ex:"ID: $userID[SomeUser]",cat:"User",v:1},
+  {sig:"$userAvatar[userID]",args:[{n:"userID",d:"User's Discord ID"}],desc:"Returns the avatar URL of any user by ID.",ex:"$image[$userAvatar[$mentionedID[1]]]",cat:"User",v:1},
+  {sig:"$userNickname[userID]",args:[{n:"userID",d:"User's Discord ID"}],desc:"Returns the server nickname of a user by ID.",ex:"$userNickname[$mentionedID[1]]",cat:"User",v:1},
+  {sig:"$accountAge[]",args:[{n:"userID",d:"User ID (optional, defaults to author)"}],desc:"How many days old the account is.",ex:"Your account is $accountAge[] days old",cat:"User",v:1},
+  {sig:"$isUserInGuild[userID]",args:[{n:"userID",d:"User's Discord ID"}],desc:"Returns 'true' if the user is in the current server.",ex:"$if[$isUserInGuild[$mentionedID[1]]==true;They're here!;Not found]",cat:"User",v:1},
+  {sig:"$hasPerms[perm]",args:[{n:"perm",d:"Permission name e.g. ADMINISTRATOR, KICK_MEMBERS, BAN_MEMBERS"}],desc:"Returns 'true' if the command author has the given permission.",ex:"$if[$hasPerms[ADMINISTRATOR]==true;You're an admin!;Not an admin]",cat:"User",v:1},
+  // Server
   {sig:"$guildName",args:[],desc:"The server's name.",ex:"Welcome to $guildName!",cat:"Server",v:1},
   {sig:"$guildID",args:[],desc:"The server's ID.",ex:"Server ID: $guildID",cat:"Server",v:1},
-  {sig:"$guildMemberCount",args:[],desc:"Number of members in the server.",ex:"$guildName has $guildMemberCount members",cat:"Server",v:1},
-  {sig:"$channelName",args:[],desc:"Name of the current channel.",ex:"You're in #$channelName",cat:"Server",v:1},
-  {sig:"$channelID",args:[],desc:"ID of the current channel.",ex:"Channel: $channelID",cat:"Server",v:1},
+  {sig:"$guildMemberCount",args:[],desc:"Total number of members in the server.",ex:"$guildName has $guildMemberCount members",cat:"Server",v:1},
+  {sig:"$guildOwnerID",args:[],desc:"The Discord user ID of the server owner.",ex:"Owner ID: $guildOwnerID",cat:"Server",v:1},
+  {sig:"$guildIcon",args:[],desc:"URL of the server's icon image.",ex:"$thumbnail[$guildIcon]",cat:"Server",v:1},
+  {sig:"$guildBoostCount",args:[],desc:"Number of active server boosts.",ex:"Boosts: $guildBoostCount",cat:"Server",v:1},
+  {sig:"$guildBoostTier",args:[],desc:"Current server boost tier (0–3).",ex:"Boost tier: $guildBoostTier",cat:"Server",v:1},
+  {sig:"$guildCreationDate",args:[],desc:"The date the server was created.",ex:"Server created: $guildCreationDate",cat:"Server",v:1},
+  // Channel
+  {sig:"$channelName",args:[],desc:"Name of the current channel.",ex:"You're in #$channelName",cat:"Channel",v:1},
+  {sig:"$channelID",args:[],desc:"ID of the current channel.",ex:"Channel: $channelID",cat:"Channel",v:1},
+  {sig:"$channelMention",args:[],desc:"Clickable mention of the current channel.",ex:"Post in $channelMention",cat:"Channel",v:1},
+  {sig:"$channelTopic",args:[],desc:"Topic/description of the current channel.",ex:"Topic: $channelTopic",cat:"Channel",v:1},
+  // Bot
   {sig:"$botUsername",args:[],desc:"The bot's username.",ex:"I am $botUsername",cat:"Bot",v:1},
+  {sig:"$botID",args:[],desc:"The bot's user ID.",ex:"Bot ID: $botID",cat:"Bot",v:1},
   {sig:"$botMention",args:[],desc:"Mentions the bot.",ex:"Ping me at $botMention",cat:"Bot",v:1},
-  {sig:"$ping",args:[],desc:"The bot's current latency in milliseconds.",ex:"Pong! Latency: $ping",cat:"Bot",v:1},
-  {sig:"$prefix",args:[],desc:"The command prefix.",ex:"Use $prefix + command",cat:"Bot",v:1},
-  {sig:"$message",args:[],desc:"The text the user typed after the command.",ex:"You said: $message",cat:"Message",v:1},
-  {sig:"$args",args:[],desc:"Same as $message — text after the command trigger.",ex:"Args: $args",cat:"Message",v:1},
+  {sig:"$botAvatar",args:[],desc:"URL of the bot's avatar.",ex:"$thumbnail[$botAvatar]",cat:"Bot",v:1},
+  {sig:"$ping",args:[],desc:"The bot's current WebSocket latency.",ex:"Pong! Latency: $ping",cat:"Bot",v:1},
+  {sig:"$prefix",args:[],desc:"The command prefix.",ex:"Use $prefix + a command name",cat:"Bot",v:1},
+  // Message
+  {sig:"$message",args:[],desc:"The full text the user typed after the command.",ex:"You said: $message",cat:"Message",v:1},
+  {sig:"$args",args:[],desc:"Alias for $message — text after the command trigger.",ex:"Args: $args",cat:"Message",v:1},
+  {sig:"$messageID",args:[],desc:"The ID of the trigger message.",ex:"Message ID: $messageID",cat:"Message",v:1},
+  {sig:"$messageLink",args:[],desc:"A direct link to the trigger message.",ex:"[Jump]($messageLink)",cat:"Message",v:1},
+  {sig:"$noMentionMessage",args:[],desc:"The message text with @mentions removed.",ex:"Cleaned: $noMentionMessage",cat:"Message",v:1},
   {sig:"$arg[n]",args:[{n:"n",d:"Index of the argument (1-based)"}],desc:"Gets the nth word after the command.",ex:"First word: $arg[1]",cat:"Message",v:1},
   {sig:"$argsCount",args:[],desc:"Number of words after the command.",ex:"You gave $argsCount arguments",cat:"Message",v:1},
-  {sig:"$isArgs",args:[],desc:"Returns 'true' if the user provided any text after the command, otherwise 'false'.",ex:"$if[$isArgs==true;You said: $args;No args given]",cat:"Message",v:1},
+  {sig:"$isArgs",args:[],desc:"Returns 'true' if the user typed anything after the command.",ex:"$if[$isArgs==true;You said: $args;No args given]",cat:"Message",v:1},
+  // Time
   {sig:"$date",args:[],desc:"Current date in YYYY-MM-DD format.",ex:"Today is $date",cat:"Time",v:1},
   {sig:"$time",args:[],desc:"Current time in HH:MM:SS format.",ex:"Time is $time",cat:"Time",v:1},
   {sig:"$day",args:[],desc:"Current day of the week.",ex:"Happy $day!",cat:"Time",v:1},
   {sig:"$month",args:[],desc:"Current month name.",ex:"It's $month",cat:"Time",v:1},
   {sig:"$year",args:[],desc:"Current year.",ex:"Year: $year",cat:"Time",v:1},
-  {sig:"$sum[a;b]",args:[{n:"a",d:"First number"},{n:"b",d:"Second number"}],desc:"Adds two or more numbers together.",ex:"$sum[10;5] → 15",cat:"Math",v:1},
-  {sig:"$sub[a;b]",args:[{n:"a",d:"Number to subtract from"},{n:"b",d:"Number to subtract"}],desc:"Subtracts b from a.",ex:"$sub[10;3] → 7",cat:"Math",v:1},
-  {sig:"$multi[a;b]",args:[{n:"a",d:"First number"},{n:"b",d:"Second number"}],desc:"Multiplies two or more numbers.",ex:"$multi[4;5] → 20",cat:"Math",v:1},
-  {sig:"$div[a;b]",args:[{n:"a",d:"Dividend"},{n:"b",d:"Divisor"}],desc:"Divides a by b.",ex:"$div[10;2] → 5",cat:"Math",v:1},
+  // Math
+  {sig:"$sum[a;b]",args:[{n:"a",d:"First number"},{n:"b",d:"Second number"}],desc:"Adds numbers. Pass more than two separated by ; for multiple.",ex:"$sum[10;5] → 15\n$sum[1;2;3;4] → 10",cat:"Math",v:1},
+  {sig:"$sub[a;b]",args:[{n:"a",d:"Number to subtract from"},{n:"b",d:"Amount to subtract"}],desc:"Subtracts b from a.",ex:"$sub[10;3] → 7",cat:"Math",v:1},
+  {sig:"$multi[a;b]",args:[{n:"a",d:"First number"},{n:"b",d:"Second number"}],desc:"Multiplies numbers together.",ex:"$multi[4;5] → 20",cat:"Math",v:1},
+  {sig:"$div[a;b]",args:[{n:"a",d:"Dividend"},{n:"b",d:"Divisor"}],desc:"Divides a by b. Returns error if b is 0.",ex:"$div[10;2] → 5",cat:"Math",v:1},
   {sig:"$mod[a;b]",args:[{n:"a",d:"Number"},{n:"b",d:"Divisor"}],desc:"Returns the remainder after dividing a by b.",ex:"$mod[10;3] → 1",cat:"Math",v:1},
-  {sig:"$random[min;max]",args:[{n:"min",d:"Minimum value (inclusive)"},{n:"max",d:"Maximum value (inclusive)"}],desc:"Returns a random integer between min and max.",ex:"You rolled a $random[1;6]!",cat:"Math",v:1},
-  {sig:"$round[n]",args:[{n:"n",d:"Number to round"}],desc:"Rounds a number to the nearest integer.",ex:"$round[4.6] → 5",cat:"Math",v:1},
-  {sig:"$abs[n]",args:[{n:"n",d:"Number"}],desc:"Returns the absolute value.",ex:"$abs[-5] → 5",cat:"Math",v:1},
+  {sig:"$random[min;max]",args:[{n:"min",d:"Minimum (inclusive)"},{n:"max",d:"Maximum (inclusive)"}],desc:"Returns a random integer between min and max.",ex:"You rolled a $random[1;6]!",cat:"Math",v:1},
+  {sig:"$round[n]",args:[{n:"n",d:"Number to round"}],desc:"Rounds to the nearest integer.",ex:"$round[4.6] → 5",cat:"Math",v:1},
+  {sig:"$abs[n]",args:[{n:"n",d:"Number"}],desc:"Returns the absolute (positive) value.",ex:"$abs[-5] → 5",cat:"Math",v:1},
   {sig:"$min[a;b]",args:[{n:"a",d:"First number"},{n:"b",d:"Second number"}],desc:"Returns the smaller of two numbers.",ex:"$min[3;7] → 3",cat:"Math",v:1},
   {sig:"$max[a;b]",args:[{n:"a",d:"First number"},{n:"b",d:"Second number"}],desc:"Returns the larger of two numbers.",ex:"$max[3;7] → 7",cat:"Math",v:1},
   {sig:"$pow[a;b]",args:[{n:"a",d:"Base"},{n:"b",d:"Exponent"}],desc:"Raises a to the power of b.",ex:"$pow[2;10] → 1024",cat:"Math",v:1},
-  {sig:"$floor[n]",args:[{n:"n",d:"Number"}],desc:"Rounds a number down to the nearest integer.",ex:"$floor[4.9] → 4",cat:"Math",v:1},
-  {sig:"$ceil[n]",args:[{n:"n",d:"Number"}],desc:"Rounds a number up to the nearest integer.",ex:"$ceil[4.1] → 5",cat:"Math",v:1},
-  {sig:"$upper[text]",args:[{n:"text",d:"Input text"}],desc:"Converts text to uppercase.",ex:"$upper[hello] → HELLO",cat:"String",v:1},
+  {sig:"$floor[n]",args:[{n:"n",d:"Number"}],desc:"Rounds down to the nearest integer.",ex:"$floor[4.9] → 4",cat:"Math",v:1},
+  {sig:"$ceil[n]",args:[{n:"n",d:"Number"}],desc:"Rounds up to the nearest integer.",ex:"$ceil[4.1] → 5",cat:"Math",v:1},
+  {sig:"$sqrt[n]",args:[{n:"n",d:"Number"}],desc:"Returns the square root of n.",ex:"$sqrt[16] → 4",cat:"Math",v:1},
+  {sig:"$toFixed[n;decimals]",args:[{n:"n",d:"Number"},{n:"decimals",d:"Decimal places"}],desc:"Formats a number to a fixed number of decimal places.",ex:"$toFixed[3.14159;2] → 3.14",cat:"Math",v:1},
+  // String
+  {sig:"$upper[text]",args:[{n:"text",d:"Input text"}],desc:"Converts text to UPPERCASE.",ex:"$upper[hello] → HELLO",cat:"String",v:1},
   {sig:"$lower[text]",args:[{n:"text",d:"Input text"}],desc:"Converts text to lowercase.",ex:"$lower[HELLO] → hello",cat:"String",v:1},
   {sig:"$strlen[text]",args:[{n:"text",d:"Input text"}],desc:"Returns the character count of the text.",ex:"$strlen[hello] → 5",cat:"String",v:1},
-  {sig:"$replaceText[text;old;new]",args:[{n:"text",d:"Source text"},{n:"old",d:"Text to find"},{n:"new",d:"Replacement text"}],desc:"Replaces all occurrences of 'old' with 'new'.",ex:"$replaceText[hello world;world;there] → hello there",cat:"String",v:1},
+  {sig:"$replaceText[text;old;new]",args:[{n:"text",d:"Source"},{n:"old",d:"Text to find"},{n:"new",d:"Replacement"}],desc:"Replaces all occurrences of 'old' with 'new' in text.",ex:"$replaceText[hello world;world;there]",cat:"String",v:1},
   {sig:"$trimSpace[text]",args:[{n:"text",d:"Input text"}],desc:"Removes leading and trailing whitespace.",ex:"$trimSpace[  hi  ] → hi",cat:"String",v:1},
-  {sig:"$repeat[text;n]",args:[{n:"text",d:"Text to repeat"},{n:"n",d:"Number of times"}],desc:"Repeats text n times.",ex:"$repeat[ha;3] → hahaha",cat:"String",v:1},
+  {sig:"$removeSpace[text]",args:[{n:"text",d:"Input text"}],desc:"Removes ALL spaces from the text.",ex:"$removeSpace[h e l l o] → hello",cat:"String",v:1},
+  {sig:"$repeat[text;n]",args:[{n:"text",d:"Text to repeat"},{n:"n",d:"Times to repeat"}],desc:"Repeats text n times.",ex:"$repeat[ha;3] → hahaha",cat:"String",v:1},
   {sig:"$numberSeparator[n]",args:[{n:"n",d:"Number"}],desc:"Formats a number with commas (e.g. 1,000,000).",ex:"$numberSeparator[1000000] → 1,000,000",cat:"String",v:1},
-  {sig:"$substring[text;start;end]",args:[{n:"text",d:"Source text"},{n:"start",d:"Start index (0-based)"},{n:"end",d:"End index (exclusive)"}],desc:"Extracts a section of a string.",ex:"$substring[hello;1;4] → ell",cat:"String",v:1},
-  {sig:"$startsWith[text;prefix]",args:[{n:"text",d:"Source text"},{n:"prefix",d:"Prefix to check"}],desc:"Returns 'true' if text starts with prefix.",ex:"$startsWith[hello;he] → true",cat:"String",v:1},
-  {sig:"$endsWith[text;suffix]",args:[{n:"text",d:"Source text"},{n:"suffix",d:"Suffix to check"}],desc:"Returns 'true' if text ends with suffix.",ex:"$endsWith[hello;lo] → true",cat:"String",v:1},
-  {sig:"$contains[text;str]",args:[{n:"text",d:"Source text"},{n:"str",d:"Substring to find"}],desc:"Returns 'true' if text contains str.",ex:"$contains[hello world;world] → true",cat:"String",v:1},
-  {sig:"$split[text;sep]",args:[{n:"text",d:"Text to split"},{n:"sep",d:"Separator character"}],desc:"Splits text by separator. Use $splitText[n] to access parts.",ex:"$split[a,b,c;,]\n$splitText[2] → b",cat:"String",v:1},
-  {sig:"$splitText[n]",args:[{n:"n",d:"Index of segment (1-based)"}],desc:"Returns the nth segment from the last $split[] call.",ex:"$split[a,b,c;,]\n$splitText[1] → a",cat:"String",v:1},
+  {sig:"$substring[text;start;end]",args:[{n:"text",d:"Source"},{n:"start",d:"Start index (0-based)"},{n:"end",d:"End index (exclusive)"}],desc:"Extracts a section of a string.",ex:"$substring[hello;1;4] → ell",cat:"String",v:1},
+  {sig:"$startsWith[text;prefix]",args:[{n:"text",d:"Source"},{n:"prefix",d:"Prefix to check"}],desc:"Returns 'true' if text starts with the given prefix.",ex:"$startsWith[hello;he] → true",cat:"String",v:1},
+  {sig:"$endsWith[text;suffix]",args:[{n:"text",d:"Source"},{n:"suffix",d:"Suffix to check"}],desc:"Returns 'true' if text ends with the given suffix.",ex:"$endsWith[hello;lo] → true",cat:"String",v:1},
+  {sig:"$contains[text;str]",args:[{n:"text",d:"Source"},{n:"str",d:"Substring to find"}],desc:"Returns 'true' if text contains str.",ex:"$contains[hello world;world] → true",cat:"String",v:1},
+  {sig:"$index[text;str]",args:[{n:"text",d:"Source"},{n:"str",d:"Substring to find"}],desc:"Returns the character index of str in text, or -1 if not found.",ex:"$index[hello;ll] → 2",cat:"String",v:1},
+  {sig:"$wordCount[text]",args:[{n:"text",d:"Input text"}],desc:"Returns the number of words in text.",ex:"$wordCount[hello world] → 2",cat:"String",v:1},
+  {sig:"$split[text;sep]",args:[{n:"text",d:"Text to split"},{n:"sep",d:"Separator"}],desc:"Splits text by the separator. Use $splitText[n] to access parts.",ex:"$split[a,b,c;,]\n$splitText[2] → b",cat:"String",v:1},
+  {sig:"$splitText[n]",args:[{n:"n",d:"Segment index (1-based)"}],desc:"Returns the nth segment from the last $split[] call.",ex:"$split[a,b,c;,]\n$splitText[1] → a",cat:"String",v:1},
   {sig:"$splitCount",args:[],desc:"Returns the number of segments from the last $split[] call.",ex:"$split[a,b,c;,]\n$splitCount → 3",cat:"String",v:1},
-  {sig:"$if[cond;then;else]",args:[{n:"cond",d:"Condition (e.g. $argsCount==0)"},{n:"then",d:"Value if true"},{n:"else",d:"Value if false"}],desc:"Inline if/else expression.",ex:"$if[$argsCount==0;No args;You said: $args]",cat:"Logic",v:1},
-  {sig:"$if[cond]\n...\n$else\n...\n$endif",args:[],desc:"Block-style conditional. Can span multiple lines.",ex:"$if[$random[1;2]==1]\nHeads!\n$else\nTails!\n$endif",cat:"Logic",v:1},
-  {sig:"$let[name;value]",args:[{n:"name",d:"Variable name"},{n:"value",d:"Value to store"}],desc:"Sets a local variable for use later in the same response.",ex:"$let[score;$random[1;100]]\nYour score: $get[score]",cat:"Variables",v:1},
-  {sig:"$get[name]",args:[{n:"name",d:"Variable name"}],desc:"Gets the value of a local variable set with $let[].",ex:"$let[x;10]\nDouble: $sum[$get[x];$get[x]]",cat:"Variables",v:1},
+  // Logic
+  {sig:"$if[cond;then;else]",args:[{n:"cond",d:"Condition e.g. $argsCount==0 or true"},{n:"then",d:"Value if true"},{n:"else",d:"Value if false"}],desc:"Inline conditional — returns 'then' if condition is true, otherwise 'else'.",ex:"$if[$argsCount==0;No args!;You said: $args]",cat:"Logic",v:1},
+  {sig:"$if[cond]\n...\n$else\n...\n$endif",args:[],desc:"Block conditional spanning multiple lines. Everything between $if and $else runs if true; between $else and $endif runs if false.",ex:"$if[$random[1;2]==1]\nHeads!\n$else\nTails!\n$endif",cat:"Logic",v:1},
+  {sig:"$and[a;b]",args:[{n:"a",d:"First boolean (true/false)"},{n:"b",d:"Second boolean"}],desc:"Returns 'true' only if both a and b are 'true'.",ex:"$if[$and[$isArgs;$contains[$args;hi]]==true;You said hi!;No match]",cat:"Logic",v:1},
+  {sig:"$or[a;b]",args:[{n:"a",d:"First boolean"},{n:"b",d:"Second boolean"}],desc:"Returns 'true' if either a or b is 'true'.",ex:"$if[$or[$contains[$args;yes];$contains[$args;yeah]]==true;OK!;No]",cat:"Logic",v:1},
+  {sig:"$not[val]",args:[{n:"val",d:"Boolean value (true/false)"}],desc:"Flips a boolean — 'true' becomes 'false' and vice versa.",ex:"$not[true] → false",cat:"Logic",v:1},
+  // Variables
+  {sig:"$let[name;value]",args:[{n:"name",d:"Variable name"},{n:"value",d:"Value to store"}],desc:"Sets a local variable. Only lasts for the current command response.",ex:"$let[score;$random[1;100]]\nYour score: $get[score]",cat:"Variables",v:1},
+  {sig:"$get[name]",args:[{n:"name",d:"Variable name"}],desc:"Gets the value of a local variable previously set with $let[].",ex:"$let[x;10]\nDouble: $sum[$get[x];$get[x]]",cat:"Variables",v:1},
+  {sig:"$set[name;value]",args:[{n:"name",d:"Variable name"},{n:"value",d:"Value to store"}],desc:"Alias for $let — sets a local variable.",ex:"$set[roll;$random[1;20]]\nYou rolled $get[roll]!",cat:"Variables",v:1},
+  // Embed
   {sig:"$title[text]",args:[{n:"text",d:"Embed title"}],desc:"Sets the title of the embed.",ex:"$title[Hello World]",cat:"Embed",v:1},
-  {sig:"$description[text]",args:[{n:"text",d:"Embed description"}],desc:"Sets the description text of the embed.",ex:"$description[This is the body text]",cat:"Embed",v:1},
-  {sig:"$color[hex]",args:[{n:"hex",d:"Hex color code e.g. #3b82f6"}],desc:"Sets the sidebar color of the embed.",ex:"$color[#3b82f6]",cat:"Embed",v:1},
-  {sig:"$footer[text]",args:[{n:"text",d:"Footer text"}],desc:"Sets the embed footer text.",ex:"$footer[Powered by BotForge]",cat:"Embed",v:1},
-  {sig:"$thumbnail[url]",args:[{n:"url",d:"Image URL"}],desc:"Sets the small thumbnail image in the top-right of the embed.",ex:"$thumbnail[$authorAvatar]",cat:"Embed",v:1},
-  {sig:"$image[url]",args:[{n:"url",d:"Image URL"}],desc:"Sets the large image at the bottom of the embed.",ex:"$image[https://example.com/banner.png]",cat:"Embed",v:1},
-  {sig:"$addField[name;value;inline?]",args:[{n:"name",d:"Field title"},{n:"value",d:"Field content"},{n:"inline?",d:"true or false (optional)"}],desc:"Adds a field to the embed.",ex:"$addField[Score;$random[1;100];true]",cat:"Embed",v:1},
-  {sig:"$author[name;iconURL?]",args:[{n:"name",d:"Author name"},{n:"iconURL?",d:"Author icon URL (optional)"}],desc:"Sets the author section of the embed.",ex:"$author[$authorNickname;$authorAvatar]",cat:"Embed",v:1},
-  {sig:"$timestamp",args:[],desc:"Adds the current timestamp to the embed footer.",ex:"$title[Event]\n$timestamp",cat:"Embed",v:1},
-  {sig:"$deleteCommand",args:[],desc:"Deletes the message that triggered the command.",ex:"$deleteCommand\nDone! (message deleted)",cat:"Actions",v:1},
-  {sig:"$isNumber[text]",args:[{n:"text",d:"Text to check"}],desc:"Returns 'true' if the text is a valid number. (BDScript 2 only)",ex:"$if[$isNumber[$args]==true;Valid number!;Not a number]",cat:"BDScript 2",v:2},
-  {sig:"$isEmpty[text]",args:[{n:"text",d:"Text to check"}],desc:"Returns 'true' if the text is empty or whitespace. (BDScript 2 only)",ex:"$if[$isEmpty[$args]==true;You didn't say anything!;You said: $args]",cat:"BDScript 2",v:2},
-  {sig:"$chance[percent]",args:[{n:"percent",d:"Chance percentage (0-100)"}],desc:"Returns 'true' the given percent of the time. (BDScript 2 only)",ex:"$if[$chance[50]==true;You won!;You lost!]",cat:"BDScript 2",v:2},
-  {sig:"$randomText[a;b;c]",args:[{n:"options…",d:"Two or more text options to pick from"}],desc:"Randomly picks one of the provided options. (BDScript 2 only)",ex:"$randomText[Nice!;Cool!;Awesome!;Great!]",cat:"BDScript 2",v:2},
-  {sig:"$charCount[text;char]",args:[{n:"text",d:"Source text"},{n:"char",d:"Character to count"}],desc:"Counts occurrences of a character in text. (BDScript 2 only)",ex:"$charCount[hello world;l] → 3",cat:"BDScript 2",v:2},
-  {sig:"$zeroPad[n;length]",args:[{n:"n",d:"Number"},{n:"length",d:"Total length with zero padding"}],desc:"Zero-pads a number to a given length. (BDScript 2 only)",ex:"$zeroPad[$random[1;99];3] → 042",cat:"BDScript 2",v:2},
+  {sig:"$description[text]",args:[{n:"text",d:"Embed description"}],desc:"Sets the main body text of the embed.",ex:"$description[This is the body text]",cat:"Embed",v:1},
+  {sig:"$color[hex]",args:[{n:"hex",d:"Hex color e.g. #3b82f6"}],desc:"Sets the left sidebar color of the embed.",ex:"$color[#3b82f6]",cat:"Embed",v:1},
+  {sig:"$footer[text]",args:[{n:"text",d:"Footer text"}],desc:"Sets the embed footer.",ex:"$footer[Powered by BotForge]",cat:"Embed",v:1},
+  {sig:"$thumbnail[url]",args:[{n:"url",d:"Image URL"}],desc:"Small image in the top-right corner of the embed.",ex:"$thumbnail[$authorAvatar]",cat:"Embed",v:1},
+  {sig:"$image[url]",args:[{n:"url",d:"Image URL"}],desc:"Large image at the bottom of the embed.",ex:"$image[https://example.com/banner.png]",cat:"Embed",v:1},
+  {sig:"$addField[name;value;inline?]",args:[{n:"name",d:"Field title"},{n:"value",d:"Field body"},{n:"inline?",d:"true or false (optional)"}],desc:"Adds a field to the embed. Set inline to 'true' for side-by-side fields.",ex:"$addField[Score;$random[1;100];true]\n$addField[Level;7;true]",cat:"Embed",v:1},
+  {sig:"$author[name;iconURL?]",args:[{n:"name",d:"Author name"},{n:"iconURL?",d:"Icon URL (optional)"}],desc:"Sets the author section at the top of the embed.",ex:"$author[$authorNickname;$authorAvatar]",cat:"Embed",v:1},
+  {sig:"$url[url]",args:[{n:"url",d:"URL"}],desc:"Makes the embed title a clickable hyperlink.",ex:"$title[Click me]\n$url[https://discord.com]",cat:"Embed",v:1},
+  {sig:"$timestamp",args:[],desc:"Adds the current date and time to the embed footer.",ex:"$title[Event]\n$timestamp",cat:"Embed",v:1},
+  // Actions
+  {sig:"$deleteCommand",args:[],desc:"Deletes the message that triggered the command.",ex:"$deleteCommand\nDone!",cat:"Actions",v:1},
+  {sig:"$addReaction[emoji]",args:[{n:"emoji",d:"Emoji character or :name:"}],desc:"Adds a reaction to the trigger message.",ex:"$addReaction[✅]",cat:"Actions",v:1},
+  {sig:"$dm[text]",args:[{n:"text",d:"Message to DM"}],desc:"Sends a direct message to the command author.",ex:"$dm[Hey $authorUsername, you triggered the command!]",cat:"Actions",v:1},
+  {sig:"$sendMessage[channelID;text]",args:[{n:"channelID",d:"Target channel ID"},{n:"text",d:"Message to send"}],desc:"Sends a message to a different channel.",ex:"$sendMessage[$channelID;Command used in #$channelName]",cat:"Actions",v:1},
+  {sig:"$reply[text]",args:[{n:"text",d:"Reply content"}],desc:"Sends a reply that pings the original message.",ex:"$reply[Got it!]",cat:"Actions",v:1},
+  // Roles
+  {sig:"$roleID[name]",args:[{n:"name",d:"Role name (case-sensitive)"}],desc:"Returns the ID of a role by its name.",ex:"Role ID: $roleID[Moderator]",cat:"Roles",v:1},
+  {sig:"$roleName[id]",args:[{n:"id",d:"Role ID"}],desc:"Returns the name of a role by its ID.",ex:"Role: $roleName[$roleID[Mod]]",cat:"Roles",v:1},
+  {sig:"$roleMention[id]",args:[{n:"id",d:"Role ID"}],desc:"Returns a @mention for a role.",ex:"Pinging $roleMention[$roleID[Staff]]",cat:"Roles",v:1},
+  {sig:"$roleColor[id]",args:[{n:"id",d:"Role ID"}],desc:"Returns the hex color of a role.",ex:"$color[$roleColor[$roleID[Admin]]]",cat:"Roles",v:1},
+  {sig:"$hasRole[userID;roleID]",args:[{n:"userID",d:"User's Discord ID"},{n:"roleID",d:"Role ID"}],desc:"Returns 'true' if the user has the given role.",ex:"$if[$hasRole[$authorID;$roleID[Mod]]==true;You're a mod!;Not a mod]",cat:"Roles",v:1},
+  {sig:"$roleCount[roleID]",args:[{n:"roleID",d:"Role ID"}],desc:"Returns how many members have the given role.",ex:"$roleCount[$roleID[Member]] members have the Member role",cat:"Roles",v:1},
+  {sig:"$highestRole[userID]",args:[{n:"userID",d:"User's Discord ID"}],desc:"Returns the name of the user's highest role.",ex:"Your top role: $highestRole[$authorID]",cat:"Roles",v:1},
+  // BDScript 2
+  {sig:"$isNumber[text]",args:[{n:"text",d:"Text to check"}],desc:"Returns 'true' if the text is a valid number. BDScript 2 only.",ex:"$if[$isNumber[$args]==true;Valid number!;Not a number]",cat:"BDScript 2",v:2},
+  {sig:"$isEmpty[text]",args:[{n:"text",d:"Text to check"}],desc:"Returns 'true' if the text is empty or only whitespace. BDScript 2 only.",ex:"$if[$isEmpty[$args]==true;You didn't type anything!;You said: $args]",cat:"BDScript 2",v:2},
+  {sig:"$chance[percent]",args:[{n:"percent",d:"0–100"}],desc:"Returns 'true' the given percentage of the time. BDScript 2 only.",ex:"$if[$chance[50]==true;You won!;You lost!]",cat:"BDScript 2",v:2},
+  {sig:"$randomText[a;b;c]",args:[{n:"options…",d:"Two or more options"}],desc:"Picks one of the options at random. BDScript 2 only.",ex:"$randomText[Nice!;Cool!;Awesome!;Great!]",cat:"BDScript 2",v:2},
+  {sig:"$charCount[text;char]",args:[{n:"text",d:"Source text"},{n:"char",d:"Character to count"}],desc:"Counts how many times a character appears in text. BDScript 2 only.",ex:"$charCount[hello world;l] → 3",cat:"BDScript 2",v:2},
+  {sig:"$zeroPad[n;length]",args:[{n:"n",d:"Number"},{n:"length",d:"Total padded length"}],desc:"Zero-pads a number to a fixed length. BDScript 2 only.",ex:"$zeroPad[$random[1;99];3] → 042",cat:"BDScript 2",v:2},
+  {sig:"$join[sep;a;b;c]",args:[{n:"sep",d:"Separator string"},{n:"values…",d:"Values to join"}],desc:"Joins multiple values with a separator. BDScript 2 only.",ex:"$join[, ;one;two;three] → one, two, three",cat:"BDScript 2",v:2},
+  {sig:"$sort[a;b;c]",args:[{n:"values…",d:"Values to sort"}],desc:"Returns the values sorted in ascending order. BDScript 2 only.",ex:"$sort[3;1;2] → 1, 2, 3",cat:"BDScript 2",v:2},
+  {sig:"$greatest[a;b;c]",args:[{n:"values…",d:"Numbers to compare"}],desc:"Returns the greatest of all provided values. BDScript 2 only.",ex:"$greatest[5;3;8;1] → 8",cat:"BDScript 2",v:2},
+  {sig:"$smallest[a;b;c]",args:[{n:"values…",d:"Numbers to compare"}],desc:"Returns the smallest of all provided values. BDScript 2 only.",ex:"$smallest[5;3;8;1] → 1",cat:"BDScript 2",v:2},
+  {sig:"$eval[code]",args:[{n:"code",d:"BDScript 2 code to evaluate"}],desc:"Evaluates a BDScript 2 expression and returns the result. BDScript 2 only.",ex:"$eval[$sum[2;3]] → 5",cat:"BDScript 2",v:2},
 ];
+
+/* ── Variables tab data ── */
+const SIMPLE_VARS=[
+  {name:"{user}",desc:"Author's server nickname or username",ex:"Hey {user}!"},
+  {name:"{username}",desc:"Author's raw username",ex:"Username: {username}"},
+  {name:"{mention}",desc:"@mentions the author",ex:"Hi {mention}!"},
+  {name:"{id}",desc:"Author's Discord user ID",ex:"Your ID: {id}"},
+  {name:"{server}",desc:"Server name",ex:"Welcome to {server}!"},
+  {name:"{channel}",desc:"Current channel name",ex:"You're in #{channel}"},
+  {name:"{members}",desc:"Total member count",ex:"{server} has {members} members"},
+];
+const BDS_VARS=[
+  {name:"$authorID",desc:"Author's user ID"},
+  {name:"$authorUsername",desc:"Author's username"},
+  {name:"$authorMention",desc:"@mention the author"},
+  {name:"$authorNickname",desc:"Author's nickname"},
+  {name:"$authorAvatar",desc:"Author's avatar URL"},
+  {name:"$authorRoles",desc:"Author's role list"},
+  {name:"$guildName",desc:"Server name"},
+  {name:"$guildID",desc:"Server ID"},
+  {name:"$guildMemberCount",desc:"Member count"},
+  {name:"$guildOwnerID",desc:"Server owner's ID"},
+  {name:"$guildIcon",desc:"Server icon URL"},
+  {name:"$guildBoostCount",desc:"Boost count"},
+  {name:"$guildBoostTier",desc:"Boost tier (0–3)"},
+  {name:"$guildCreationDate",desc:"Server creation date"},
+  {name:"$channelID",desc:"Current channel ID"},
+  {name:"$channelName",desc:"Current channel name"},
+  {name:"$channelMention",desc:"Channel mention"},
+  {name:"$channelTopic",desc:"Channel topic"},
+  {name:"$botUsername",desc:"Bot's username"},
+  {name:"$botID",desc:"Bot's user ID"},
+  {name:"$botMention",desc:"@mention the bot"},
+  {name:"$botAvatar",desc:"Bot's avatar URL"},
+  {name:"$ping",desc:"Bot latency e.g. 42ms"},
+  {name:"$prefix",desc:"Command prefix"},
+  {name:"$message",desc:"Text after the command"},
+  {name:"$args",desc:"Alias for $message"},
+  {name:"$messageID",desc:"Trigger message ID"},
+  {name:"$messageLink",desc:"Link to the message"},
+  {name:"$noMentionMessage",desc:"Message without @s"},
+  {name:"$argsCount",desc:"Word count after command"},
+  {name:"$isArgs",desc:"'true' if args exist"},
+  {name:"$date",desc:"Current date YYYY-MM-DD"},
+  {name:"$time",desc:"Current time HH:MM:SS"},
+  {name:"$day",desc:"Day of week"},
+  {name:"$month",desc:"Month name"},
+  {name:"$year",desc:"Current year"},
+  {name:"$splitCount",desc:"Segments from last $split[]"},
+];
+const LOCAL_VARS=[
+  {name:"$let[name;value]",desc:"Store a value in a named variable",ex:"$let[score;$random[1;100]]"},
+  {name:"$get[name]",desc:"Retrieve a stored variable",ex:"$get[score]"},
+  {name:"$set[name;value]",desc:"Alias for $let",ex:"$set[x;42]"},
+];
+
+let _varFilter="all";
+function filterVars(f){
+  _varFilter=f;
+  id("var-simple-section").style.display=f==="all"||f==="simple"?"block":"none";
+  id("var-bds-section").style.display=f==="all"||f==="bds"?"block":"none";
+  id("var-local-section").style.display=f==="all"||f==="local"?"block":"none";
+}
+
+function buildVarGrid(containerId,items,clickFn){
+  const g=id(containerId);if(!g)return;g.innerHTML="";
+  items.forEach(v=>{
+    const c=document.createElement("div");c.className="var-card";
+    c.innerHTML=`<div class="vc-name">${esc(v.name)}</div><div class="vc-desc">${esc(v.desc)}</div>${v.ex?`<div class="vc-ex">${esc(v.ex)}</div>`:""}`;
+    c.onclick=()=>{insVar(v.name);switchWsTab("commands");const ed=id("cmd-editor");if(ed.classList.contains("hidden"))openCmdEditor(null);toast("Inserted '"+v.name+"' into editor","ok")};
+    g.appendChild(c);
+  });
+}
+
+function initVarsTab(){
+  buildVarGrid("simple-var-grid",SIMPLE_VARS);
+  buildVarGrid("bds-var-grid",BDS_VARS);
+  buildVarGrid("local-var-grid",LOCAL_VARS);
+}
 
 let _fnFilter="bdscript";
 function filterFns(f){
@@ -1320,7 +1574,80 @@ async function saveBotFromSettings(){
   }
 }
 
-function refreshPanel(){
+function filterCmds(){
+  const q=(id("cmd-search")?.value||"").toLowerCase();
+  document.querySelectorAll("#cmd-list .cmd-row").forEach(row=>{
+    const txt=row.textContent.toLowerCase();
+    row.style.display=(!q||txt.includes(q))?"":"none";
+  });
+}
+
+/* ── Templates ── */
+const TEMPLATES=[
+  {label:"🏓 Ping",trigger:"ping",desc:"Reply with pong",stype:"simple",response:"Pong! 🏓"},
+  {label:"ℹ️ Server info",trigger:"server",desc:"Server info embed",stype:"bdscript",response:"$title[$guildName]\n$description[**Members:** $guildMemberCount\n**Created:** $guildCreationDate\n**Boost tier:** $guildBoostTier]\n$color[#3b82f6]\n$thumbnail[$guildIcon]\n$footer[Server ID: $guildID]"},
+  {label:"👤 User info",trigger:"userinfo",desc:"User info embed",stype:"bdscript",response:"$title[User Info]\n$description[**Username:** $authorUsername\n**Nickname:** $authorNickname\n**ID:** $authorID\n**Account age:** $accountAge[]]\n$thumbnail[$authorAvatar]\n$color[#6366f1]"},
+  {label:"🎲 Random number",trigger:"random",desc:"Roll between 1 and 100",stype:"bdscript",response:"🎲 $authorMention rolled **$random[1;100]**!"},
+  {label:"🪙 Coin flip",trigger:"flip",desc:"Heads or tails",stype:"bdscript2",response:"$randomText[🪙 Heads!;🪙 Tails!]"},
+  {label:"📊 Choice",trigger:"choose",desc:"Pick from your options",stype:"bdscript",response:"$if[$isArgs==true;$authorMention I choose: **$arg[$random[1;$argsCount]]**!;Give me options separated by spaces!]"},
+  {label:"🔢 Math",trigger:"math",desc:"Sum all numbers",stype:"bdscript",response:"$if[$isArgs==true;Result: **$sum[$split[$args; ]$splitText[1];$splitText[2];$splitText[3]]**;Give me some numbers!]"},
+  {label:"📢 Say",trigger:"say",desc:"Bot repeats your message",stype:"bdscript",response:"$if[$isArgs==true;$noMentionMessage;❌ Provide a message!]\n$deleteCommand"},
+  {label:"🆙 Level check",trigger:"level",desc:"Show a mock level",stype:"bdscript",response:"$title[$authorNickname's Level]\n$description[Level: **$random[1;99]**\nXP: **$numberSeparator[$random[100;50000]]**]\n$color[$if[$hasPerms[administrator]==true;#f59e0b;#3b82f6]]\n$thumbnail[$authorAvatar]"},
+  {label:"❓ Help",trigger:"help",desc:"Command list embed",stype:"bdscript",response:"$title[$botUsername Help]\n$description[Use **$prefix** before any command.]\n$addField[Commands;ping, server, userinfo, help;false]\n$color[#22d3ee]\n$footer[Powered by BotForge]\n$timestamp"},
+];
+
+let _templatesOpen=false;
+function toggleTemplates(){
+  _templatesOpen=!_templatesOpen;
+  const menu=id("templates-menu");
+  if(!_templatesOpen){menu.classList.add("hidden");return}
+  menu.classList.remove("hidden");
+  menu.innerHTML="";
+  TEMPLATES.forEach(t=>{
+    const item=document.createElement("div");
+    item.style.cssText="padding:9px 14px;cursor:pointer;font-size:12.5px;border-bottom:1px solid var(--border);transition:background .1s";
+    item.textContent=t.label;
+    item.onmouseover=()=>item.style.background="var(--surface2)";
+    item.onmouseout=()=>item.style.background="";
+    item.onclick=()=>applyTemplate(t);
+    menu.appendChild(item);
+  });
+  document.addEventListener("click",_closeTemplatesOutside,{once:true,capture:true});
+}
+function _closeTemplatesOutside(e){
+  const menu=id("templates-menu");
+  if(menu&&!menu.contains(e.target)){menu.classList.add("hidden");_templatesOpen=false}
+}
+function applyTemplate(t){
+  id("templates-menu").classList.add("hidden");_templatesOpen=false;
+  openCmdEditor(null);
+  id("e-trigger").value=t.trigger;
+  id("e-response").value=t.response;
+  id("e-desc").value=t.desc;
+  switchStype(t.stype);updCharCount();
+  toast("Template loaded — edit and save","info");
+}
+
+/* ── Auto-stop warning ── */
+let _warnedAt5=false,_warnedAt1=false;
+function checkAutoStopWarning(timeLeft){
+  if(!timeLeft)return;
+  if(timeLeft<=60&&!_warnedAt1){
+    _warnedAt1=true;
+    toast("⏰ Bot stops in 1 minute!","err");
+  }else if(timeLeft<=300&&!_warnedAt5){
+    _warnedAt5=true;
+    toast("⏰ Bot stops in 5 minutes","amber");
+  }
+}
+
+/* ── Override updateStatusUI to hook warning ── */
+const _origUpdateStatusUI=updateStatusUI;
+function updateStatusUI(s){
+  _origUpdateStatusUI(s);
+  if(s.running&&s.time_left!=null)checkAutoStopWarning(s.time_left);
+  if(!s.running){_warnedAt5=false;_warnedAt1=false}
+}
   if(curPage==="dashboard")loadBots();
   else if(curPage==="workspace"){
     if(curWsTab==="commands")loadCommands();
