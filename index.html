@@ -28,7 +28,6 @@ h1,h2,h3,h4{font-family:var(--font-head);line-height:1.15}
 .muted2{color:var(--muted2)}
 .green{color:var(--green)}
 .red{color:var(--red)}
-.amber{color:var(--amber)}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:var(--radius);font-family:var(--font-mono);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .15s ease;white-space:nowrap}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .btn-primary{background:var(--accent);color:#fff}
@@ -53,6 +52,7 @@ label.field-label{display:block;color:var(--muted2);font-size:12px;margin-bottom
 .badge-green{background:rgba(74,222,128,.1);color:var(--green);border:1px solid rgba(74,222,128,.2)}
 .badge-red{background:rgba(248,113,113,.1);color:var(--red);border:1px solid rgba(248,113,113,.2)}
 .badge-amber{background:rgba(251,191,36,.1);color:var(--amber);border:1px solid rgba(251,191,36,.2)}
+.badge-cyan{background:rgba(34,211,238,.1);color:var(--cyan);border:1px solid rgba(34,211,238,.2)}
 .badge-blue{background:var(--accent-lo);color:var(--accent);border:1px solid var(--accent-glo)}
 .badge-muted{background:var(--surface2);color:var(--muted);border:1px solid var(--border)}
 #toast-wrap{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px}
@@ -124,7 +124,7 @@ label.field-label{display:block;color:var(--muted2);font-size:12px;margin-bottom
 .empty-state{text-align:center;padding:64px 24px;color:var(--muted)}
 .empty-icon{font-size:48px;margin-bottom:16px;opacity:.4}
 .empty-state h3{font-family:var(--font-head);font-size:20px;font-weight:700;color:var(--muted2);margin-bottom:8px}
-.workspace-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:0;background:var(--surface);padding:0 24px;flex-shrink:0}
+.workspace-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--surface);padding:0 24px;flex-shrink:0}
 .ws-tab{padding:13px 16px;cursor:pointer;color:var(--muted);font-size:13px;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s,border-color .15s;white-space:nowrap}
 .ws-tab:hover{color:var(--muted2)}
 .ws-tab.active{color:var(--text);border-bottom-color:var(--accent)}
@@ -143,6 +143,19 @@ label.field-label{display:block;color:var(--muted2);font-size:12px;margin-bottom
 .var-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .var-chip{background:var(--surface3);border:1px solid var(--border);border-radius:2px;padding:2px 8px;font-size:11px;color:var(--cyan);cursor:pointer;transition:background .12s;font-family:var(--font-mono)}
 .var-chip:hover{background:var(--border)}
+.script-tabs{display:flex;gap:4px;margin-bottom:16px}
+.script-tab{padding:5px 14px;border-radius:var(--radius);font-size:12px;cursor:pointer;border:1px solid var(--border);color:var(--muted);font-family:var(--font-mono);transition:all .12s}
+.script-tab:hover{border-color:var(--border2);color:var(--text)}
+.script-tab.active{background:var(--accent-lo);color:var(--accent);border-color:var(--accent-glo)}
+.script-tab.active.bdscript{background:rgba(34,211,238,.1);color:var(--cyan);border-color:rgba(34,211,238,.25)}
+.script-tab.active.bdscript2{background:rgba(251,191,36,.1);color:var(--amber);border-color:rgba(251,191,36,.25)}
+.ref-panel{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-top:10px;font-size:12px;display:none}
+.ref-panel.visible{display:block}
+.ref-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-top:10px}
+.ref-group h5{color:var(--muted2);font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.ref-item{color:var(--cyan);font-family:var(--font-mono);font-size:11px;cursor:pointer;padding:2px 0}
+.ref-item:hover{color:var(--text)}
+.ref-item small{color:var(--muted);font-family:var(--font-mono)}
 .log-box{background:#030508;border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-family:var(--font-mono);font-size:12px;line-height:2;height:400px;overflow-y:auto}
 .log-entry{display:flex;gap:10px}
 .log-ts{color:var(--muted);flex-shrink:0}
@@ -160,6 +173,8 @@ label.field-label{display:block;color:var(--muted2);font-size:12px;margin-bottom
 .timer-bar.warn{background:var(--amber)}.timer-bar.crit{background:var(--red)}
 .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 @media(max-width:700px){.settings-grid{grid-template-columns:1fr}}
+.section-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:20px 24px;margin-bottom:20px}
+.section-card h3{font-family:var(--font-head);font-size:17px;font-weight:700;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
 .conflict-card{background:rgba(251,191,36,.05);border:1px solid rgba(251,191,36,.25);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px}
 .conflict-card h5{color:var(--amber);font-size:13px;margin-bottom:8px}
 #sync-indicator{position:fixed;bottom:24px;left:24px;background:var(--surface2);border:1px solid var(--amber);border-radius:var(--radius);padding:8px 14px;font-size:12px;color:var(--amber);z-index:200;display:none;gap:8px;align-items:center}
@@ -183,11 +198,10 @@ label.field-label{display:block;color:var(--muted2);font-size:12px;margin-bottom
       <button class="btn btn-primary" onclick="openAuth('register')">Get started →</button>
     </div>
   </nav>
-
   <section class="hero fade-up">
     <div class="hero-kicker">⚡ Discord bot builder</div>
     <h1>Build bots.<br>No backend required.<br><span class="highlight">Just you and your ideas.</span></h1>
-    <p>Create Discord bots with a visual interface. Add commands, set responses, manage everything from a clean dashboard.</p>
+    <p>Create Discord bots with a visual interface. Supports Simple, BDScript, and BDScript 2 — no code required.</p>
     <div class="hero-cta">
       <button class="btn btn-primary" onclick="openAuth('register')" style="padding:11px 28px;font-size:14px;">Create free account</button>
       <button class="btn btn-ghost" onclick="openAuth('login')" style="padding:11px 22px;font-size:14px;">I have an account</button>
@@ -201,20 +215,19 @@ label.field-label{display:block;color:var(--muted2);font-size:12px;margin-bottom
         <div><span class="t-prompt">›</span> <span class="t-cmd">Starting MyBot#1337...</span></div>
         <div><span class="t-out">[08:12:01]</span> <span class="t-ok">[OK]  Connected as MyBot#1337</span></div>
         <div><span class="t-out">[08:12:04]</span> [CMD] user123: !help</div>
-        <div><span class="t-out">[08:12:11]</span> [CMD] user456: !ping</div>
+        <div><span class="t-out">[08:12:11]</span> [CMD] user456: !random</div>
         <div><span class="t-out">[08:15:33]</span> <span style="color:var(--amber)">[!!]  Auto-stop in 25 min</span></div>
         <div><span class="t-prompt">›</span> <span class="t-cmd" id="blink-cursor">_</span></div>
       </div>
     </div>
   </section>
-
   <section class="features">
     <h2 class="features-title">Everything you need</h2>
     <div class="feature-grid">
       <div class="feature-card fade-up">
         <div class="feature-icon">⚡</div>
-        <h3>Visual command builder</h3>
-        <p>Create commands with triggers and responses. Use variables like {user}, {server}, {mention} for dynamic replies. No code needed.</p>
+        <h3>BDScript support</h3>
+        <p>Write commands in Simple, BDScript, or BDScript 2. Use the full BDScript function library — embeds, math, conditionals, variables, and more.</p>
       </div>
       <div class="feature-card fade-up fade-up-d1">
         <div class="feature-icon">🔄</div>
@@ -233,7 +246,6 @@ label.field-label{display:block;color:var(--muted2);font-size:12px;margin-bottom
       </div>
     </div>
   </section>
-
   <footer class="land-footer">© 2025 BotForge. All rights reserved.</footer>
 </div>
 
@@ -248,30 +260,15 @@ label.field-label{display:block;color:var(--muted2);font-size:12px;margin-bottom
       <div class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Sign up</div>
     </div>
     <div id="form-login">
-      <div class="field">
-        <label class="field-label">Email</label>
-        <input class="input" type="email" id="login-email" placeholder="you@example.com" autocomplete="email">
-      </div>
-      <div class="field">
-        <label class="field-label">Password</label>
-        <input class="input" type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password">
-      </div>
+      <div class="field"><label class="field-label">Email</label><input class="input" type="email" id="login-email" placeholder="you@example.com" autocomplete="email"></div>
+      <div class="field"><label class="field-label">Password</label><input class="input" type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password"></div>
       <button class="btn btn-primary" style="width:100%;justify-content:center;padding:10px;" onclick="doLogin()" id="login-btn">Log in →</button>
       <div id="login-err" class="red" style="font-size:12px;margin-top:10px;"></div>
     </div>
     <div id="form-register" class="hidden">
-      <div class="field">
-        <label class="field-label">Username</label>
-        <input class="input" type="text" id="reg-username" placeholder="coolbotbuilder" autocomplete="username">
-      </div>
-      <div class="field">
-        <label class="field-label">Email</label>
-        <input class="input" type="email" id="reg-email" placeholder="you@example.com" autocomplete="email">
-      </div>
-      <div class="field">
-        <label class="field-label">Password <span class="muted">(min 6 chars)</span></label>
-        <input class="input" type="password" id="reg-pass" placeholder="••••••••" autocomplete="new-password">
-      </div>
+      <div class="field"><label class="field-label">Username</label><input class="input" type="text" id="reg-username" placeholder="coolbotbuilder" autocomplete="username"></div>
+      <div class="field"><label class="field-label">Email</label><input class="input" type="email" id="reg-email" placeholder="you@example.com" autocomplete="email"></div>
+      <div class="field"><label class="field-label">Password <span class="muted">(min 6 chars)</span></label><input class="input" type="password" id="reg-pass" placeholder="••••••••" autocomplete="new-password"></div>
       <button class="btn btn-primary" style="width:100%;justify-content:center;padding:10px;" onclick="doRegister()" id="reg-btn">Create account →</button>
       <div id="reg-err" class="red" style="font-size:12px;margin-top:10px;"></div>
     </div>
@@ -283,20 +280,14 @@ label.field-label{display:block;color:var(--muted2);font-size:12px;margin-bottom
     <div class="sidebar-logo">bot<span>forge</span></div>
     <div class="sidebar-section">Navigation</div>
     <nav class="sidebar-nav">
-      <div class="nav-item active" data-page="dashboard" onclick="goto('dashboard')">
-        <span class="icon">⬜</span><span>Dashboard</span>
-      </div>
-      <div class="nav-item" data-page="workspace" onclick="goto('workspace')" id="ws-nav-item">
-        <span class="icon">🤖</span><span>Bot Workspace</span>
-      </div>
+      <div class="nav-item active" data-page="dashboard" onclick="goto('dashboard')"><span class="icon">⬜</span><span>Dashboard</span></div>
+      <div class="nav-item" data-page="workspace" onclick="goto('workspace')" id="ws-nav-item"><span class="icon">🤖</span><span>Bot Workspace</span></div>
+      <div class="nav-item" data-page="settings" onclick="goto('settings')"><span class="icon">⚙</span><span>Settings</span></div>
     </nav>
     <div class="sidebar-bottom">
       <div class="user-chip" onclick="confirmLogout()">
         <div class="user-avatar" id="user-avatar-letter">?</div>
-        <div>
-          <div class="user-name" id="sidebar-username">—</div>
-          <div style="font-size:11px;color:var(--muted);">Log out</div>
-        </div>
+        <div><div class="user-name" id="sidebar-username">—</div><div style="font-size:11px;color:var(--muted);">Log out</div></div>
       </div>
     </div>
   </aside>
@@ -306,9 +297,7 @@ label.field-label{display:block;color:var(--muted2);font-size:12px;margin-bottom
       <div class="topbar-title" id="topbar-title">Dashboard</div>
       <div style="display:flex;align-items:center;gap:12px;">
         <div id="api-status-badge" class="badge badge-muted">⬤ checking</div>
-        <div style="color:var(--muted);font-size:12px;" id="pending-count" class="hidden">
-          <span id="pending-num">0</span> pending sync
-        </div>
+        <div style="color:var(--muted);font-size:12px;" id="pending-count" class="hidden"><span id="pending-num">0</span> pending sync</div>
       </div>
     </div>
 
@@ -324,7 +313,7 @@ label.field-label{display:block;color:var(--muted2);font-size:12px;margin-bottom
       <div class="workspace-tabs">
         <div class="ws-tab active" data-panel="overview" onclick="switchWsTab('overview')">Overview</div>
         <div class="ws-tab" data-panel="commands" onclick="switchWsTab('commands')">Commands</div>
-        <div class="ws-tab" data-panel="settings" onclick="switchWsTab('settings')">Settings</div>
+        <div class="ws-tab" data-panel="botsettings" onclick="switchWsTab('botsettings')">Bot Settings</div>
         <div class="ws-tab" data-panel="logs" onclick="switchWsTab('logs')">Logs</div>
       </div>
       <div class="page" style="padding-top:20px;">
@@ -344,18 +333,9 @@ label.field-label{display:block;color:var(--muted2);font-size:12px;margin-bottom
           </div>
           <div class="timer-bar-wrap"><div class="timer-bar" id="timer-bar" style="width:100%"></div></div>
           <div style="margin-top:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
-            <div class="card card-body" style="text-align:center;">
-              <div style="font-size:28px;font-weight:800;font-family:var(--font-head);" id="stat-cmds">0</div>
-              <div class="muted" style="font-size:12px;margin-top:4px;">Commands</div>
-            </div>
-            <div class="card card-body" style="text-align:center;">
-              <div style="font-size:28px;font-weight:800;font-family:var(--font-head);" id="stat-prefix">!</div>
-              <div class="muted" style="font-size:12px;margin-top:4px;">Prefix</div>
-            </div>
-            <div class="card card-body" style="text-align:center;">
-              <div style="font-size:28px;font-weight:800;font-family:var(--font-head);" id="stat-status">—</div>
-              <div class="muted" style="font-size:12px;margin-top:4px;">Status</div>
-            </div>
+            <div class="card card-body" style="text-align:center;"><div style="font-size:28px;font-weight:800;font-family:var(--font-head);" id="stat-cmds">0</div><div class="muted" style="font-size:12px;margin-top:4px;">Commands</div></div>
+            <div class="card card-body" style="text-align:center;"><div style="font-size:28px;font-weight:800;font-family:var(--font-head);" id="stat-prefix">!</div><div class="muted" style="font-size:12px;margin-top:4px;">Prefix</div></div>
+            <div class="card card-body" style="text-align:center;"><div style="font-size:28px;font-weight:800;font-family:var(--font-head);" id="stat-status">—</div><div class="muted" style="font-size:12px;margin-top:4px;">Status</div></div>
           </div>
         </div>
 
@@ -368,30 +348,43 @@ label.field-label{display:block;color:var(--muted2);font-size:12px;margin-bottom
             <button class="btn btn-primary btn-sm" onclick="openCmdEditor(null)">+ New Command</button>
           </div>
           <div id="cmd-list" class="cmd-list"></div>
+
           <div class="cmd-editor hidden" id="cmd-editor">
             <h4 id="editor-title">New Command</h4>
+            <div style="margin-bottom:16px;">
+              <div class="field-label" style="margin-bottom:8px;">Script type</div>
+              <div class="script-tabs">
+                <div class="script-tab active" data-stype="simple" onclick="switchScriptTab('simple')">Simple</div>
+                <div class="script-tab bdscript" data-stype="bdscript" onclick="switchScriptTab('bdscript')">BDScript</div>
+                <div class="script-tab bdscript2" data-stype="bdscript2" onclick="switchScriptTab('bdscript2')">BDScript 2</div>
+              </div>
+            </div>
             <div class="settings-grid">
-              <div class="field">
-                <label class="field-label">Trigger word <span class="muted">(without prefix)</span></label>
-                <input class="input" type="text" id="e-trigger" placeholder="help">
-              </div>
-              <div class="field">
-                <label class="field-label">Description <span class="muted">(optional)</span></label>
-                <input class="input" type="text" id="e-desc" placeholder="Shows help info">
-              </div>
+              <div class="field"><label class="field-label">Trigger word <span class="muted">(without prefix)</span></label><input class="input" type="text" id="e-trigger" placeholder="help"></div>
+              <div class="field"><label class="field-label">Description <span class="muted">(optional)</span></label><input class="input" type="text" id="e-desc" placeholder="Shows help info"></div>
             </div>
             <div class="field">
               <label class="field-label">Response</label>
-              <textarea class="textarea" id="e-response" rows="4" placeholder="Hey {user}! Welcome to {server}."></textarea>
-              <div class="muted" style="font-size:11px;margin-top:6px;">Click a variable to insert it:</div>
-              <div class="var-chips">
-                <span class="var-chip" onclick="insertVar('{user}')"> {user} </span>
-                <span class="var-chip" onclick="insertVar('{username}')"> {username} </span>
-                <span class="var-chip" onclick="insertVar('{mention}')"> {mention} </span>
-                <span class="var-chip" onclick="insertVar('{server}')"> {server} </span>
-                <span class="var-chip" onclick="insertVar('{channel}')"> {channel} </span>
-                <span class="var-chip" onclick="insertVar('{members}')"> {members} </span>
-                <span class="var-chip" onclick="insertVar('{id}')"> {id} </span>
+              <textarea class="textarea" id="e-response" rows="5" placeholder="Hey {user}! Welcome to {server}."></textarea>
+
+              <div id="simple-vars">
+                <div class="muted" style="font-size:11px;margin-top:6px;">Click to insert:</div>
+                <div class="var-chips">
+                  <span class="var-chip" onclick="insertVar('{user}')">{user}</span>
+                  <span class="var-chip" onclick="insertVar('{username}')">{username}</span>
+                  <span class="var-chip" onclick="insertVar('{mention}')">{mention}</span>
+                  <span class="var-chip" onclick="insertVar('{server}')">{server}</span>
+                  <span class="var-chip" onclick="insertVar('{channel}')">{channel}</span>
+                  <span class="var-chip" onclick="insertVar('{members}')">{members}</span>
+                </div>
+              </div>
+
+              <div id="bds-ref" class="ref-panel">
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                  <span class="muted" style="font-size:11px;">Click any function to insert it at the cursor</span>
+                  <span id="bds-version-label" class="badge badge-cyan" style="font-size:10px;">BDScript</span>
+                </div>
+                <div class="ref-grid" id="bds-ref-grid"></div>
               </div>
             </div>
             <div style="display:flex;gap:8px;margin-top:4px;">
@@ -400,6 +393,7 @@ label.field-label{display:block;color:var(--muted2);font-size:12px;margin-bottom
               <button class="btn btn-danger btn-sm hidden" id="delete-cmd-btn" onclick="deleteCmd()">Delete</button>
             </div>
           </div>
+
           <div id="conflicts-container" class="hidden" style="margin-top:20px;">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
               <span class="badge badge-amber">⚠ Sync conflicts</span>
@@ -409,30 +403,13 @@ label.field-label{display:block;color:var(--muted2);font-size:12px;margin-bottom
           </div>
         </div>
 
-        <div class="ws-panel" id="panel-settings">
+        <div class="ws-panel" id="panel-botsettings">
           <h3 style="font-family:var(--font-head);font-size:17px;font-weight:700;margin-bottom:20px;">Bot Settings</h3>
           <div class="settings-grid">
-            <div class="field">
-              <label class="field-label">Bot name</label>
-              <input class="input" type="text" id="s-name" placeholder="My Cool Bot">
-            </div>
-            <div class="field">
-              <label class="field-label">Command prefix</label>
-              <input class="input" type="text" id="s-prefix" placeholder="!" maxlength="5" style="max-width:100px;">
-            </div>
-            <div class="field" style="grid-column:span 2;">
-              <label class="field-label">Status message</label>
-              <input class="input" type="text" id="s-status" placeholder="with commands | !help">
-            </div>
-            <div class="field">
-              <label class="field-label">Activity type</label>
-              <select class="select" id="s-activity">
-                <option value="playing">Playing</option>
-                <option value="watching">Watching</option>
-                <option value="listening">Listening to</option>
-                <option value="competing">Competing in</option>
-              </select>
-            </div>
+            <div class="field"><label class="field-label">Bot name</label><input class="input" type="text" id="s-name" placeholder="My Cool Bot"></div>
+            <div class="field"><label class="field-label">Command prefix</label><input class="input" type="text" id="s-prefix" placeholder="!" maxlength="5" style="max-width:100px;"></div>
+            <div class="field" style="grid-column:span 2;"><label class="field-label">Status message</label><input class="input" type="text" id="s-status" placeholder="with commands | !help"></div>
+            <div class="field"><label class="field-label">Activity type</label><select class="select" id="s-activity"><option value="playing">Playing</option><option value="watching">Watching</option><option value="listening">Listening to</option><option value="competing">Competing in</option></select></div>
           </div>
           <div style="display:flex;gap:8px;margin-top:8px;padding-top:20px;border-top:1px solid var(--border);">
             <button class="btn btn-primary btn-sm" onclick="saveBotSettings()">Save settings</button>
@@ -448,13 +425,71 @@ label.field-label{display:block;color:var(--muted2);font-size:12px;margin-bottom
               <button class="btn btn-ghost btn-sm" onclick="clearLogs()">Clear</button>
             </div>
           </div>
-          <div class="log-box" id="log-box">
-            <div class="muted" style="font-size:12px;">Start your bot to see logs here.</div>
-          </div>
+          <div class="log-box" id="log-box"><div class="muted" style="font-size:12px;">Start your bot to see logs here.</div></div>
         </div>
 
       </div>
     </div>
+
+    <div id="page-settings" class="page hidden">
+      <h2 style="font-family:var(--font-head);font-size:22px;font-weight:800;letter-spacing:-.5px;margin-bottom:24px;">Settings</h2>
+
+      <div class="section-card">
+        <h3>Account</h3>
+        <div class="settings-grid">
+          <div class="field">
+            <label class="field-label">Username</label>
+            <div style="display:flex;gap:8px;">
+              <input class="input" type="text" id="acc-username" placeholder="username">
+              <button class="btn btn-ghost btn-sm" style="flex-shrink:0;" onclick="changeUsername()">Save</button>
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label">Email</label>
+            <input class="input" type="text" id="acc-email" disabled style="opacity:.5;">
+          </div>
+        </div>
+        <div style="padding-top:16px;border-top:1px solid var(--border);margin-top:4px;">
+          <div class="field-label" style="margin-bottom:12px;">Change password</div>
+          <div class="settings-grid">
+            <div class="field"><label class="field-label">Current password</label><input class="input" type="password" id="pw-current" placeholder="••••••••"></div>
+            <div class="field"><label class="field-label">New password</label><input class="input" type="password" id="pw-new" placeholder="••••••••"></div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="changePassword()">Update password</button>
+        </div>
+      </div>
+
+      <div class="section-card" id="settings-bot-section">
+        <h3>Bot</h3>
+        <div class="settings-grid">
+          <div class="field"><label class="field-label">Bot name</label><input class="input" type="text" id="sb-name" placeholder="My Cool Bot"></div>
+          <div class="field"><label class="field-label">Command prefix</label><input class="input" type="text" id="sb-prefix" placeholder="!" maxlength="5"></div>
+          <div class="field" style="grid-column:span 2;"><label class="field-label">Status message</label><input class="input" type="text" id="sb-status" placeholder="with commands | !help"></div>
+          <div class="field">
+            <label class="field-label">Activity type</label>
+            <select class="select" id="sb-activity">
+              <option value="playing">Playing</option>
+              <option value="watching">Watching</option>
+              <option value="listening">Listening to</option>
+              <option value="competing">Competing in</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="saveBotSettingsFromPage()">Save bot settings</button>
+      </div>
+
+      <div class="section-card" style="border-color:rgba(248,113,113,.2);">
+        <h3 style="color:var(--red);">Danger zone</h3>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+          <div>
+            <div style="font-size:13px;font-weight:500;">Delete account</div>
+            <div class="muted" style="font-size:12px;">This will permanently delete your account and your bot. This cannot be undone.</div>
+          </div>
+          <button class="btn btn-danger btn-sm" onclick="toast('Account deletion not yet supported. Contact the administrator.','info')">Delete account</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -464,23 +499,11 @@ label.field-label{display:block;color:var(--muted2);font-size:12px;margin-bottom
       <h3 style="font-family:var(--font-head);font-weight:800;">Add your Discord bot</h3>
       <button class="btn btn-ghost btn-xs" onclick="closeAddBot()">✕</button>
     </div>
-    <div class="field">
-      <label class="field-label">Bot name</label>
-      <input class="input" type="text" id="ab-name" placeholder="My Cool Bot">
-    </div>
-    <div class="field">
-      <label class="field-label">Bot token</label>
-      <input class="input" type="password" id="ab-token" placeholder="Your Discord bot token">
-    </div>
+    <div class="field"><label class="field-label">Bot name</label><input class="input" type="text" id="ab-name" placeholder="My Cool Bot"></div>
+    <div class="field"><label class="field-label">Bot token</label><input class="input" type="password" id="ab-token" placeholder="Your Discord bot token"></div>
     <div style="display:flex;gap:12px;margin-bottom:14px;">
-      <div style="flex:0 0 100px;">
-        <label class="field-label">Prefix</label>
-        <input class="input" type="text" id="ab-prefix" placeholder="!" maxlength="5" value="!">
-      </div>
-      <div style="flex:1;">
-        <label class="field-label">Status message</label>
-        <input class="input" type="text" id="ab-status" placeholder="with commands | !help">
-      </div>
+      <div style="flex:0 0 100px;"><label class="field-label">Prefix</label><input class="input" type="text" id="ab-prefix" placeholder="!" maxlength="5" value="!"></div>
+      <div style="flex:1;"><label class="field-label">Status message</label><input class="input" type="text" id="ab-status" placeholder="with commands | !help"></div>
     </div>
     <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:14px;" onclick="doAddBot()">Add Bot →</button>
     <div id="ab-err" class="red" style="font-size:12px;margin-top:8px;"></div>
@@ -496,8 +519,118 @@ const GITHUB_RAW="https://raw.githubusercontent.com/iamdookie1/Website-4/refs/he
 let API_URL=null,apiOnline=false,token=localStorage.getItem("bf_token")||null;
 let currentUser=JSON.parse(localStorage.getItem("bf_user")||"null");
 let currentBot=JSON.parse(localStorage.getItem("bf_bot")||"null");
-let statusInterval=null,editingCmdId=null;
+let statusInterval=null,editingCmdId=null,currentScriptType="simple";
 const LS_QUEUE="bf_queue",LS_CMDS="bf_local_cmds";
+
+const BDS_REFS = {
+  "User": [
+    ["$authorID","author's user ID"],["$authorUsername","author's username"],
+    ["$authorMention","@mention the author"],["$authorNickname","author's display name"],
+    ["$authorAvatar","author's avatar URL"],["$authorTag","username#0000"],
+    ["$accountAge[]","days since account creation"],
+  ],
+  "Server": [
+    ["$guildID","server ID"],["$guildName","server name"],
+    ["$guildMemberCount","member count"],["$channelID","channel ID"],
+    ["$channelName","channel name"],
+  ],
+  "Bot": [
+    ["$botID","bot's user ID"],["$botUsername","bot's username"],
+    ["$botMention","@mention the bot"],["$prefix","command prefix"],
+    ["$ping","bot latency (e.g. 42ms)"],
+  ],
+  "Message": [
+    ["$message","text after the command"],["$messageID","message ID"],
+    ["$args","text after command"],["$arg[n]","nth argument"],
+    ["$argsCount","number of args"],["$isArgs","true if args exist"],
+  ],
+  "Math": [
+    ["$sum[a;b]","add numbers"],["$sub[a;b]","subtract"],
+    ["$multi[a;b]","multiply"],["$div[a;b]","divide"],
+    ["$mod[a;b]","modulo"],["$random[min;max]","random integer"],
+    ["$round[n]","round"],["$abs[n]","absolute value"],
+    ["$min[a;b]","minimum"],["$max[a;b]","maximum"],
+    ["$pow[a;b]","power"],["$floor[n]","floor"],["$ceil[n]","ceiling"],
+  ],
+  "String": [
+    ["$upper[text]","UPPERCASE"],["$lower[text]","lowercase"],
+    ["$strlen[text]","string length"],["$replaceText[text;old;new]","replace"],
+    ["$trimSpace[text]","trim whitespace"],["$repeat[text;n]","repeat N times"],
+    ["$numberSeparator[n]","1,000,000 format"],["$substring[text;start;end]","slice"],
+    ["$startsWith[text;prefix]","true/false"],["$endsWith[text;suffix]","true/false"],
+    ["$contains[text;str]","true/false"],["$split[text;sep]","split string"],
+    ["$splitText[n]","get split segment n"],["$splitCount","number of segments"],
+  ],
+  "Logic": [
+    ["$if[cond;then;else]","inline if"],
+    ["$if[cond]\\n...\\n$else\\n...\\n$endif","block if"],
+  ],
+  "Variables": [
+    ["$let[name;value]","set local var"],["$get[name]","get local var"],
+    ["$set[name;value]","set local var"],
+  ],
+  "Embed": [
+    ["$title[text]","embed title"],["$description[text]","embed description"],
+    ["$color[#hex]","embed color"],["$footer[text]","embed footer"],
+    ["$thumbnail[url]","embed thumbnail"],["$image[url]","embed image"],
+    ["$addField[name;value;inline?]","add field"],["$author[name;iconURL]","embed author"],
+    ["$timestamp","add timestamp"],["$url[url]","embed URL"],
+  ],
+  "Actions": [
+    ["$deleteCommand","delete trigger message"],["$reply[text]","reply content"],
+  ],
+  "Time": [
+    ["$date","YYYY-MM-DD"],["$time","HH:MM:SS"],
+    ["$day","day of week"],["$month","month name"],["$year","year"],
+  ],
+};
+
+const BDS2_EXTRA = {
+  "BDScript 2": [
+    ["$isNumber[text]","true if numeric"],["$isEmpty[text]","true if empty"],
+    ["$chance[pct]","true X% of the time"],["$randomText[a;b;c]","pick random option"],
+    ["$charCount[text;char]","count occurrences"],["$zeroPad[n;length]","zero-pad number"],
+  ],
+};
+
+function buildRefGrid(version){
+  const grid=document.getElementById("bds-ref-grid");
+  const lbl=document.getElementById("bds-version-label");
+  grid.innerHTML="";
+  lbl.textContent=version==="bdscript2"?"BDScript 2":"BDScript";
+  lbl.className=version==="bdscript2"?"badge badge-amber":"badge badge-cyan";
+
+  const all={...BDS_REFS,...(version==="bdscript2"?BDS2_EXTRA:{})};
+  for(const [group,items] of Object.entries(all)){
+    const div=document.createElement("div");div.className="ref-group";
+    div.innerHTML=`<h5>${group}</h5>`;
+    items.forEach(([fn,desc])=>{
+      const el=document.createElement("div");el.className="ref-item";
+      el.innerHTML=`${esc(fn)} <small>— ${esc(desc)}</small>`;
+      el.onclick=()=>insertVar(fn.replace(/\\n/g,"\n"));
+      div.appendChild(el);
+    });
+    grid.appendChild(div);
+  }
+}
+
+function switchScriptTab(stype){
+  currentScriptType=stype;
+  document.querySelectorAll(".script-tab").forEach(t=>t.classList.toggle("active",t.dataset.stype===stype));
+  const ta=document.getElementById("e-response");
+  const simpleVars=document.getElementById("simple-vars");
+  const bdsRef=document.getElementById("bds-ref");
+  if(stype==="simple"){
+    ta.placeholder="Hey {user}! Welcome to {server}.";
+    simpleVars.style.display="block";bdsRef.classList.remove("visible");
+  }else{
+    ta.placeholder=stype==="bdscript2"
+      ?"$title[Server Info]\n$description[Hey $authorMention! $guildName has $guildMemberCount members.]\n$color[#3b82f6]"
+      :"Hey $authorMention!\nYou are in $guildName which has $guildMemberCount members.\nYour roll: $random[1;100]";
+    simpleVars.style.display="none";bdsRef.classList.add("visible");
+    buildRefGrid(stype);
+  }
+}
 
 function getQueue(){try{return JSON.parse(localStorage.getItem(LS_QUEUE)||"[]")}catch{return[]}}
 function setQueue(q){localStorage.setItem(LS_QUEUE,JSON.stringify(q))}
@@ -565,8 +698,7 @@ async function syncQueue(){
         const serverCmds=await apiFetch(`/bots/${currentBot.id}/commands`);
         const sc=serverCmds.find(c=>c.id===entry.data.id);
         if(sc&&new Date(sc.updated_at).getTime()>entry.ts){conflicts.push({entry,serverCmd:sc});continue}
-        await apiFetch(`/commands/${entry.data.id}`,{method:"PUT",body:JSON.stringify(entry.data)});
-        resolved.push(entry);
+        await apiFetch(`/commands/${entry.data.id}`,{method:"PUT",body:JSON.stringify(entry.data)});resolved.push(entry);
       }else if(entry.action==="DELETE_CMD"){
         await apiFetch(`/commands/${entry.data.id}`,{method:"DELETE"});resolved.push(entry);
       }else if(entry.action==="UPDATE_BOT"){
@@ -585,7 +717,7 @@ function showConflicts(conflicts){
   container.classList.remove("hidden");list.innerHTML="";
   conflicts.forEach(({entry,serverCmd})=>{
     const div=document.createElement("div");div.className="conflict-card";
-    div.innerHTML=`<h5>⚠ Conflict: command "${esc(entry.data.trigger||serverCmd.trigger)}"</h5><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:12px;margin-bottom:10px;"><div><div class="muted" style="margin-bottom:4px;">Your offline edit:</div><pre style="background:var(--surface);padding:8px;border-radius:2px;white-space:pre-wrap;">${esc(entry.data.response||"—")}</pre></div><div><div class="muted" style="margin-bottom:4px;">Current server version:</div><pre style="background:var(--surface);padding:8px;border-radius:2px;white-space:pre-wrap;">${esc(serverCmd.response)}</pre></div></div><div style="display:flex;gap:8px;"><button class="btn btn-primary btn-xs" onclick='resolveConflict("mine",${JSON.stringify(entry).replace(/"/g,"&quot;")})'>Keep my edit</button><button class="btn btn-ghost btn-xs" onclick='resolveConflict("server",${JSON.stringify(entry).replace(/"/g,"&quot;")})'>Keep server version</button></div>`;
+    div.innerHTML=`<h5>⚠ Conflict: "${esc(entry.data.trigger||serverCmd.trigger)}"</h5><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:12px;margin-bottom:10px;"><div><div class="muted" style="margin-bottom:4px;">Your offline edit:</div><pre style="background:var(--surface);padding:8px;border-radius:2px;white-space:pre-wrap;">${esc(entry.data.response||"—")}</pre></div><div><div class="muted" style="margin-bottom:4px;">Server version:</div><pre style="background:var(--surface);padding:8px;border-radius:2px;white-space:pre-wrap;">${esc(serverCmd.response)}</pre></div></div><div style="display:flex;gap:8px;"><button class="btn btn-primary btn-xs" onclick='resolveConflict("mine",${JSON.stringify(entry).replace(/"/g,"&quot;")})'>Keep my edit</button><button class="btn btn-ghost btn-xs" onclick='resolveConflict("server",${JSON.stringify(entry).replace(/"/g,"&quot;")})'>Keep server version</button></div>`;
     list.appendChild(div);
   });
 }
@@ -608,21 +740,21 @@ function toast(msg,type="info"){
   document.getElementById("toast-wrap").appendChild(el);setTimeout(()=>el.remove(),3500);
 }
 
-let currentPage="dashboard";
+const ALL_PAGES=["dashboard","workspace","settings"];
+let currentPage="dashboard",currentWsTab="overview";
+
 function goto(page){
   currentPage=page;
   document.querySelectorAll("[data-page]").forEach(el=>el.classList.remove("active"));
   document.querySelector(`[data-page="${page}"]`)?.classList.add("active");
-  document.getElementById("page-dashboard").classList.add("hidden");
-  document.getElementById("page-workspace").classList.add("hidden");
-  document.getElementById(`page-${page}`).classList.remove("hidden");
-  const titles={dashboard:"Dashboard",workspace:"Bot Workspace"};
+  ALL_PAGES.forEach(p=>document.getElementById(`page-${p}`).classList.toggle("hidden",p!==page));
+  const titles={dashboard:"Dashboard",workspace:"Bot Workspace",settings:"Settings"};
   document.getElementById("topbar-title").textContent=titles[page]||page;
   if(page==="workspace"&&currentBot)loadWorkspace();
   else if(page==="dashboard"){loadBots();stopPolling()}
+  else if(page==="settings")loadSettingsPage();
 }
 
-let currentWsTab="overview";
 function switchWsTab(tab){
   currentWsTab=tab;
   document.querySelectorAll(".ws-tab").forEach(el=>el.classList.toggle("active",el.dataset.panel===tab));
@@ -635,7 +767,6 @@ function openAuth(tab="login"){document.getElementById("auth-modal").classList.r
 function closeAuth(){document.getElementById("auth-modal").classList.add("hidden")}
 function handleModalClick(e){if(e.target===e.currentTarget)closeAuth()}
 function handleAddBotModal(e){if(e.target===e.currentTarget)closeAddBot()}
-
 function switchAuthTab(tab){
   ["login","register"].forEach(t=>{
     document.getElementById(`tab-${t}`).classList.toggle("active",t===tab);
@@ -704,7 +835,7 @@ async function loadBots(){
     document.getElementById("ws-nav-item").style.opacity="1";
     document.getElementById("add-bot-btn").classList.add("hidden");
     const card=document.createElement("div");card.className="bot-card fade-up";card.onclick=()=>goto("workspace");
-    card.innerHTML=`<div class="bot-avatar">🤖</div><div class="bot-info"><div class="bot-name">${esc(bot.name)}</div><div class="bot-meta"><span>prefix: <strong>${esc(bot.prefix)}</strong></span><span>${bot.is_running?'<span class="badge badge-green">● Running</span>':'<span class="badge badge-muted">○ Offline</span>'}</span></div></div><div class="bot-actions" onclick="event.stopPropagation()"><button class="btn btn-ghost btn-sm" onclick="goto('workspace')">Manage →</button></div>`;
+    card.innerHTML=`<div class="bot-avatar">🤖</div><div class="bot-info"><div class="bot-name">${esc(bot.name)}</div><div class="bot-meta"><span>prefix: <strong>${esc(bot.prefix)}</strong></span><span>${bot.is_running?'<span class="badge badge-green">● Running</span>':'<span class="badge badge-muted">○ Offline</span>'}</span><span class="muted">${esc(bot.token_preview)}</span></div></div><div class="bot-actions" onclick="event.stopPropagation()"><button class="btn btn-ghost btn-sm" onclick="goto('workspace')">Manage →</button></div>`;
     el.appendChild(card);
   }catch(e){el.innerHTML=`<div class="muted" style="font-size:13px;padding:20px 0;">${esc(e.message)}</div>`}
 }
@@ -730,7 +861,63 @@ function loadWorkspace(){
   document.getElementById("ws-bot-name").textContent=currentBot.name;
   document.getElementById("stat-prefix").textContent=currentBot.prefix||"!";
   document.getElementById("stat-status").textContent=currentBot.status_message||"—";
-  loadStatus();loadCommands();loadSettings();startStatusPolling();
+  loadStatus();loadCommands();loadBotSettings();startStatusPolling();
+}
+
+function loadSettingsPage(){
+  if(currentUser){
+    document.getElementById("acc-username").value=currentUser.username||"";
+    document.getElementById("acc-email").value=currentUser.email||"";
+  }
+  const botSection=document.getElementById("settings-bot-section");
+  if(currentBot){
+    botSection.classList.remove("hidden");
+    document.getElementById("sb-name").value=currentBot.name||"";
+    document.getElementById("sb-prefix").value=currentBot.prefix||"!";
+    document.getElementById("sb-status").value=currentBot.status_message||"";
+    document.getElementById("sb-activity").value=currentBot.activity_type||"playing";
+  }else{
+    botSection.classList.add("hidden");
+  }
+}
+
+async function changeUsername(){
+  const name=document.getElementById("acc-username").value.trim();
+  if(!apiOnline){toast("Server offline","err");return}
+  try{
+    const res=await apiFetch("/auth/change-username",{method:"POST",body:JSON.stringify({username:name})});
+    currentUser.username=res.username;localStorage.setItem("bf_user",JSON.stringify(currentUser));
+    document.getElementById("sidebar-username").textContent=res.username;
+    document.getElementById("user-avatar-letter").textContent=res.username[0].toUpperCase();
+    toast("Username updated!","ok");
+  }catch(e){toast(e.message,"err")}
+}
+
+async function changePassword(){
+  const current=document.getElementById("pw-current").value;
+  const newPw=document.getElementById("pw-new").value;
+  if(!apiOnline){toast("Server offline","err");return}
+  try{
+    await apiFetch("/auth/change-password",{method:"POST",body:JSON.stringify({current,new:newPw})});
+    document.getElementById("pw-current").value="";document.getElementById("pw-new").value="";
+    toast("Password updated!","ok");
+  }catch(e){toast(e.message,"err")}
+}
+
+async function saveBotSettingsFromPage(){
+  const data={name:document.getElementById("sb-name").value.trim(),prefix:document.getElementById("sb-prefix").value.trim()||"!",status_message:document.getElementById("sb-status").value.trim(),activity_type:document.getElementById("sb-activity").value};
+  if(!currentBot){toast("No bot to update","err");return}
+  if(apiOnline){
+    try{
+      await apiFetch(`/bots/${currentBot.id}`,{method:"PUT",body:JSON.stringify(data)});
+      Object.assign(currentBot,data);localStorage.setItem("bf_bot",JSON.stringify(currentBot));
+      toast("Bot settings saved!","ok");
+    }catch(e){toast(e.message,"err")}
+  }else{
+    Object.assign(currentBot,data);localStorage.setItem("bf_bot",JSON.stringify(currentBot));
+    addToQueue({action:"UPDATE_BOT",data:{id:currentBot.id,...data}});
+    toast("Saved offline. Will sync when connection is restored.","info");
+  }
 }
 
 async function loadStatus(){
@@ -782,12 +969,19 @@ async function loadCommands(){
   renderCmds(cmds);
 }
 
+const STYPE_BADGES={
+  simple:'<span class="badge badge-muted">Simple</span>',
+  bdscript:'<span class="badge badge-cyan">BDScript</span>',
+  bdscript2:'<span class="badge badge-amber">BDScript 2</span>',
+};
+
 function renderCmds(cmds){
   const list=document.getElementById("cmd-list");list.innerHTML="";
   if(!cmds.length){list.innerHTML=`<div class="muted" style="font-size:13px;padding:16px 0;">No commands yet. Create your first one above.</div>`;return}
   cmds.forEach(cmd=>{
     const row=document.createElement("div");row.className="cmd-row"+(cmd.enabled?"":" disabled-row");row.dataset.id=cmd.id;
-    row.innerHTML=`<div class="cmd-trigger">${esc(currentBot.prefix||"!")}${esc(cmd.trigger)}</div><div class="cmd-desc">${esc(cmd.description||cmd.response)}</div><div style="margin-right:auto;">${cmd.enabled?'<span class="badge badge-green">on</span>':'<span class="badge badge-muted">off</span>'}</div><div class="cmd-actions"><button class="btn btn-ghost btn-xs" onclick="openCmdEditor(${cmd.id})">Edit</button><button class="btn btn-ghost btn-xs" onclick="toggleCmd(${cmd.id},${cmd.enabled?0:1})">${cmd.enabled?"Disable":"Enable"}</button></div>`;
+    const stype=cmd.script_type||"simple";
+    row.innerHTML=`<div class="cmd-trigger">${esc(currentBot.prefix||"!")}${esc(cmd.trigger)}</div><div class="cmd-desc">${esc(cmd.description||cmd.response)}</div><div style="display:flex;gap:6px;margin-right:auto;">${STYPE_BADGES[stype]||STYPE_BADGES.simple} ${cmd.enabled?'<span class="badge badge-green">on</span>':'<span class="badge badge-muted">off</span>'}</div><div class="cmd-actions"><button class="btn btn-ghost btn-xs" onclick="openCmdEditor(${cmd.id})">Edit</button><button class="btn btn-ghost btn-xs" onclick="toggleCmd(${cmd.id},${cmd.enabled?0:1})">${cmd.enabled?"Disable":"Enable"}</button></div>`;
     list.appendChild(row);
   });
 }
@@ -796,11 +990,19 @@ function openCmdEditor(id){
   editingCmdId=id;
   const editor=document.getElementById("cmd-editor"),title=document.getElementById("editor-title"),delBtn=document.getElementById("delete-cmd-btn");
   editor.classList.remove("hidden");
-  if(!id){title.textContent="New Command";document.getElementById("e-trigger").value="";document.getElementById("e-response").value="";document.getElementById("e-desc").value="";delBtn.classList.add("hidden")}
-  else{
+  if(!id){
+    title.textContent="New Command";
+    document.getElementById("e-trigger").value="";document.getElementById("e-response").value="";document.getElementById("e-desc").value="";
+    delBtn.classList.add("hidden");switchScriptTab("simple");
+  }else{
     title.textContent="Edit Command";delBtn.classList.remove("hidden");
     const cmd=getLocalCmds().find(c=>c.id===id);
-    if(cmd){document.getElementById("e-trigger").value=cmd.trigger;document.getElementById("e-response").value=cmd.response;document.getElementById("e-desc").value=cmd.description||""}
+    if(cmd){
+      document.getElementById("e-trigger").value=cmd.trigger;
+      document.getElementById("e-response").value=cmd.response;
+      document.getElementById("e-desc").value=cmd.description||"";
+      switchScriptTab(cmd.script_type||"simple");
+    }
   }
   editor.scrollIntoView({behavior:"smooth",block:"nearest"});
 }
@@ -815,21 +1017,22 @@ async function saveCommand(){
   const trigger=document.getElementById("e-trigger").value.trim();
   const response=document.getElementById("e-response").value.trim();
   const desc=document.getElementById("e-desc").value.trim();
+  const stype=currentScriptType;
   if(!trigger||!response){toast("Trigger and response are required","err");return}
   const localCmds=getLocalCmds();
   if(!editingCmdId){
     if(apiOnline){
       try{
-        const cmd=await apiFetch(`/bots/${currentBot.id}/commands`,{method:"POST",body:JSON.stringify({trigger,response,description:desc})});
+        const cmd=await apiFetch(`/bots/${currentBot.id}/commands`,{method:"POST",body:JSON.stringify({trigger,response,description:desc,script_type:stype})});
         const updated=[...localCmds,cmd];setLocalCmds(updated);document.getElementById("stat-cmds").textContent=updated.length;renderCmds(updated);closeCmdEditor();toast("Command created!","ok");
       }catch(e){toast(e.message,"err")}
     }else{
       const tempId="local_"+Date.now();
-      const cmd={id:tempId,trigger,response,description:desc,enabled:1,created_at:new Date().toISOString(),updated_at:new Date().toISOString(),bot_id:currentBot.id};
-      const updated=[...localCmds,cmd];setLocalCmds(updated);addToQueue({action:"ADD_CMD",data:{trigger,response,description:desc},localId:tempId});renderCmds(updated);closeCmdEditor();toast("Saved offline. Will sync when connection is restored.","info");
+      const cmd={id:tempId,trigger,response,description:desc,script_type:stype,enabled:1,created_at:new Date().toISOString(),updated_at:new Date().toISOString(),bot_id:currentBot.id};
+      const updated=[...localCmds,cmd];setLocalCmds(updated);addToQueue({action:"ADD_CMD",data:{trigger,response,description:desc,script_type:stype},localId:tempId});renderCmds(updated);closeCmdEditor();toast("Saved offline. Will sync when connection is restored.","info");
     }
   }else{
-    const data={trigger,response,description:desc};
+    const data={trigger,response,description:desc,script_type:stype};
     if(apiOnline){
       try{
         const res=await apiFetch(`/commands/${editingCmdId}`,{method:"PUT",body:JSON.stringify(data)});
@@ -844,7 +1047,7 @@ async function saveCommand(){
 
 async function toggleCmd(id,enabled){
   const localCmds=getLocalCmds(),cmd=localCmds.find(c=>c.id===id);if(!cmd)return;
-  const data={trigger:cmd.trigger,response:cmd.response,description:cmd.description,enabled};
+  const data={trigger:cmd.trigger,response:cmd.response,description:cmd.description,script_type:cmd.script_type,enabled};
   if(apiOnline){
     try{await apiFetch(`/commands/${id}`,{method:"PUT",body:JSON.stringify(data)});const updated=localCmds.map(c=>c.id===id?{...c,enabled}:c);setLocalCmds(updated);renderCmds(updated)}
     catch(e){toast(e.message,"err")}
@@ -866,7 +1069,7 @@ async function deleteCmd(){
   }
 }
 
-function loadSettings(){
+function loadBotSettings(){
   if(!currentBot)return;
   document.getElementById("s-name").value=currentBot.name||"";
   document.getElementById("s-prefix").value=currentBot.prefix||"!";
@@ -918,8 +1121,8 @@ function refreshCurrentPanel(){
   else if(currentPage==="workspace"){
     if(currentWsTab==="commands")loadCommands();
     else if(currentWsTab==="overview")loadStatus();
-    else if(currentWsTab==="settings")loadSettings();
-  }
+    else if(currentWsTab==="botsettings")loadBotSettings();
+  }else if(currentPage==="settings")loadSettingsPage();
 }
 
 function esc(str){return String(str||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
