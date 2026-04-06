@@ -204,8 +204,8 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
 .stype-tab{padding:5px 13px;border-radius:var(--radius);font-size:12px;cursor:pointer;border:1px solid var(--border);color:var(--muted);font-family:var(--fm);transition:all .12s}
 .stype-tab:hover{border-color:var(--border2);color:var(--text)}
 .stype-tab.active{background:var(--accent-lo);color:var(--accent);border-color:var(--accent-glo)}
-.stype-tab.bds.active{background:rgba(34,211,238,.1);color:var(--cyan);border-color:rgba(34,211,238,.3)}
-.stype-tab.bds2.active{background:rgba(251,191,36,.1);color:var(--amber);border-color:rgba(251,191,36,.3)}
+.stype-tab.cs.active{background:rgba(34,211,238,.1);color:var(--cyan);border-color:rgba(34,211,238,.3)}
+.stype-tab.csplus.active{background:rgba(167,139,250,.1);color:var(--purple);border-color:rgba(167,139,250,.3)}
 .var-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
 .chip{background:var(--surface3);border:1px solid var(--border);border-radius:3px;padding:2px 8px;font-size:11px;color:var(--cyan);cursor:pointer;font-family:var(--fm);transition:background .1s}
 .chip:hover{background:var(--border)}
@@ -328,7 +328,7 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
   <section class="hero fu">
     <div class="hero-pill">⚡ Discord bot builder</div>
     <h1>Build bots.<br>No code required.<br><em>Just your ideas.</em></h1>
-    <p>Create Discord bots with a visual dashboard. Supports Simple, BDScript, and BDScript 2 — add commands, set responses, run your bot from the browser.</p>
+    <p>Create Discord bots with a visual dashboard. Supports Simple, CScript, and CScript+ — add commands, set responses, run your bot from the browser.</p>
     <div class="hero-btns">
       <button class="btn btn-primary" onclick="openAuth('register')" style="padding:10px 26px;font-size:14px;">Create free account</button>
       <button class="btn btn-ghost" onclick="openAuth('login')" style="padding:10px 20px;font-size:14px;">I have an account</button>
@@ -348,7 +348,7 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
   <section class="feats">
     <h2>Everything you need</h2>
     <div class="feat-grid">
-      <div class="feat-card fu"><div style="font-size:24px">⚡</div><h3>BDScript support</h3><p>Simple, BDScript, or BDScript 2. Full function library — embeds, math, conditionals, variables, string ops, and more.</p></div>
+      <div class="feat-card fu"><div style="font-size:24px">⚡</div><h3>CScript & CScript+</h3><p>Two custom scripting engines built from scratch. CScript is easy to pick up. CScript+ adds loops, switch, repeat, ternary, clamp, and more advanced control flow.</p></div>
       <div class="feat-card fu fu1"><div style="font-size:24px">🔄</div><h3>Hot reload</h3><p>Edit commands while your bot is live. Changes apply instantly with no restart needed.</p></div>
       <div class="feat-card fu fu2"><div style="font-size:24px">💾</div><h3>Offline sync</h3><p>Edit even when the server is down. Changes queue locally and sync with smart conflict detection.</p></div>
       <div class="feat-card fu fu3"><div style="font-size:24px">⏱</div><h3>Auto-stop</h3><p>Bots stop automatically after 30 minutes. A live countdown keeps you informed.</p></div>
@@ -549,8 +549,8 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
               <label class="lbl" style="margin-bottom:8px">Script type</label>
               <div class="stype-tabs">
                 <div class="stype-tab active" data-st="simple" onclick="switchStype('simple')">Simple</div>
-                <div class="stype-tab bds" data-st="bdscript" onclick="switchStype('bdscript')">BDScript</div>
-                <div class="stype-tab bds2" data-st="bdscript2" onclick="switchStype('bdscript2')">BDScript 2</div>
+                <div class="stype-tab cs" data-st="cscript" onclick="switchStype('cscript')">CScript</div>
+                <div class="stype-tab csplus" data-st="cscript+" onclick="switchStype('cscript+')">CScript+</div>
               </div>
             </div>
             <div class="two-col">
@@ -562,7 +562,7 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
               <textarea class="textarea" id="e-response" rows="5" placeholder="Hey {user}! Welcome to {server}." oninput="updCharCount()"></textarea>
               <div class="char-counter" id="char-counter">0 chars</div>
               <div id="simple-chips"><div style="color:var(--muted);font-size:11px;margin-top:6px">Click to insert:</div><div class="var-chips"><span class="chip" onclick="insVar('{user}')">{user}</span><span class="chip" onclick="insVar('{username}')">{username}</span><span class="chip" onclick="insVar('{mention}')">{mention}</span><span class="chip" onclick="insVar('{server}')">{server}</span><span class="chip" onclick="insVar('{channel}')">{channel}</span><span class="chip" onclick="insVar('{members}')">{members}</span></div></div>
-              <div id="bds-hint" class="hidden" style="font-size:11.5px;color:var(--muted);margin-top:7px">Use the <strong style="color:var(--cyan)">Functions</strong> tab to browse all available functions. Click any to open details and insert.</div>
+              <div id="bds-hint" class="hidden" style="font-size:11.5px;color:var(--muted);margin-top:7px">Browse the <strong style="color:var(--cyan)">Functions</strong> and <strong style="color:var(--purple)">Variables</strong> tabs for everything available. Click any item to insert at cursor.</div>
             </div>
             <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:4px">
               <button class="btn btn-primary btn-sm" onclick="saveCommand()">Save command</button>
@@ -582,8 +582,8 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
           <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
             <div><h3 style="font-family:var(--fh);font-size:17px;font-weight:700">Function Reference</h3><p style="color:var(--muted);font-size:12px;margin-top:2px">Click any function to see details and insert it into the editor.</p></div>
             <div style="display:flex;gap:6px">
-              <div class="badge b-cyan" id="fn-filter-bds" style="cursor:pointer" onclick="filterFns('bdscript')">BDScript</div>
-              <div class="badge b-amber" id="fn-filter-bds2" style="cursor:pointer" onclick="filterFns('bdscript2')">BDScript 2</div>
+              <div class="badge b-cyan" id="fn-filter-bots" style="cursor:pointer" onclick="filterFns('botscript')">BotScript</div>
+              <div class="badge b-purple" id="fn-filter-forge" style="cursor:pointer" onclick="filterFns('forgescript')">ForgeScript</div>
               <div class="badge b-muted" id="fn-filter-all" style="cursor:pointer;opacity:.5" onclick="filterFns('all')">All</div>
             </div>
           </div>
@@ -619,7 +619,7 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
 
           <div id="live-vars-list" style="margin-bottom:24px"></div>
 
-          <div class="fn-cat-header">BDScript variable functions — click any to insert into editor</div>
+          <div class="fn-cat-header">CScript variable functions — click any to insert into editor</div>
           <div style="margin-bottom:10px;display:flex;gap:6px;flex-wrap:wrap">
             <div class="badge b-blue" style="cursor:pointer" onclick="setVarRefFilter('user')">User vars</div>
             <div class="badge b-cyan" style="cursor:pointer" onclick="setVarRefFilter('server')">Server vars</div>
@@ -709,7 +709,7 @@ const GITHUB_RAW="https://raw.githubusercontent.com/iamdookie1/Website-4/refs/he
 const LS_Q="bf_q",LS_CMDS="bf_cmds",LS_BOT="bf_bot",LS_TOKEN="bf_token",LS_USER="bf_user",LS_URL="bf_url";
 
 let API=null,online=false,token=ls(LS_TOKEN),currentUser=lsj(LS_USER),currentBot=lsj(LS_BOT);
-let statusInt=null,editingCmdId=null,currentStype="simple",fnFilter="bdscript",currentFnInsert=null;
+let statusInt=null,editingCmdId=null,currentStype="simple",fnFilter="cscript",currentFnInsert=null;
 
 function ls(k){return localStorage.getItem(k)}
 function lss(k,v){localStorage.setItem(k,v)}
@@ -1055,7 +1055,7 @@ async function loadCommands(){
   renderCmds(cmds);
 }
 
-const SBADGE={simple:'<span class="badge b-muted">Simple</span>',bdscript:'<span class="badge b-cyan">BDScript</span>',bdscript2:'<span class="badge b-amber">BDScript 2</span>'};
+const SBADGE={simple:'<span class="badge b-muted">Simple</span>',botscript:'<span class="badge b-cyan">BotScript</span>',forgescript:'<span class="badge b-purple">ForgeScript</span>'};
 
 function renderCmds(cmds){
   const el=id("cmd-list");el.innerHTML="";
@@ -1107,8 +1107,16 @@ function switchStype(st){
   currentStype=st;
   document.querySelectorAll(".stype-tab").forEach(t=>t.classList.toggle("active",t.dataset.st===st));
   const ta=id("e-response"),sc=id("simple-chips"),bh=id("bds-hint");
-  if(st==="simple"){ta.placeholder="Hey {user}! Welcome to {server}.";sc.style.display="block";bh.classList.add("hidden")}
-  else{ta.placeholder=st==="bdscript2"?"$title[Hello]\n$description[Hey $authorMention! You're in $guildName.]\n$color[#3b82f6]":"Hey $authorMention! Random number: $random[1;100]\nYou're in $guildName with $guildMemberCount members.";sc.style.display="none";bh.classList.remove("hidden")}
+  if(st==="simple"){
+    ta.placeholder="Hey {user}! Welcome to {server}.";
+    sc.style.display="block";bh.classList.add("hidden");
+  }else if(st==="botscript"){
+    ta.placeholder="{embed.title:Daily Reward!}\n{embed.desc:Hey {user}! You got {adduvar:coins|50} coins!\nBalance: {uvar:coins} 💰}\n{embed.color:#4ade80}\n{react:🎁}";
+    sc.style.display="none";bh.classList.remove("hidden");
+  }else{
+    ta.placeholder="[[title Daily Reward!]]\n[[color #4ade80]]\n[[add coins 50]]\nHey {{user}}, you got 50 coins!\nBalance: {{uvar.coins}} 💰\n[[react 🎁]]";
+    sc.style.display="none";bh.classList.remove("hidden");
+  }
 }
 
 function insVar(v){
@@ -1229,197 +1237,172 @@ function updCharCount(){
 
 /* ── Function reference data (comprehensive) ── */
 const FN_DATA=[
-  // User
-  {sig:"$authorID",args:[],desc:"The command author's Discord user ID.",ex:"Your ID: $authorID",cat:"User",v:1},
-  {sig:"$authorUsername",args:[],desc:"The author's username (not nickname).",ex:"Hello $authorUsername!",cat:"User",v:1},
-  {sig:"$authorMention",args:[],desc:"Pings the command author.",ex:"Hi $authorMention!",cat:"User",v:1},
-  {sig:"$authorNickname",args:[],desc:"The author's server nickname, falls back to username.",ex:"Hey $authorNickname",cat:"User",v:1},
-  {sig:"$authorAvatar",args:[],desc:"URL of the author's avatar image.",ex:"$thumbnail[$authorAvatar]",cat:"User",v:1},
-  {sig:"$authorRoles",args:[],desc:"Comma-separated list of the author's role names.",ex:"Your roles: $authorRoles",cat:"User",v:1},
-  {sig:"$mentioned[n]",args:[{n:"n",d:"Position of the mention (1-based, optional — defaults to 1)"}],desc:"Returns the @mention of the nth mentioned user in the message.",ex:"You mentioned $mentioned[1]",cat:"User",v:1},
-  {sig:"$mentionedID[n]",args:[{n:"n",d:"Position of the mention (1-based, optional)"}],desc:"Returns the user ID of the nth mentioned user.",ex:"Mentioned ID: $mentionedID[1]",cat:"User",v:1},
-  {sig:"$mentionedName[n]",args:[{n:"n",d:"Position of the mention (1-based, optional)"}],desc:"Returns the username of the nth mentioned user.",ex:"You mentioned $mentionedName[1]",cat:"User",v:1},
-  {sig:"$noMentionMessage",args:[],desc:"The message content with all @mentions replaced by plain usernames.",ex:"You said: $noMentionMessage",cat:"User",v:1},
-  {sig:"$userID[name]",args:[{n:"name",d:"Username to look up"}],desc:"Returns the ID of a user by their username.",ex:"ID: $userID[SomeUser]",cat:"User",v:1},
-  {sig:"$userAvatar[userID]",args:[{n:"userID",d:"User's Discord ID"}],desc:"Returns the avatar URL of any user by ID.",ex:"$image[$userAvatar[$mentionedID[1]]]",cat:"User",v:1},
-  {sig:"$userNickname[userID]",args:[{n:"userID",d:"User's Discord ID"}],desc:"Returns the server nickname of a user by ID.",ex:"$userNickname[$mentionedID[1]]",cat:"User",v:1},
-  {sig:"$accountAge[]",args:[{n:"userID",d:"User ID (optional, defaults to author)"}],desc:"How many days old the account is.",ex:"Your account is $accountAge[] days old",cat:"User",v:1},
-  {sig:"$isUserInGuild[userID]",args:[{n:"userID",d:"User's Discord ID"}],desc:"Returns 'true' if the user is in the current server.",ex:"$if[$isUserInGuild[$mentionedID[1]]==true;They're here!;Not found]",cat:"User",v:1},
-  {sig:"$hasPerms[perm]",args:[{n:"perm",d:"Permission name e.g. ADMINISTRATOR, KICK_MEMBERS, BAN_MEMBERS"}],desc:"Returns 'true' if the command author has the given permission.",ex:"$if[$hasPerms[ADMINISTRATOR]==true;You're an admin!;Not an admin]",cat:"User",v:1},
-  // Server
-  {sig:"$guildName",args:[],desc:"The server's name.",ex:"Welcome to $guildName!",cat:"Server",v:1},
-  {sig:"$guildID",args:[],desc:"The server's ID.",ex:"Server ID: $guildID",cat:"Server",v:1},
-  {sig:"$guildMemberCount",args:[],desc:"Total number of members in the server.",ex:"$guildName has $guildMemberCount members",cat:"Server",v:1},
-  {sig:"$guildOwnerID",args:[],desc:"The Discord user ID of the server owner.",ex:"Owner ID: $guildOwnerID",cat:"Server",v:1},
-  {sig:"$guildIcon",args:[],desc:"URL of the server's icon image.",ex:"$thumbnail[$guildIcon]",cat:"Server",v:1},
-  {sig:"$guildBoostCount",args:[],desc:"Number of active server boosts.",ex:"Boosts: $guildBoostCount",cat:"Server",v:1},
-  {sig:"$guildBoostTier",args:[],desc:"Current server boost tier (0–3).",ex:"Boost tier: $guildBoostTier",cat:"Server",v:1},
-  {sig:"$guildCreationDate",args:[],desc:"The date the server was created.",ex:"Server created: $guildCreationDate",cat:"Server",v:1},
-  // Channel
-  {sig:"$channelName",args:[],desc:"Name of the current channel.",ex:"You're in #$channelName",cat:"Channel",v:1},
-  {sig:"$channelID",args:[],desc:"ID of the current channel.",ex:"Channel: $channelID",cat:"Channel",v:1},
-  {sig:"$channelMention",args:[],desc:"Clickable mention of the current channel.",ex:"Post in $channelMention",cat:"Channel",v:1},
-  {sig:"$channelTopic",args:[],desc:"Topic/description of the current channel.",ex:"Topic: $channelTopic",cat:"Channel",v:1},
-  // Bot
-  {sig:"$botUsername",args:[],desc:"The bot's username.",ex:"I am $botUsername",cat:"Bot",v:1},
-  {sig:"$botID",args:[],desc:"The bot's user ID.",ex:"Bot ID: $botID",cat:"Bot",v:1},
-  {sig:"$botMention",args:[],desc:"Mentions the bot.",ex:"Ping me at $botMention",cat:"Bot",v:1},
-  {sig:"$botAvatar",args:[],desc:"URL of the bot's avatar.",ex:"$thumbnail[$botAvatar]",cat:"Bot",v:1},
-  {sig:"$ping",args:[],desc:"The bot's current WebSocket latency.",ex:"Pong! Latency: $ping",cat:"Bot",v:1},
-  {sig:"$prefix",args:[],desc:"The command prefix.",ex:"Use $prefix + a command name",cat:"Bot",v:1},
-  // Message
-  {sig:"$message",args:[],desc:"The full text the user typed after the command.",ex:"You said: $message",cat:"Message",v:1},
-  {sig:"$args",args:[],desc:"Alias for $message — text after the command trigger.",ex:"Args: $args",cat:"Message",v:1},
-  {sig:"$messageID",args:[],desc:"The ID of the trigger message.",ex:"Message ID: $messageID",cat:"Message",v:1},
-  {sig:"$messageLink",args:[],desc:"A direct link to the trigger message.",ex:"[Jump]($messageLink)",cat:"Message",v:1},
-  {sig:"$noMentionMessage",args:[],desc:"The message text with @mentions removed.",ex:"Cleaned: $noMentionMessage",cat:"Message",v:1},
-  {sig:"$arg[n]",args:[{n:"n",d:"Index of the argument (1-based)"}],desc:"Gets the nth word after the command.",ex:"First word: $arg[1]",cat:"Message",v:1},
-  {sig:"$argsCount",args:[],desc:"Number of words after the command.",ex:"You gave $argsCount arguments",cat:"Message",v:1},
-  {sig:"$isArgs",args:[],desc:"Returns 'true' if the user typed anything after the command.",ex:"$if[$isArgs==true;You said: $args;No args given]",cat:"Message",v:1},
-  // Time
-  {sig:"$date",args:[],desc:"Current date in YYYY-MM-DD format.",ex:"Today is $date",cat:"Time",v:1},
-  {sig:"$time",args:[],desc:"Current time in HH:MM:SS format.",ex:"Time is $time",cat:"Time",v:1},
-  {sig:"$day",args:[],desc:"Current day of the week.",ex:"Happy $day!",cat:"Time",v:1},
-  {sig:"$month",args:[],desc:"Current month name.",ex:"It's $month",cat:"Time",v:1},
-  {sig:"$year",args:[],desc:"Current year.",ex:"Year: $year",cat:"Time",v:1},
-  // Math
-  {sig:"$sum[a;b]",args:[{n:"a",d:"First number"},{n:"b",d:"Second number"}],desc:"Adds numbers. Pass more than two separated by ; for multiple.",ex:"$sum[10;5] → 15\n$sum[1;2;3;4] → 10",cat:"Math",v:1},
-  {sig:"$sub[a;b]",args:[{n:"a",d:"Number to subtract from"},{n:"b",d:"Amount to subtract"}],desc:"Subtracts b from a.",ex:"$sub[10;3] → 7",cat:"Math",v:1},
-  {sig:"$multi[a;b]",args:[{n:"a",d:"First number"},{n:"b",d:"Second number"}],desc:"Multiplies numbers together.",ex:"$multi[4;5] → 20",cat:"Math",v:1},
-  {sig:"$div[a;b]",args:[{n:"a",d:"Dividend"},{n:"b",d:"Divisor"}],desc:"Divides a by b. Returns error if b is 0.",ex:"$div[10;2] → 5",cat:"Math",v:1},
-  {sig:"$mod[a;b]",args:[{n:"a",d:"Number"},{n:"b",d:"Divisor"}],desc:"Returns the remainder after dividing a by b.",ex:"$mod[10;3] → 1",cat:"Math",v:1},
-  {sig:"$random[min;max]",args:[{n:"min",d:"Minimum (inclusive)"},{n:"max",d:"Maximum (inclusive)"}],desc:"Returns a random integer between min and max.",ex:"You rolled a $random[1;6]!",cat:"Math",v:1},
-  {sig:"$round[n]",args:[{n:"n",d:"Number to round"}],desc:"Rounds to the nearest integer.",ex:"$round[4.6] → 5",cat:"Math",v:1},
-  {sig:"$abs[n]",args:[{n:"n",d:"Number"}],desc:"Returns the absolute (positive) value.",ex:"$abs[-5] → 5",cat:"Math",v:1},
-  {sig:"$min[a;b]",args:[{n:"a",d:"First number"},{n:"b",d:"Second number"}],desc:"Returns the smaller of two numbers.",ex:"$min[3;7] → 3",cat:"Math",v:1},
-  {sig:"$max[a;b]",args:[{n:"a",d:"First number"},{n:"b",d:"Second number"}],desc:"Returns the larger of two numbers.",ex:"$max[3;7] → 7",cat:"Math",v:1},
-  {sig:"$pow[a;b]",args:[{n:"a",d:"Base"},{n:"b",d:"Exponent"}],desc:"Raises a to the power of b.",ex:"$pow[2;10] → 1024",cat:"Math",v:1},
-  {sig:"$floor[n]",args:[{n:"n",d:"Number"}],desc:"Rounds down to the nearest integer.",ex:"$floor[4.9] → 4",cat:"Math",v:1},
-  {sig:"$ceil[n]",args:[{n:"n",d:"Number"}],desc:"Rounds up to the nearest integer.",ex:"$ceil[4.1] → 5",cat:"Math",v:1},
-  {sig:"$sqrt[n]",args:[{n:"n",d:"Number"}],desc:"Returns the square root of n.",ex:"$sqrt[16] → 4",cat:"Math",v:1},
-  {sig:"$toFixed[n;decimals]",args:[{n:"n",d:"Number"},{n:"decimals",d:"Decimal places"}],desc:"Formats a number to a fixed number of decimal places.",ex:"$toFixed[3.14159;2] → 3.14",cat:"Math",v:1},
-  // String
-  {sig:"$upper[text]",args:[{n:"text",d:"Input text"}],desc:"Converts text to UPPERCASE.",ex:"$upper[hello] → HELLO",cat:"String",v:1},
-  {sig:"$lower[text]",args:[{n:"text",d:"Input text"}],desc:"Converts text to lowercase.",ex:"$lower[HELLO] → hello",cat:"String",v:1},
-  {sig:"$strlen[text]",args:[{n:"text",d:"Input text"}],desc:"Returns the character count of the text.",ex:"$strlen[hello] → 5",cat:"String",v:1},
-  {sig:"$replaceText[text;old;new]",args:[{n:"text",d:"Source"},{n:"old",d:"Text to find"},{n:"new",d:"Replacement"}],desc:"Replaces all occurrences of 'old' with 'new' in text.",ex:"$replaceText[hello world;world;there]",cat:"String",v:1},
-  {sig:"$trimSpace[text]",args:[{n:"text",d:"Input text"}],desc:"Removes leading and trailing whitespace.",ex:"$trimSpace[  hi  ] → hi",cat:"String",v:1},
-  {sig:"$removeSpace[text]",args:[{n:"text",d:"Input text"}],desc:"Removes ALL spaces from the text.",ex:"$removeSpace[h e l l o] → hello",cat:"String",v:1},
-  {sig:"$repeat[text;n]",args:[{n:"text",d:"Text to repeat"},{n:"n",d:"Times to repeat"}],desc:"Repeats text n times.",ex:"$repeat[ha;3] → hahaha",cat:"String",v:1},
-  {sig:"$numberSeparator[n]",args:[{n:"n",d:"Number"}],desc:"Formats a number with commas (e.g. 1,000,000).",ex:"$numberSeparator[1000000] → 1,000,000",cat:"String",v:1},
-  {sig:"$substring[text;start;end]",args:[{n:"text",d:"Source"},{n:"start",d:"Start index (0-based)"},{n:"end",d:"End index (exclusive)"}],desc:"Extracts a section of a string.",ex:"$substring[hello;1;4] → ell",cat:"String",v:1},
-  {sig:"$startsWith[text;prefix]",args:[{n:"text",d:"Source"},{n:"prefix",d:"Prefix to check"}],desc:"Returns 'true' if text starts with the given prefix.",ex:"$startsWith[hello;he] → true",cat:"String",v:1},
-  {sig:"$endsWith[text;suffix]",args:[{n:"text",d:"Source"},{n:"suffix",d:"Suffix to check"}],desc:"Returns 'true' if text ends with the given suffix.",ex:"$endsWith[hello;lo] → true",cat:"String",v:1},
-  {sig:"$contains[text;str]",args:[{n:"text",d:"Source"},{n:"str",d:"Substring to find"}],desc:"Returns 'true' if text contains str.",ex:"$contains[hello world;world] → true",cat:"String",v:1},
-  {sig:"$index[text;str]",args:[{n:"text",d:"Source"},{n:"str",d:"Substring to find"}],desc:"Returns the character index of str in text, or -1 if not found.",ex:"$index[hello;ll] → 2",cat:"String",v:1},
-  {sig:"$wordCount[text]",args:[{n:"text",d:"Input text"}],desc:"Returns the number of words in text.",ex:"$wordCount[hello world] → 2",cat:"String",v:1},
-  {sig:"$split[text;sep]",args:[{n:"text",d:"Text to split"},{n:"sep",d:"Separator"}],desc:"Splits text by the separator. Use $splitText[n] to access parts.",ex:"$split[a,b,c;,]\n$splitText[2] → b",cat:"String",v:1},
-  {sig:"$splitText[n]",args:[{n:"n",d:"Segment index (1-based)"}],desc:"Returns the nth segment from the last $split[] call.",ex:"$split[a,b,c;,]\n$splitText[1] → a",cat:"String",v:1},
-  {sig:"$splitCount",args:[],desc:"Returns the number of segments from the last $split[] call.",ex:"$split[a,b,c;,]\n$splitCount → 3",cat:"String",v:1},
-  // Logic
-  {sig:"$if[cond;then;else]",args:[{n:"cond",d:"Condition e.g. $argsCount==0 or true"},{n:"then",d:"Value if true"},{n:"else",d:"Value if false"}],desc:"Inline conditional — returns 'then' if condition is true, otherwise 'else'.",ex:"$if[$argsCount==0;No args!;You said: $args]",cat:"Logic",v:1},
-  {sig:"$if[cond]\n...\n$else\n...\n$endif",args:[],desc:"Block conditional spanning multiple lines. Everything between $if and $else runs if true; between $else and $endif runs if false.",ex:"$if[$random[1;2]==1]\nHeads!\n$else\nTails!\n$endif",cat:"Logic",v:1},
-  {sig:"$and[a;b]",args:[{n:"a",d:"First boolean (true/false)"},{n:"b",d:"Second boolean"}],desc:"Returns 'true' only if both a and b are 'true'.",ex:"$if[$and[$isArgs;$contains[$args;hi]]==true;You said hi!;No match]",cat:"Logic",v:1},
-  {sig:"$or[a;b]",args:[{n:"a",d:"First boolean"},{n:"b",d:"Second boolean"}],desc:"Returns 'true' if either a or b is 'true'.",ex:"$if[$or[$contains[$args;yes];$contains[$args;yeah]]==true;OK!;No]",cat:"Logic",v:1},
-  {sig:"$not[val]",args:[{n:"val",d:"Boolean value (true/false)"}],desc:"Flips a boolean — 'true' becomes 'false' and vice versa.",ex:"$not[true] → false",cat:"Logic",v:1},
-  // Variables
-  {sig:"$let[name;value]",args:[{n:"name",d:"Variable name"},{n:"value",d:"Value to store"}],desc:"Sets a local variable. Only lasts for the current command response.",ex:"$let[score;$random[1;100]]\nYour score: $get[score]",cat:"Variables",v:1},
-  {sig:"$get[name]",args:[{n:"name",d:"Variable name"}],desc:"Gets the value of a local variable previously set with $let[].",ex:"$let[x;10]\nDouble: $sum[$get[x];$get[x]]",cat:"Variables",v:1},
-  {sig:"$set[name;value]",args:[{n:"name",d:"Variable name"},{n:"value",d:"Value to store"}],desc:"Alias for $let — sets a local variable.",ex:"$set[roll;$random[1;20]]\nYou rolled $get[roll]!",cat:"Variables",v:1},
-  // Embed
-  {sig:"$title[text]",args:[{n:"text",d:"Embed title"}],desc:"Sets the title of the embed.",ex:"$title[Hello World]",cat:"Embed",v:1},
-  {sig:"$description[text]",args:[{n:"text",d:"Embed description"}],desc:"Sets the main body text of the embed.",ex:"$description[This is the body text]",cat:"Embed",v:1},
-  {sig:"$color[hex]",args:[{n:"hex",d:"Hex color e.g. #3b82f6"}],desc:"Sets the left sidebar color of the embed.",ex:"$color[#3b82f6]",cat:"Embed",v:1},
-  {sig:"$footer[text]",args:[{n:"text",d:"Footer text"}],desc:"Sets the embed footer.",ex:"$footer[Powered by BotForge]",cat:"Embed",v:1},
-  {sig:"$thumbnail[url]",args:[{n:"url",d:"Image URL"}],desc:"Small image in the top-right corner of the embed.",ex:"$thumbnail[$authorAvatar]",cat:"Embed",v:1},
-  {sig:"$image[url]",args:[{n:"url",d:"Image URL"}],desc:"Large image at the bottom of the embed.",ex:"$image[https://example.com/banner.png]",cat:"Embed",v:1},
-  {sig:"$addField[name;value;inline?]",args:[{n:"name",d:"Field title"},{n:"value",d:"Field body"},{n:"inline?",d:"true or false (optional)"}],desc:"Adds a field to the embed. Set inline to 'true' for side-by-side fields.",ex:"$addField[Score;$random[1;100];true]\n$addField[Level;7;true]",cat:"Embed",v:1},
-  {sig:"$author[name;iconURL?]",args:[{n:"name",d:"Author name"},{n:"iconURL?",d:"Icon URL (optional)"}],desc:"Sets the author section at the top of the embed.",ex:"$author[$authorNickname;$authorAvatar]",cat:"Embed",v:1},
-  {sig:"$url[url]",args:[{n:"url",d:"URL"}],desc:"Makes the embed title a clickable hyperlink.",ex:"$title[Click me]\n$url[https://discord.com]",cat:"Embed",v:1},
-  {sig:"$timestamp",args:[],desc:"Adds the current date and time to the embed footer.",ex:"$title[Event]\n$timestamp",cat:"Embed",v:1},
-  // Actions
-  {sig:"$deleteCommand",args:[],desc:"Deletes the message that triggered the command.",ex:"$deleteCommand\nDone!",cat:"Actions",v:1},
-  {sig:"$addReaction[emoji]",args:[{n:"emoji",d:"Emoji character or :name:"}],desc:"Adds a reaction to the trigger message.",ex:"$addReaction[✅]",cat:"Actions",v:1},
-  {sig:"$dm[text]",args:[{n:"text",d:"Message to DM"}],desc:"Sends a direct message to the command author.",ex:"$dm[Hey $authorUsername, you triggered the command!]",cat:"Actions",v:1},
-  {sig:"$sendMessage[channelID;text]",args:[{n:"channelID",d:"Target channel ID"},{n:"text",d:"Message to send"}],desc:"Sends a message to a different channel.",ex:"$sendMessage[$channelID;Command used in #$channelName]",cat:"Actions",v:1},
-  {sig:"$reply[text]",args:[{n:"text",d:"Reply content"}],desc:"Sends a reply that pings the original message.",ex:"$reply[Got it!]",cat:"Actions",v:1},
-  // Roles
-  {sig:"$roleID[name]",args:[{n:"name",d:"Role name (case-sensitive)"}],desc:"Returns the ID of a role by its name.",ex:"Role ID: $roleID[Moderator]",cat:"Roles",v:1},
-  {sig:"$roleName[id]",args:[{n:"id",d:"Role ID"}],desc:"Returns the name of a role by its ID.",ex:"Role: $roleName[$roleID[Mod]]",cat:"Roles",v:1},
-  {sig:"$roleMention[id]",args:[{n:"id",d:"Role ID"}],desc:"Returns a @mention for a role.",ex:"Pinging $roleMention[$roleID[Staff]]",cat:"Roles",v:1},
-  {sig:"$roleColor[id]",args:[{n:"id",d:"Role ID"}],desc:"Returns the hex color of a role.",ex:"$color[$roleColor[$roleID[Admin]]]",cat:"Roles",v:1},
-  {sig:"$hasRole[userID;roleID]",args:[{n:"userID",d:"User's Discord ID"},{n:"roleID",d:"Role ID"}],desc:"Returns 'true' if the user has the given role.",ex:"$if[$hasRole[$authorID;$roleID[Mod]]==true;You're a mod!;Not a mod]",cat:"Roles",v:1},
-  {sig:"$roleCount[roleID]",args:[{n:"roleID",d:"Role ID"}],desc:"Returns how many members have the given role.",ex:"$roleCount[$roleID[Member]] members have the Member role",cat:"Roles",v:1},
-  {sig:"$highestRole[userID]",args:[{n:"userID",d:"User's Discord ID"}],desc:"Returns the name of the user's highest role.",ex:"Your top role: $highestRole[$authorID]",cat:"Roles",v:1},
-  // BDScript 2
-  {sig:"$isNumber[text]",args:[{n:"text",d:"Text to check"}],desc:"Returns 'true' if the text is a valid number. BDScript 2 only.",ex:"$if[$isNumber[$args]==true;Valid number!;Not a number]",cat:"BDScript 2",v:2},
-  {sig:"$isEmpty[text]",args:[{n:"text",d:"Text to check"}],desc:"Returns 'true' if the text is empty or only whitespace. BDScript 2 only.",ex:"$if[$isEmpty[$args]==true;You didn't type anything!;You said: $args]",cat:"BDScript 2",v:2},
-  {sig:"$chance[percent]",args:[{n:"percent",d:"0–100"}],desc:"Returns 'true' the given percentage of the time. BDScript 2 only.",ex:"$if[$chance[50]==true;You won!;You lost!]",cat:"BDScript 2",v:2},
-  {sig:"$randomText[a;b;c]",args:[{n:"options…",d:"Two or more options"}],desc:"Picks one of the options at random. BDScript 2 only.",ex:"$randomText[Nice!;Cool!;Awesome!;Great!]",cat:"BDScript 2",v:2},
-  {sig:"$charCount[text;char]",args:[{n:"text",d:"Source text"},{n:"char",d:"Character to count"}],desc:"Counts how many times a character appears in text. BDScript 2 only.",ex:"$charCount[hello world;l] → 3",cat:"BDScript 2",v:2},
-  {sig:"$zeroPad[n;length]",args:[{n:"n",d:"Number"},{n:"length",d:"Total padded length"}],desc:"Zero-pads a number to a fixed length. BDScript 2 only.",ex:"$zeroPad[$random[1;99];3] → 042",cat:"BDScript 2",v:2},
-  {sig:"$join[sep;a;b;c]",args:[{n:"sep",d:"Separator string"},{n:"values…",d:"Values to join"}],desc:"Joins multiple values with a separator. BDScript 2 only.",ex:"$join[, ;one;two;three] → one, two, three",cat:"BDScript 2",v:2},
-  {sig:"$sort[a;b;c]",args:[{n:"values…",d:"Values to sort"}],desc:"Returns the values sorted in ascending order. BDScript 2 only.",ex:"$sort[3;1;2] → 1, 2, 3",cat:"BDScript 2",v:2},
-  {sig:"$greatest[a;b;c]",args:[{n:"values…",d:"Numbers to compare"}],desc:"Returns the greatest of all provided values. BDScript 2 only.",ex:"$greatest[5;3;8;1] → 8",cat:"BDScript 2",v:2},
-  {sig:"$smallest[a;b;c]",args:[{n:"values…",d:"Numbers to compare"}],desc:"Returns the smallest of all provided values. BDScript 2 only.",ex:"$smallest[5;3;8;1] → 1",cat:"BDScript 2",v:2},
-  {sig:"$eval[code]",args:[{n:"code",d:"BDScript 2 code to evaluate"}],desc:"Evaluates a BDScript 2 expression and returns the result. BDScript 2 only.",ex:"$eval[$sum[2;3]] → 5",cat:"BDScript 2",v:2},
-  {sig:"$getUserVar[name]",args:[{n:"name",d:"Variable name"}],desc:"Get YOUR persistent variable value (defaults to 0 if not set).",ex:"You have $getUserVar[coins] coins!",cat:"Variables",v:1},
-  {sig:"$getUserVar[name;userID]",args:[{n:"name",d:"Variable name"},{n:"userID",d:"Target user's Discord ID"}],desc:"Get any user's persistent variable value.",ex:"$getUserVar[coins;$mentionedID]",cat:"Variables",v:1},
-  {sig:"$setUserVar[name;value]",args:[{n:"name",d:"Variable name"},{n:"value",d:"New value"}],desc:"Set YOUR persistent variable to a value.",ex:"$setUserVar[coins;100]",cat:"Variables",v:1},
-  {sig:"$setUserVar[name;value;userID]",args:[{n:"name",d:"Variable name"},{n:"value",d:"New value"},{n:"userID",d:"Target user ID"}],desc:"Set any user's persistent variable.",ex:"$setUserVar[coins;0;$mentionedID]",cat:"Variables",v:1},
-  {sig:"$addToUserVar[name;amount]",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount to add"}],desc:"Add to YOUR variable and return the new value. Use inline for dynamic responses.",ex:"You earned 50 coins! Total: $addToUserVar[coins;50]",cat:"Variables",v:1},
-  {sig:"$subtractFromUserVar[name;amount]",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount to subtract"}],desc:"Subtract from YOUR variable.",ex:"$subtractFromUserVar[coins;10]",cat:"Variables",v:1},
-  {sig:"$multiplyUserVar[name;factor]",args:[{n:"name",d:"Variable name"},{n:"factor",d:"Multiplication factor"}],desc:"Multiply YOUR variable by a factor.",ex:"$multiplyUserVar[coins;2]",cat:"Variables",v:1},
-  {sig:"$divideUserVar[name;factor]",args:[{n:"name",d:"Variable name"},{n:"factor",d:"Division factor"}],desc:"Divide YOUR variable.",ex:"$divideUserVar[coins;2]",cat:"Variables",v:1},
-  {sig:"$resetUserVar[name]",args:[{n:"name",d:"Variable name"}],desc:"Reset YOUR variable to 0.",ex:"$resetUserVar[streak]",cat:"Variables",v:1},
-  {sig:"$deleteUserVar[name]",args:[{n:"name",d:"Variable name"}],desc:"Delete YOUR variable entirely (removes the record).",ex:"$deleteUserVar[tempdata]",cat:"Variables",v:1},
-  {sig:"$userLeaderboard[name]",args:[{n:"name",d:"Variable name"},{n:"limit",d:"Max entries, default 10 (optional)"}],desc:"Show a ranked leaderboard of users by variable value.",ex:"$title[Top Coins 🏆]\n$description[$userLeaderboard[coins;10]]",cat:"Variables",v:1},
-  {sig:"$getServerVar[name]",args:[{n:"name",d:"Variable name"}],desc:"Get a server-wide variable (same value for everyone in the server).",ex:"Total plays: $getServerVar[plays]",cat:"Variables",v:1},
-  {sig:"$setServerVar[name;value]",args:[{n:"name",d:"Variable name"},{n:"value",d:"New value"}],desc:"Set a server-wide variable.",ex:"$setServerVar[event;active]",cat:"Variables",v:1},
-  {sig:"$addToServerVar[name;amount]",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount to add"}],desc:"Add to a server variable.",ex:"$addToServerVar[plays;1]",cat:"Variables",v:1},
-  {sig:"$subtractFromServerVar[name;amount]",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount to subtract"}],desc:"Subtract from a server variable.",ex:"$subtractFromServerVar[stock;1]",cat:"Variables",v:1},
-  {sig:"$resetServerVar[name]",args:[{n:"name",d:"Variable name"}],desc:"Reset a server variable to 0.",ex:"$resetServerVar[plays]",cat:"Variables",v:1},
-  {sig:"$getGlobalVar[name]",args:[{n:"name",d:"Variable name"}],desc:"Get a global variable (shared across all servers).",ex:"Global uses: $getGlobalVar[totalUses]",cat:"Variables",v:1},
-  {sig:"$setGlobalVar[name;value]",args:[{n:"name",d:"Variable name"},{n:"value",d:"New value"}],desc:"Set a global variable.",ex:"$setGlobalVar[version;2]",cat:"Variables",v:1},
-  {sig:"$addToGlobalVar[name;amount]",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount to add"}],desc:"Add to a global variable.",ex:"$addToGlobalVar[totalUses;1]",cat:"Variables",v:1},
-  {sig:"$let[name;value]",args:[{n:"name",d:"Variable name"},{n:"value",d:"Value to store"}],desc:"Store a value locally — only lasts for this one response.",ex:"$let[roll;$random[1;20]]\nYou rolled $get[roll]!",cat:"Variables",v:1},
-  {sig:"$get[name]",args:[{n:"name",d:"Variable name"}],desc:"Retrieve a local variable set with $let[].",ex:"$get[roll]",cat:"Variables",v:1},
-];
+  // ── BotScript — {tag} and {tag:arg1|arg2} ──────────────────────────────────
+  {sig:"{user}",desc:"Author's server nickname.",ex:"Welcome {user}!",cat:"User",lang:"botscript",v:1},
+  {sig:"{user.name}",desc:"Author's raw username.",ex:"Username: {user.name}",cat:"User",lang:"botscript",v:1},
+  {sig:"{user.id}",desc:"Author's Discord user ID.",ex:"ID: {user.id}",cat:"User",lang:"botscript",v:1},
+  {sig:"{user.mention}",desc:"@mentions the author.",ex:"Hi {user.mention}!",cat:"User",lang:"botscript",v:1},
+  {sig:"{user.avatar}",desc:"URL of author's avatar.",ex:"{embed.thumb:{user.avatar}}",cat:"User",lang:"botscript",v:1},
+  {sig:"{user.roles}",desc:"Author's role names, comma-separated.",ex:"Roles: {user.roles}",cat:"User",lang:"botscript",v:1},
+  {sig:"{user.age}",desc:"How many days old the author's account is.",ex:"Account age: {user.age}",cat:"User",lang:"botscript",v:1},
+  {sig:"{user.hasrole:RoleName}",args:[{n:"RoleName",d:"Role name to check"}],desc:"Returns 'true' if the author has this role.",ex:"{if:{user.hasrole:Member}|You're a member!|You're not a member.}",cat:"User",lang:"botscript",v:1},
+  {sig:"{user.hasperm:permission}",args:[{n:"permission",d:"e.g. administrator, kick_members"}],desc:"Returns 'true' if the author has this Discord permission.",ex:"{if:{user.hasperm:administrator}|Admin!|Not admin.}",cat:"User",lang:"botscript",v:1},
+  {sig:"{mentioned:1}",args:[{n:"n",d:"Position of the mention (1-based)"}],desc:"@mention of the nth mentioned user.",ex:"You mentioned {mentioned:1}",cat:"User",lang:"botscript",v:1},
+  {sig:"{mentioned.id:1}",args:[{n:"n",d:"Position of the mention (1-based)"}],desc:"ID of the nth mentioned user.",ex:"ID: {mentioned.id:1}",cat:"User",lang:"botscript",v:1},
+  {sig:"{mentioned.name:1}",args:[{n:"n",d:"Position (1-based)"}],desc:"Nickname of the nth mentioned user.",ex:"{mentioned.name:1}'s coins: {uvar:coins|{mentioned.id:1}}",cat:"User",lang:"botscript",v:1},
+  {sig:"{server}",desc:"Server name.",ex:"Welcome to {server}!",cat:"Server",lang:"botscript",v:1},
+  {sig:"{server.id}",desc:"Server ID.",ex:"Server ID: {server.id}",cat:"Server",lang:"botscript",v:1},
+  {sig:"{server.members}",desc:"Total member count.",ex:"{server} has {server.members} members.",cat:"Server",lang:"botscript",v:1},
+  {sig:"{server.icon}",desc:"Server icon URL.",ex:"{embed.thumb:{server.icon}}",cat:"Server",lang:"botscript",v:1},
+  {sig:"{server.boosts}",desc:"Number of active boosts.",ex:"Boosts: {server.boosts}",cat:"Server",lang:"botscript",v:1},
+  {sig:"{server.boosttier}",desc:"Boost tier (0–3).",ex:"Tier {server.boosttier}",cat:"Server",lang:"botscript",v:1},
+  {sig:"{server.created}",desc:"Date the server was created.",ex:"Created: {server.created}",cat:"Server",lang:"botscript",v:1},
+  {sig:"{channel}",desc:"Current channel name.",ex:"You're in #{channel}",cat:"Server",lang:"botscript",v:1},
+  {sig:"{channel.id}",desc:"Current channel ID.",ex:"Channel: {channel.id}",cat:"Server",lang:"botscript",v:1},
+  {sig:"{channel.mention}",desc:"Clickable channel mention.",ex:"Post in {channel.mention}",cat:"Server",lang:"botscript",v:1},
+  {sig:"{channel.topic}",desc:"Channel topic.",ex:"Topic: {channel.topic}",cat:"Server",lang:"botscript",v:1},
+  {sig:"{bot}",desc:"Bot's username.",ex:"I am {bot}",cat:"Bot",lang:"botscript",v:1},
+  {sig:"{bot.id}",desc:"Bot's user ID.",ex:"Bot ID: {bot.id}",cat:"Bot",lang:"botscript",v:1},
+  {sig:"{bot.mention}",desc:"Mentions the bot.",ex:"Ping {bot.mention}",cat:"Bot",lang:"botscript",v:1},
+  {sig:"{ping}",desc:"Bot's current latency.",ex:"Latency: {ping}",cat:"Bot",lang:"botscript",v:1},
+  {sig:"{prefix}",desc:"Command prefix.",ex:"Use {prefix}help",cat:"Bot",lang:"botscript",v:1},
+  {sig:"{args}",desc:"Text after the command.",ex:"You said: {args}",cat:"Message",lang:"botscript",v:1},
+  {sig:"{arg:1}",args:[{n:"n",d:"Index, 1-based"}],desc:"The nth word after the command.",ex:"First word: {arg:1}",cat:"Message",lang:"botscript",v:1},
+  {sig:"{argcount}",desc:"Number of words after the command.",ex:"{argcount} words given",cat:"Message",lang:"botscript",v:1},
+  {sig:"{hasargs}",desc:"'true' if user typed anything after the command.",ex:"{if:{hasargs}|{args}|No args!}",cat:"Message",lang:"botscript",v:1},
+  {sig:"{nomentions}",desc:"Message text with all @mentions stripped.",ex:"You said: {nomentions}",cat:"Message",lang:"botscript",v:1},
+  {sig:"{date}",desc:"Current date YYYY-MM-DD.",ex:"Today: {date}",cat:"Time",lang:"botscript",v:1},
+  {sig:"{time}",desc:"Current time HH:MM:SS.",ex:"Time: {time}",cat:"Time",lang:"botscript",v:1},
+  {sig:"{day}",desc:"Day of the week.",ex:"Happy {day}!",cat:"Time",lang:"botscript",v:1},
+  {sig:"{month}",desc:"Month name.",ex:"It's {month}",cat:"Time",lang:"botscript",v:1},
+  {sig:"{year}",desc:"Current year.",ex:"Year: {year}",cat:"Time",lang:"botscript",v:1},
+  {sig:"{unix}",desc:"Current Unix timestamp.",ex:"Stamp: {unix}",cat:"Time",lang:"botscript",v:1},
+  {sig:"{math:expr}",args:[{n:"expr",d:"Math expression e.g. 2+2*5"}],desc:"Evaluates a math expression.",ex:"Result: {math:10*3+5}",cat:"Math",lang:"botscript",v:1},
+  {sig:"{random:min|max}",args:[{n:"min",d:"Minimum (inclusive)"},{n:"max",d:"Maximum (inclusive)"}],desc:"Random integer between min and max.",ex:"You rolled {random:1|6}!",cat:"Math",lang:"botscript",v:1},
+  {sig:"{choose:a|b|c}",args:[{n:"options",d:"Two or more choices separated by |"}],desc:"Pick a random option from the list.",ex:"{choose:Heads|Tails}",cat:"Math",lang:"botscript",v:1},
+  {sig:"{round:value}",args:[{n:"value",d:"Number to round"}],desc:"Round a number to the nearest integer.",ex:"{round:4.7} → 5",cat:"Math",lang:"botscript",v:1},
+  {sig:"{abs:value}",args:[{n:"value",d:"Number"}],desc:"Absolute value.",ex:"{abs:-5} → 5",cat:"Math",lang:"botscript",v:1},
+  {sig:"{chance:percent}",args:[{n:"percent",d:"0–100"}],desc:"Returns 'true' the given percent of the time.",ex:"{if:{chance:50}|Lucky!|Unlucky!}",cat:"Math",lang:"botscript",v:1},
+  {sig:"{number:value}",args:[{n:"value",d:"Number"}],desc:"Format number with commas: 1,000,000.",ex:"{number:{uvar:coins}}",cat:"Math",lang:"botscript",v:1},
+  {sig:"{upper:text}",args:[{n:"text",d:"Input text"}],desc:"Convert to UPPERCASE.",ex:"{upper:hello} → HELLO",cat:"String",lang:"botscript",v:1},
+  {sig:"{lower:text}",args:[{n:"text",d:"Input text"}],desc:"Convert to lowercase.",ex:"{lower:HELLO} → hello",cat:"String",lang:"botscript",v:1},
+  {sig:"{len:text}",args:[{n:"text",d:"Input text"}],desc:"Character count.",ex:"{len:hello} → 5",cat:"String",lang:"botscript",v:1},
+  {sig:"{trim:text}",args:[{n:"text",d:"Input text"}],desc:"Remove surrounding whitespace.",ex:"{trim:  hi  } → hi",cat:"String",lang:"botscript",v:1},
+  {sig:"{replace:text|old|new}",args:[{n:"text",d:"Source"},{n:"old",d:"Find this"},{n:"new",d:"Replace with"}],desc:"Replace all occurrences of old with new.",ex:"{replace:hello world|world|there}",cat:"String",lang:"botscript",v:1},
+  {sig:"{contains:text|str}",args:[{n:"text",d:"Source"},{n:"str",d:"Substring"}],desc:"'true' if text contains str.",ex:"{if:{contains:{args}|hello}|You said hello!|No hello.}",cat:"String",lang:"botscript",v:1},
+  {sig:"{repeat:text|n}",args:[{n:"text",d:"Text to repeat"},{n:"n",d:"Times"}],desc:"Repeat text n times.",ex:"{repeat:ha|3} → hahaha",cat:"String",lang:"botscript",v:1},
+  {sig:"{role.id:name}",args:[{n:"name",d:"Role name"}],desc:"Get role ID by name.",ex:"Role ID: {role.id:Moderator}",cat:"Roles",lang:"botscript",v:1},
+  {sig:"{role.mention:id}",args:[{n:"id",d:"Role ID"}],desc:"@mention a role.",ex:"Ping {role.mention:{role.id:Staff}}",cat:"Roles",lang:"botscript",v:1},
+  {sig:"{role.color:id}",args:[{n:"id",d:"Role ID"}],desc:"Hex color of a role.",ex:"{embed.color:{role.color:{role.id:Admin}}}",cat:"Roles",lang:"botscript",v:1},
+  {sig:"{if:cond|then|else}",args:[{n:"cond",d:"Condition"},{n:"then",d:"Value if true"},{n:"else",d:"Value if false (optional)"}],desc:"Inline conditional. Use == != > < >= <= for comparisons.",ex:"{if:{uvar:coins}>100|You're rich!|Keep saving!}",cat:"Logic",lang:"botscript",v:1},
+  {sig:"{if:cond}{else}{/if}",desc:"Multi-line conditional block.",ex:"{if:{uvar:coins}>500}\n💎 You're wealthy!\n{else}\n🪙 Keep grinding!\n{/if}",cat:"Logic",lang:"botscript",v:1},
+  {sig:"{uvar:name}",args:[{n:"name",d:"Variable name"}],desc:"Get YOUR persistent user variable (defaults to 0).",ex:"Coins: {uvar:coins}",cat:"Variables",lang:"botscript",v:1},
+  {sig:"{uvar:name|userID}",args:[{n:"name",d:"Variable name"},{n:"userID",d:"Target user's ID"}],desc:"Get any user's persistent variable.",ex:"{uvar:coins|{mentioned.id:1}}",cat:"Variables",lang:"botscript",v:1},
+  {sig:"{setuvar:name|value}",args:[{n:"name",d:"Variable name"},{n:"value",d:"New value"}],desc:"Set YOUR persistent variable.",ex:"{setuvar:coins|100}",cat:"Variables",lang:"botscript",v:1},
+  {sig:"{adduvar:name|amount}",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount to add"}],desc:"Add to YOUR variable. Returns new value.",ex:"You now have {adduvar:coins|50} coins!",cat:"Variables",lang:"botscript",v:1},
+  {sig:"{subuvar:name|amount}",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount to subtract"}],desc:"Subtract from YOUR variable.",ex:"{subuvar:coins|10}",cat:"Variables",lang:"botscript",v:1},
+  {sig:"{muluvar:name|factor}",args:[{n:"name",d:"Variable name"},{n:"factor",d:"Multiplication factor"}],desc:"Multiply YOUR variable.",ex:"{muluvar:coins|2}",cat:"Variables",lang:"botscript",v:1},
+  {sig:"{resetuvar:name}",args:[{n:"name",d:"Variable name"}],desc:"Reset YOUR variable to 0.",ex:"{resetuvar:streak}",cat:"Variables",lang:"botscript",v:1},
+  {sig:"{svar:name}",args:[{n:"name",d:"Variable name"}],desc:"Get a server-wide variable.",ex:"Total plays: {svar:plays}",cat:"Variables",lang:"botscript",v:1},
+  {sig:"{setsvar:name|value}",args:[{n:"name",d:"Variable name"},{n:"value",d:"New value"}],desc:"Set a server-wide variable.",ex:"{setsvar:event|active}",cat:"Variables",lang:"botscript",v:1},
+  {sig:"{addsvar:name|amount}",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount"}],desc:"Add to a server variable.",ex:"{addsvar:plays|1}",cat:"Variables",lang:"botscript",v:1},
+  {sig:"{gvar:name}",args:[{n:"name",d:"Variable name"}],desc:"Get a global variable (all servers).",ex:"{gvar:totalUses}",cat:"Variables",lang:"botscript",v:1},
+  {sig:"{setgvar:name|value}",args:[{n:"name",d:"Variable name"},{n:"value",d:"New value"}],desc:"Set a global variable.",ex:"{setgvar:version|2}",cat:"Variables",lang:"botscript",v:1},
+  {sig:"{addgvar:name|amount}",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount"}],desc:"Add to a global variable.",ex:"{addgvar:totalUses|1}",cat:"Variables",lang:"botscript",v:1},
+  {sig:"{set:name|value}",args:[{n:"name",d:"Variable name"},{n:"value",d:"Value"}],desc:"Set a local (response-only) variable.",ex:"{set:roll|{random:1|20}}",cat:"Variables",lang:"botscript",v:1},
+  {sig:"{get:name}",args:[{n:"name",d:"Variable name"}],desc:"Get a local variable.",ex:"You rolled {get:roll}!",cat:"Variables",lang:"botscript",v:1},
+  {sig:"{top:varname}",args:[{n:"varname",d:"Variable name"},{n:"limit",d:"Max entries (optional, default 10)"}],desc:"Show ranked leaderboard for a user variable.",ex:"{embed.title:Coin Leaderboard}\n{embed.desc:{top:coins|10}}",cat:"Variables",lang:"botscript",v:1},
+  {sig:"{embed.title:text}",args:[{n:"text",d:"Embed title"}],desc:"Set the embed title.",ex:"{embed.title:Hello!}",cat:"Embed",lang:"botscript",v:1},
+  {sig:"{embed.desc:text}",args:[{n:"text",d:"Embed description"}],desc:"Set the embed description/body.",ex:"{embed.desc:Hello everyone!}",cat:"Embed",lang:"botscript",v:1},
+  {sig:"{embed.color:#hex}",args:[{n:"#hex",d:"Hex color e.g. #3b82f6"}],desc:"Set the embed sidebar color.",ex:"{embed.color:#3b82f6}",cat:"Embed",lang:"botscript",v:1},
+  {sig:"{embed.footer:text}",args:[{n:"text",d:"Footer text"}],desc:"Set the embed footer.",ex:"{embed.footer:Powered by BotForge}",cat:"Embed",lang:"botscript",v:1},
+  {sig:"{embed.thumb:url}",args:[{n:"url",d:"Image URL"}],desc:"Small thumbnail image (top-right).",ex:"{embed.thumb:{user.avatar}}",cat:"Embed",lang:"botscript",v:1},
+  {sig:"{embed.image:url}",args:[{n:"url",d:"Image URL"}],desc:"Large image at the bottom.",ex:"{embed.image:https://example.com/banner.png}",cat:"Embed",lang:"botscript",v:1},
+  {sig:"{embed.author:name|iconURL}",args:[{n:"name",d:"Author name"},{n:"iconURL",d:"Icon URL (optional)"}],desc:"Set the embed author section.",ex:"{embed.author:{user}|{user.avatar}}",cat:"Embed",lang:"botscript",v:1},
+  {sig:"{embed.field:name|value|inline}",args:[{n:"name",d:"Field title"},{n:"value",d:"Field body"},{n:"inline",d:"true or false (optional)"}],desc:"Add a field to the embed.",ex:"{embed.field:Coins|{uvar:coins}|true}",cat:"Embed",lang:"botscript",v:1},
+  {sig:"{embed.url:url}",args:[{n:"url",d:"URL"}],desc:"Makes the embed title a clickable link.",ex:"{embed.url:https://discord.com}",cat:"Embed",lang:"botscript",v:1},
+  {sig:"{embed.timestamp}",desc:"Add the current timestamp to the embed.",ex:"{embed.title:Log}\n{embed.timestamp}",cat:"Embed",lang:"botscript",v:1},
+  {sig:"{delete}",desc:"Delete the trigger message.",ex:"{delete}\n✅ Done!",cat:"Actions",lang:"botscript",v:1},
+  {sig:"{react:emoji}",args:[{n:"emoji",d:"Emoji character"}],desc:"Add a reaction to the trigger message.",ex:"{react:✅}",cat:"Actions",lang:"botscript",v:1},
+  {sig:"{dm:message}",args:[{n:"message",d:"DM content"}],desc:"DM the command author.",ex:"{dm:Hey {user}, you used the command!}",cat:"Actions",lang:"botscript",v:1},
+  {sig:"{dm:message|userID}",args:[{n:"message",d:"DM content"},{n:"userID",d:"Target user ID"}],desc:"DM any user.",ex:"{dm:Hello!|{mentioned.id:1}}",cat:"Actions",lang:"botscript",v:1},
+  {sig:"{send:channelID|message}",args:[{n:"channelID",d:"Target channel ID"},{n:"message",d:"Message content"}],desc:"Send a message to another channel.",ex:"{send:{channel.id}|Command was used!}",cat:"Actions",lang:"botscript",v:1},
+  // ── ForgeScript — [[command]] and {{expression}} ────────────────────────────
+  {sig:"[[title text]]",args:[{n:"text",d:"Embed title"}],desc:"Set the embed title.",ex:"[[title User Stats]]",cat:"Embed",lang:"forgescript",v:2},
+  {sig:"[[desc text]]",args:[{n:"text",d:"Embed description"}],desc:"Set the embed description.",ex:"[[desc Hey {{user}}, welcome!]]",cat:"Embed",lang:"forgescript",v:2},
+  {sig:"[[color #hex]]",args:[{n:"#hex",d:"Hex color"}],desc:"Set the embed sidebar color.",ex:"[[color #3b82f6]]",cat:"Embed",lang:"forgescript",v:2},
+  {sig:"[[footer text]]",args:[{n:"text",d:"Footer text"}],desc:"Set the embed footer.",ex:"[[footer Powered by BotForge]]",cat:"Embed",lang:"forgescript",v:2},
+  {sig:"[[thumb url]]",args:[{n:"url",d:"Image URL"}],desc:"Small thumbnail image.",ex:"[[thumb {{user.avatar}}]]",cat:"Embed",lang:"forgescript",v:2},
+  {sig:"[[image url]]",args:[{n:"url",d:"Image URL"}],desc:"Large bottom image.",ex:"[[image https://example.com/img.png]]",cat:"Embed",lang:"forgescript",v:2},
+  {sig:"[[author name | iconURL]]",args:[{n:"name",d:"Author name"},{n:"iconURL",d:"Icon URL (optional)"}],desc:"Set embed author.",ex:"[[author {{user}} | {{user.avatar}}]]",cat:"Embed",lang:"forgescript",v:2},
+  {sig:"[[field name | value | inline]]",args:[{n:"name",d:"Field title"},{n:"value",d:"Field body"},{n:"inline",d:"true/false (optional)"}],desc:"Add a field to the embed.",ex:"[[field Coins | {{uvar.coins}} | true]]",cat:"Embed",lang:"forgescript",v:2},
+  {sig:"[[timestamp]]",desc:"Add current timestamp to embed.",ex:"[[title Log]]\n[[timestamp]]",cat:"Embed",lang:"forgescript",v:2},
+  {sig:"[[if condition]]...[[end]]",desc:"Block conditional. Supports [[elif condition]] and [[else]].",ex:"[[if {{uvar.coins}} >= 1000]]\n💎 Whale!\n[[elif {{uvar.coins}} >= 100]]\n💰 Rich!\n[[else]]\n🪙 Grind more.\n[[end]]",cat:"Logic",lang:"forgescript",v:2},
+  {sig:"[[set name value]]",args:[{n:"name",d:"Variable name"},{n:"value",d:"Value"}],desc:"Set a local (response-only) variable.",ex:"[[set roll {{random.1.100}}]]\nYou rolled {{var.roll}}!",cat:"Logic",lang:"forgescript",v:2},
+  {sig:"[[add varname amount]]",args:[{n:"varname",d:"User variable name"},{n:"amount",d:"Amount to add"}],desc:"Add to the current user's persistent variable. Outputs new value inline.",ex:"[[add coins 50]]\nNew balance: {{uvar.coins}}",cat:"Variables",lang:"forgescript",v:2},
+  {sig:"[[sub varname amount]]",args:[{n:"varname",d:"User variable name"},{n:"amount",d:"Amount to subtract"}],desc:"Subtract from the current user's variable.",ex:"[[sub coins 10]]",cat:"Variables",lang:"forgescript",v:2},
+  {sig:"[[mul varname factor]]",args:[{n:"varname",d:"Variable name"},{n:"factor",d:"Multiply by"}],desc:"Multiply the current user's variable.",ex:"[[mul coins 2]]",cat:"Variables",lang:"forgescript",v:2},
+  {sig:"[[div varname factor]]",args:[{n:"varname",d:"Variable name"},{n:"factor",d:"Divide by"}],desc:"Divide the current user's variable.",ex:"[[div coins 2]]",cat:"Variables",lang:"forgescript",v:2},
+  {sig:"[[setuvar name value]]",args:[{n:"name",d:"Variable name"},{n:"value",d:"New value"}],desc:"Set the current user's persistent variable.",ex:"[[setuvar coins 100]]",cat:"Variables",lang:"forgescript",v:2},
+  {sig:"[[setuvar name value userid]]",args:[{n:"name",d:"Variable"},{n:"value",d:"New value"},{n:"userid",d:"Target user ID"}],desc:"Set any user's persistent variable.",ex:"[[setuvar coins 0 {{mentioned.1.id}}]]",cat:"Variables",lang:"forgescript",v:2},
+  {sig:"[[reset varname]]",args:[{n:"varname",d:"Variable name"}],desc:"Reset a user variable to 0.",ex:"[[reset streak]]",cat:"Variables",lang:"forgescript",v:2},
+  {sig:"[[setsvar name value]]",args:[{n:"name",d:"Variable name"},{n:"value",d:"New value"}],desc:"Set a server-wide variable.",ex:"[[setsvar event active]]",cat:"Variables",lang:"forgescript",v:2},
+  {sig:"[[addsvar name amount]]",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount"}],desc:"Add to a server variable.",ex:"[[addsvar plays 1]]",cat:"Variables",lang:"forgescript",v:2},
+  {sig:"[[top varname limit]]",args:[{n:"varname",d:"Variable name"},{n:"limit",d:"Max entries"}],desc:"Output a ranked leaderboard.",ex:"[[title Leaderboard]]\n[[desc]]\n[[top coins 10]]",cat:"Variables",lang:"forgescript",v:2},
+  {sig:"{{user}}",desc:"Author's display name.",ex:"Hey {{user}}!",cat:"Expressions",lang:"forgescript",v:2},
+  {sig:"{{user.id}}",desc:"Author's user ID.",ex:"ID: {{user.id}}",cat:"Expressions",lang:"forgescript",v:2},
+  {sig:"{{user.mention}}",desc:"@mention the author.",ex:"Hi {{user.mention}}!",cat:"Expressions",lang:"forgescript",v:2},
+  {sig:"{{user.avatar}}",desc:"Author's avatar URL.",ex:"[[thumb {{user.avatar}}]]",cat:"Expressions",lang:"forgescript",v:2},
+  {sig:"{{user.roles}}",desc:"Author's role names.",ex:"Roles: {{user.roles}}",cat:"Expressions",lang:"forgescript",v:2},
+  {sig:"{{server}}",desc:"Server name.",ex:"Welcome to {{server}}!",cat:"Expressions",lang:"forgescript",v:2},
+  {sig:"{{server.members}}",desc:"Server member count.",ex:"{{server}} has {{server.members}} members",cat:"Expressions",lang:"forgescript",v:2},
+  {sig:"{{channel}}",desc:"Channel name.",ex:"You're in #{{channel}}",cat:"Expressions",lang:"forgescript",v:2},
+  {sig:"{{args}}",desc:"Text after the command.",ex:"You said: {{args}}",cat:"Expressions",lang:"forgescript",v:2},
+  {sig:"{{arg.1}}",args:[{n:"n",d:"Index, 1-based"}],desc:"The nth word after the command.",ex:"First word: {{arg.1}}",cat:"Expressions",lang:"forgescript",v:2},
+  {sig:"{{uvar.name}}",args:[{n:"name",d:"Variable name"}],desc:"Current user's persistent variable value.",ex:"Coins: {{uvar.coins}}",cat:"Expressions",lang:"forgescript",v:2},
+  {sig:"{{svar.name}}",args:[{n:"name",d:"Variable name"}],desc:"Server variable value.",ex:"Plays: {{svar.plays}}",cat:"Expressions",lang:"forgescript",v:2},
+  {sig:"{{gvar.name}}",args:[{n:"name",d:"Variable name"}],desc:"Global variable value.",ex:"Uses: {{gvar.totalUses}}",cat:"Expressions",lang:"forgescript",v:2},
+  {sig:"{{var.name}}",args:[{n:"name",d:"Local variable name"}],desc:"Get a local variable set with [[set]].",ex:"[[set roll {{random.1.20}}]]\nYou rolled {{var.roll}}!",cat:"Expressions",lang:"forgescript",v:2},
+  {sig:"{{ping}}",desc:"Bot latency.",ex:"Pong! {{ping}}",cat:"Expressions",lang:"forgescript",v:2},
+  {sig:"{{date}} / {{time}}",desc:"Current date or time.",ex:"Today is {{date}} at {{time}}",cat:"Expressions",lang:"forgescript",v:2},
+  {sig:"{{random.min.max}}",args:[{n:"min",d:"Minimum"},{n:"max",d:"Maximum"}],desc:"Random integer. Uses dots as separators.",ex:"You rolled {{random.1.6}}!",cat:"Expressions",lang:"forgescript",v:2},
+  {sig:"[[delete]]",desc:"Delete the trigger message.",ex:"[[delete]]\n✅ Done!",cat:"Actions",lang:"forgescript",v:2},
+  {sig:"[[react emoji]]",args:[{n:"emoji",d:"Emoji character"}],desc:"Add a reaction to the trigger message.",ex:"[[react ✅]]",cat:"Actions",lang:"forgescript",v:2},
+  {sig:"[[dm message]]",args:[{n:"message",d:"DM content"}],desc:"DM the command author.",ex:"[[dm Hey {{user}}, you used the command!]]",cat:"Actions",lang:"forgescript",v:2},
+  {sig:"[[dm userid message]]",args:[{n:"userid",d:"Target user ID"},{n:"message",d:"DM content"}],desc:"DM any user by ID.",ex:"[[dm {{mentioned.1.id}} Hello!]]",cat:"Actions",lang:"forgescript",v:2},
+  {sig:"[[send channelID message]]",args:[{n:"channelID",d:"Target channel ID"},{n:"message",d:"Content"}],desc:"Send to another channel.",ex:"[[send {{channel.id}} Command used!]]",cat:"Actions",lang:"forgescript",v:2},
+  {sig:"[[say text]]",args:[{n:"text",d:"Text to output"}],desc:"Output a line of text (useful inside if-blocks).",ex:"[[if {{uvar.coins}}>0]]\n[[say You have coins!]]\n[[end]]",cat:"Actions",lang:"forgescript",v:2},
+]; 
+
 
 /* ── Variables tab data ── */
 /* ── Persistent variable reference data ── */
 const VAR_REF={
   user:[
-    {n:"$getUserVar[name]",d:"Get YOUR value of a variable",ex:"Coins: $getUserVar[coins]"},
-    {n:"$getUserVar[name;userID]",d:"Get any user's variable value",ex:"$getUserVar[coins;$mentionedID]"},
-    {n:"$setUserVar[name;value]",d:"Set YOUR variable to a value",ex:"$setUserVar[coins;100]"},
-    {n:"$setUserVar[name;value;userID]",d:"Set any user's variable",ex:"$setUserVar[coins;0;$mentionedID]"},
-    {n:"$addToUserVar[name;amount]",d:"Add to YOUR variable. Returns new value.",ex:"You now have $addToUserVar[coins;50] coins!"},
-    {n:"$addToUserVar[name;amount;userID]",d:"Add to any user's variable",ex:"$addToUserVar[xp;25;$mentionedID]"},
-    {n:"$subtractFromUserVar[name;amount]",d:"Subtract from YOUR variable",ex:"$subtractFromUserVar[coins;10]"},
-    {n:"$multiplyUserVar[name;factor]",d:"Multiply YOUR variable",ex:"$multiplyUserVar[coins;2]"},
-    {n:"$divideUserVar[name;factor]",d:"Divide YOUR variable",ex:"$divideUserVar[coins;2]"},
-    {n:"$resetUserVar[name]",d:"Reset YOUR variable to 0",ex:"$resetUserVar[coins]"},
-    {n:"$deleteUserVar[name]",d:"Delete YOUR variable entirely",ex:"$deleteUserVar[tempdata]"},
-    {n:"$userLeaderboard[name]",d:"Top 10 users sorted by variable value",ex:"$userLeaderboard[coins]"},
-    {n:"$userLeaderboard[name;limit]",d:"Top N users sorted by variable value",ex:"$userLeaderboard[xp;5]"},
+    {n:"{uvar:name}",d:"Get YOUR persistent variable",ex:"Coins: {uvar:coins}"},
+    {n:"{uvar:name|userID}",d:"Get any user's variable",ex:"{uvar:coins|{mentioned.id:1}}"},
+    {n:"{setuvar:name|value}",d:"Set YOUR variable",ex:"{setuvar:coins|100}"},
+    {n:"{setuvar:name|value|userID}",d:"Set any user's variable",ex:"{setuvar:coins|0|{mentioned.id:1}}"},
+    {n:"{adduvar:name|amount}",d:"Add to YOUR variable. Returns new value.",ex:"You now have {adduvar:coins|50} coins!"},
+    {n:"{subuvar:name|amount}",d:"Subtract from YOUR variable",ex:"{subuvar:coins|10}"},
+    {n:"{muluvar:name|factor}",d:"Multiply YOUR variable",ex:"{muluvar:coins|2}"},
+    {n:"{resetuvar:name}",d:"Reset YOUR variable to 0",ex:"{resetuvar:streak}"},
+    {n:"{top:varname}",d:"Leaderboard for a user variable (top 10)",ex:"{embed.title:Coin Leaderboard}\n{embed.desc:{top:coins|10}}"},
+    {n:"{top:varname|limit}",d:"Leaderboard with custom limit",ex:"{top:xp|5}"},
   ],
   server:[
-    {n:"$getServerVar[name]",d:"Get a server-wide variable",ex:"Total plays: $getServerVar[plays]"},
-    {n:"$setServerVar[name;value]",d:"Set a server-wide variable",ex:"$setServerVar[plays;0]"},
-    {n:"$addToServerVar[name;amount]",d:"Add to a server variable",ex:"$addToServerVar[plays;1]"},
-    {n:"$subtractFromServerVar[name;amount]",d:"Subtract from a server variable",ex:"$subtractFromServerVar[stock;1]"},
-    {n:"$resetServerVar[name]",d:"Reset a server variable to 0",ex:"$resetServerVar[plays]"},
+    {n:"{svar:name}",d:"Get a server-wide variable",ex:"Plays: {svar:plays}"},
+    {n:"{setsvar:name|value}",d:"Set a server variable",ex:"{setsvar:event|active}"},
+    {n:"{addsvar:name|amount}",d:"Add to a server variable",ex:"{addsvar:plays|1}"},
   ],
   global:[
-    {n:"$getGlobalVar[name]",d:"Get a global variable (shared across all servers)",ex:"$getGlobalVar[totalUses]"},
-    {n:"$setGlobalVar[name;value]",d:"Set a global variable",ex:"$setGlobalVar[totalUses;0]"},
-    {n:"$addToGlobalVar[name;amount]",d:"Add to a global variable",ex:"$addToGlobalVar[totalUses;1]"},
+    {n:"{gvar:name}",d:"Get a global variable (all servers)",ex:"{gvar:totalUses}"},
+    {n:"{setgvar:name|value}",d:"Set a global variable",ex:"{setgvar:version|2}"},
+    {n:"{addgvar:name|amount}",d:"Add to a global variable",ex:"{addgvar:totalUses|1}"},
   ],
   local:[
-    {n:"$let[name;value]",d:"Store a value for this response only",ex:"$let[roll;$random[1;20]]"},
-    {n:"$get[name]",d:"Retrieve a response-local variable",ex:"You rolled $get[roll]!"},
-    {n:"$set[name;value]",d:"Alias for $let[]",ex:"$set[temp;$getUserVar[coins]]"},
+    {n:"{set:name|value}",d:"Store a value for this response only",ex:"{set:roll|{random:1|20}}"},
+    {n:"{get:name}",d:"Retrieve a local variable",ex:"You rolled {get:roll}!"},
   ],
 };
 
@@ -1528,11 +1511,12 @@ async function doCreateVar(){
 }
 
 
-let _fnFilter="bdscript";
+let _fnFilter="botscript";
 function filterFns(f){
   _fnFilter=f;
-  ["bds","bds2","all"].forEach(x=>id("fn-filter-"+x)?.style.setProperty("opacity","1"));
-  id("fn-filter-"+(f==="bdscript"?"bds":f==="bdscript2"?"bds2":"all"))?.style.setProperty("opacity",".45");
+  ["bots","forge","all"].forEach(x=>id("fn-filter-"+x)?.style.setProperty("opacity","1"));
+  const active=f==="botscript"?"bots":f==="forgescript"?"forge":"all";
+  id("fn-filter-"+active)?.style.setProperty("opacity",".45");
   renderFns();
 }
 
@@ -1542,7 +1526,8 @@ function renderFns(){
   grid.innerHTML="";
 
   let filtered=FN_DATA.filter(fn=>{
-    if(_fnFilter==="bdscript"&&fn.v>1)return false;
+    if(_fnFilter==="botscript"&&fn.lang!=="botscript")return false;
+    if(_fnFilter==="forgescript"&&fn.lang!=="forgescript")return false;
     if(search&&!fn.sig.toLowerCase().includes(search)&&!fn.desc.toLowerCase().includes(search)&&!fn.cat.toLowerCase().includes(search))return false;
     return true;
   });
@@ -1717,21 +1702,35 @@ function filterCmds(){
 
 /* ── Templates ── */
 const TEMPLATES=[
-  {label:"🏓 Ping",trigger:"ping",desc:"Reply with pong",stype:"simple",response:"Pong! 🏓"},
-  {label:"💰 Check balance",trigger:"bal",desc:"Show your coin balance",stype:"bdscript",response:"$title[$authorNickname's Balance]\n$description[💰 **$getUserVar[coins]** coins]\n$color[#fbbf24]\n$thumbnail[$authorAvatar]\n$footer[Use $prefix daily to earn more!]"},
-  {label:"🎁 Daily reward",trigger:"daily",desc:"Claim daily coins",stype:"bdscript",response:"$let[gained;$random[50;200]]\n$addToUserVar[coins;$get[gained]]\n$title[Daily Reward! 🎁]\n$description[$authorMention claimed **$get[gained]** coins!\nNew balance: **$getUserVar[coins]** 💰]\n$color[#4ade80]"},
-  {label:"🎰 Gamble",trigger:"gamble",desc:"Bet your coins",stype:"bdscript",response:"$if[$isArgs==true;$if[$isNumber[$arg[1]]==true;$if[$getUserVar[coins]>=$arg[1];$if[$random[1;2]==1;$addToUserVar[coins;$arg[1]]\n$title[You Won! 🎰]\n$description[+**$arg[1]** coins!\nBalance: **$getUserVar[coins]** 💰]\n$color[#4ade80];$subtractFromUserVar[coins;$arg[1]]\n$title[You Lost! 💀]\n$description[-**$arg[1]** coins.\nBalance: **$getUserVar[coins]** 💰]\n$color[#f87171]];❌ You only have **$getUserVar[coins]** coins!];❌ Enter a valid number!];❌ Usage: !gamble <amount>]"},
-  {label:"🏆 Leaderboard",trigger:"top",desc:"Top 10 coin holders",stype:"bdscript",response:"$title[Coin Leaderboard 🏆]\n$description[$userLeaderboard[coins;10]]\n$color[#fbbf24]"},
-  {label:"🎁 Give coins",trigger:"give",desc:"Give coins to someone",stype:"bdscript",response:"$if[$isArgs==true;$if[$mentioned[1]!=;$if[$isNumber[$arg[2]]==true;$subtractFromUserVar[coins;$arg[2]]\n$addToUserVar[coins;$arg[2];$mentionedID]\n$title[Transfer Complete ✅]\n$description[$authorMention gave **$arg[2]** coins to $mentioned[1]!]\n$color[#4ade80];❌ Enter a valid amount!];❌ Mention someone!];❌ Usage: !give @user amount]"},
-  {label:"⚔️ RPG stats",trigger:"stats",desc:"Show RPG character stats",stype:"bdscript",response:"$title[$authorNickname's Stats]\n$addField[Level;$getUserVar[level];true]\n$addField[XP;$getUserVar[xp] / 1000;true]\n$addField[Coins;$getUserVar[coins];true]\n$addField[Wins;$getUserVar[wins];true]\n$addField[Losses;$getUserVar[losses];true]\n$addField[Streak;$getUserVar[streak];true]\n$thumbnail[$authorAvatar]\n$color[#6366f1]"},
-  {label:"ℹ️ Server info",trigger:"server",desc:"Server info embed",stype:"bdscript",response:"$title[$guildName]\n$description[**Members:** $guildMemberCount\n**Created:** $guildCreationDate\n**Boost tier:** $guildBoostTier]\n$color[#3b82f6]\n$thumbnail[$guildIcon]\n$footer[Server ID: $guildID]"},
-  {label:"👤 User info",trigger:"userinfo",desc:"User info embed",stype:"bdscript",response:"$title[User Info]\n$description[**Username:** $authorUsername\n**Nickname:** $authorNickname\n**ID:** $authorID\n**Account age:** $accountAge[]]\n$thumbnail[$authorAvatar]\n$color[#6366f1]"},
-  {label:"🪙 Coin flip",trigger:"flip",desc:"Heads or tails",stype:"bdscript2",response:"$randomText[🪙 Heads!;🪙 Tails!]"},
-  {label:"📢 Say",trigger:"say",desc:"Bot repeats your message",stype:"bdscript",response:"$if[$isArgs==true;$noMentionMessage;❌ Provide a message!]\n$deleteCommand"},
-  {label:"🎲 Random number",trigger:"roll",desc:"Roll a number",stype:"bdscript",response:"🎲 $authorMention rolled **$random[1;100]**!"},
-  {label:"🛡️ Role check",trigger:"checkrole",desc:"Check if user has a role",stype:"bdscript",response:"$if[$hasRole[$authorID;$roleID[Member]]==true;✅ $authorMention has the Member role!;❌ $authorMention doesn't have the Member role.]"},
-  {label:"❓ Help",trigger:"help",desc:"Command list embed",stype:"bdscript",response:"$title[$botUsername Help]\n$description[Use **$prefix** before any command.]\n$addField[Economy;bal, daily, gamble, top, give;false]\n$addField[Fun;flip, roll, choose;false]\n$addField[Info;server, userinfo, stats;false]\n$color[#22d3ee]\n$footer[Powered by BotForge]\n$timestamp"},
-];
+  {label:"🏓 Ping",trigger:"ping",desc:"Reply with pong",stype:"simple",
+   response:"Pong! 🏓 {mention}"},
+  {label:"💰 Balance (BotScript)",trigger:"bal",desc:"Show your coin balance",stype:"botscript",
+   response:"{embed.title:{user}'s Balance}\n{embed.desc:💰 You have **{number:{uvar:coins}}** coins!}\n{embed.color:#fbbf24}\n{embed.thumb:{user.avatar}}\n{embed.footer:Use {prefix}daily to earn more!}"},
+  {label:"🎁 Daily reward (BotScript)",trigger:"daily",desc:"Claim daily coins",stype:"botscript",
+   response:"{set:gained|{random:50|200}}\n{adduvar:coins|{get:gained}}\n{embed.title:Daily Reward! 🎁}\n{embed.desc:{user.mention} claimed **{get:gained}** coins!\nNew balance: **{number:{uvar:coins}}** 💰}\n{embed.color:#4ade80}"},
+  {label:"🎰 Gamble (BotScript)",trigger:"gamble",desc:"Bet your coins",stype:"botscript",
+   response:"{if:{hasargs}|{if:{contains:{arg:1}|}|{if:{uvar:coins}>={arg:1}|{if:{random:1|2}==1|{adduvar:coins|{arg:1}}\n{embed.title:You Won! 🎰}\n{embed.desc:+**{arg:1}** coins!\nBalance: **{uvar:coins}** 💰}\n{embed.color:#4ade80}|{subuvar:coins|{arg:1}}\n{embed.title:You Lost! 💀}\n{embed.desc:-**{arg:1}** coins.\nBalance: **{uvar:coins}** 💰}\n{embed.color:#f87171}}|❌ Not enough coins! You have **{uvar:coins}**}|❌ Enter a valid amount!}|❌ Usage: {prefix}gamble <amount>}"},
+  {label:"🏆 Leaderboard (BotScript)",trigger:"top",desc:"Top 10 coin holders",stype:"botscript",
+   response:"{embed.title:Coin Leaderboard 🏆}\n{embed.desc:{top:coins|10}}\n{embed.color:#fbbf24}"},
+  {label:"💸 Give coins (BotScript)",trigger:"give",desc:"Give coins to someone",stype:"botscript",
+   response:"{if:{mentioned:1}!={if:{uvar:coins}>={arg:2}|{subuvar:coins|{arg:2}}{setuvar:coins|{math:{uvar:coins|{mentioned.id:1}}+{arg:2}}|{mentioned.id:1}}\n{embed.title:Transfer ✅}\n{embed.desc:{user.mention} gave **{arg:2}** coins to {mentioned:1}!}\n{embed.color:#4ade80}|❌ Not enough coins!}|❌ Mention a user!}"},
+  {label:"⚔️ RPG Stats (BotScript)",trigger:"stats",desc:"Show RPG character stats",stype:"botscript",
+   response:"{embed.title:{user}'s Stats}\n{embed.field:Level|{uvar:level}|true}\n{embed.field:XP|{uvar:xp} / 1000|true}\n{embed.field:Coins|{number:{uvar:coins}}|true}\n{embed.field:Wins|{uvar:wins}|true}\n{embed.field:Losses|{uvar:losses}|true}\n{embed.field:Streak|{uvar:streak}|true}\n{embed.thumb:{user.avatar}}\n{embed.color:#6366f1}"},
+  {label:"📊 Daily (ForgeScript)",trigger:"daily2",desc:"Daily reward using ForgeScript",stype:"forgescript",
+   response:"[[add coins {{random.50.200}}]]\n[[title Daily Reward! 🎁]]\n[[color #4ade80]]\nHey {{user.mention}}!\nYou claimed **{{random.50.200}}** coins.\nBalance: **{{uvar.coins}}** 💰\n[[react 🎁]]"},
+  {label:"🏅 Level up (ForgeScript)",trigger:"xp",desc:"Add XP and check level",stype:"forgescript",
+   response:"[[add xp 25]]\n[[if {{uvar.xp}} >= 1000]]\n[[setuvar xp 0]]\n[[add level 1]]\n[[title Level Up! 🎉]]\n[[color #fbbf24]]\nYou reached **Level {{uvar.level}}**, {{user}}!\n[[react 🎉]]\n[[else]]\n[[title XP Gained]]\n[[color #6366f1]]\n+25 XP! Total: **{{uvar.xp}}/1000**, {{user}}.\n[[end]]"},
+  {label:"ℹ️ Server info (BotScript)",trigger:"server",desc:"Server info embed",stype:"botscript",
+   response:"{embed.title:{server}}\n{embed.desc:**Members:** {server.members}\n**Created:** {server.created}\n**Boost tier:** {server.boosttier}}\n{embed.color:#3b82f6}\n{embed.thumb:{server.icon}}\n{embed.footer:Server ID: {server.id}}"},
+  {label:"👤 User info (BotScript)",trigger:"userinfo",desc:"User info embed",stype:"botscript",
+   response:"{embed.title:User Info}\n{embed.desc:**Username:** {user.name}\n**Nickname:** {user}\n**ID:** {user.id}\n**Account age:** {user.age}}\n{embed.thumb:{user.avatar}}\n{embed.color:#6366f1}"},
+  {label:"📢 Say (BotScript)",trigger:"say",desc:"Bot repeats your message",stype:"botscript",
+   response:"{if:{hasargs}|{nomentions}|❌ Provide a message!}\n{delete}"},
+  {label:"🪙 Coin flip (BotScript)",trigger:"flip",desc:"Heads or tails",stype:"botscript",
+   response:"{choose:🪙 Heads!|🪙 Tails!}"},
+  {label:"❓ Help (BotScript)",trigger:"help",desc:"Command list embed",stype:"botscript",
+   response:"{embed.title:{bot} Help}\n{embed.desc:Use **{prefix}** before any command.}\n{embed.field:Economy|bal, daily, gamble, top, give|false}\n{embed.field:Fun|flip, roll, choose|false}\n{embed.field:Info|server, userinfo, stats|false}\n{embed.color:#22d3ee}\n{embed.footer:Powered by BotForge}\n{embed.timestamp}"},
+]; 
 
 let _templatesOpen=false;
 function toggleTemplates(){
@@ -1792,7 +1791,7 @@ function refreshPanel(){
     }
   }
 
-  filterFns("bdscript");
+  filterFns("botscript");
 
   document.addEventListener("keydown",e=>{
     if(e.key==="Escape"){
