@@ -221,6 +221,17 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
 .fn-desc{font-size:11.5px;color:var(--muted);line-height:1.5}
 .fn-cat{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:5px}
 .fn-cat-header{font-family:var(--fh);font-size:13px;font-weight:700;color:var(--muted2);margin:16px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--border)}
+.lv-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;display:flex;align-items:center;gap:10px;margin-bottom:5px;flex-wrap:wrap}
+.lv-name{font-family:var(--fm);font-size:12px;color:var(--cyan);font-weight:500;flex-shrink:0;min-width:80px}
+.lv-sid{font-size:11px;color:var(--muted);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:60px}
+.lv-val{font-family:var(--fm);font-size:13px;font-weight:600;min-width:60px;text-align:right;flex-shrink:0}
+.lv-acts{display:flex;gap:5px;flex-shrink:0}
+.lv-edit-input{background:var(--surface2);border:1px solid var(--accent);border-radius:3px;color:var(--text);font-family:var(--fm);font-size:12px;padding:3px 8px;width:100px;outline:none}
+.var-ref-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:11px 14px;cursor:pointer;transition:all .13s}
+.var-ref-card:hover{border-color:var(--accent);background:var(--surface2)}
+.var-ref-card .vr-name{font-family:var(--fm);font-size:12px;color:var(--cyan);font-weight:500;margin-bottom:3px;word-break:break-all}
+.var-ref-card .vr-desc{font-size:11.5px;color:var(--muted);line-height:1.45}
+.var-ref-card .vr-ex{font-size:10.5px;color:var(--muted2);font-family:var(--fm);margin-top:3px}
 .var-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 13px;cursor:pointer;transition:all .13s;display:flex;flex-direction:column;gap:3px}
 .var-card:hover{border-color:var(--accent);background:var(--surface2)}
 .var-card .vc-name{font-family:var(--fm);font-size:12px;color:var(--cyan);font-weight:500}
@@ -424,6 +435,25 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
   </div>
 </div>
 
+<!-- CREATE VAR MODAL -->
+<div id="createvar-modal" class="overlay hidden" onclick="if(event.target===this)closeModal('createvar-modal')">
+  <div class="mbox" onclick="event.stopPropagation()">
+    <div class="mbox-hdr"><h3 style="font-size:16px">Create Variable</h3><button class="btn btn-ghost btn-xs" onclick="closeModal('createvar-modal')">✕</button></div>
+    <div class="field"><label class="lbl">Scope</label>
+      <select class="select" id="cv-scope" onchange="id('cv-sid-field').style.display=this.value==='global'?'none':'block'">
+        <option value="user">User (per user)</option>
+        <option value="server">Server (per server)</option>
+        <option value="global">Global (all servers)</option>
+      </select>
+    </div>
+    <div class="field" id="cv-sid-field"><label class="lbl">Scope ID <span style="color:var(--muted)">(Discord user ID for user scope, guild ID for server)</span></label><input class="input" id="cv-sid" placeholder="Discord ID…"></div>
+    <div class="field"><label class="lbl">Variable name</label><input class="input" id="cv-name" placeholder="coins"></div>
+    <div class="field"><label class="lbl">Initial value</label><input class="input" id="cv-value" placeholder="0" value="0"></div>
+    <button class="btn btn-primary btn-sm" onclick="doCreateVar()">Create variable</button>
+    <div id="cv-err" style="font-size:12px;margin-top:8px;color:var(--red)"></div>
+  </div>
+</div>
+
 <!-- ══ APP SHELL ══ -->
 <div id="app" class="hidden">
   <aside id="sidebar">
@@ -463,6 +493,7 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
         <div class="stat-card"><div class="stat-val" id="ds-cmds">—</div><div class="stat-lbl">Commands</div></div>
         <div class="stat-card"><div class="stat-val" id="ds-status" style="font-size:14px;padding-top:6px">Offline</div><div class="stat-lbl">Bot status</div></div>
         <div class="stat-card"><div class="stat-val" id="ds-prefix">—</div><div class="stat-lbl">Prefix</div></div>
+        <div class="stat-card"><div class="stat-val" id="ds-vars">—</div><div class="stat-lbl">Stored vars</div></div>
       </div>
       <div id="bot-list"></div>
     </div>
@@ -562,36 +593,40 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
 
         <!-- Variables -->
         <div class="ws-panel" id="panel-variables">
-          <h3 style="font-family:var(--fh);font-size:17px;font-weight:700;margin-bottom:4px">Variables</h3>
-          <p style="color:var(--muted);font-size:12px;margin-bottom:18px">All available variables you can use in command responses. Click any to insert into the editor.</p>
-
-          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px">
-            <div class="badge b-muted" style="cursor:pointer" onclick="filterVars('simple')">Simple</div>
-            <div class="badge b-cyan" style="cursor:pointer" onclick="filterVars('bds')">BDScript vars</div>
-            <div class="badge b-amber" style="cursor:pointer" onclick="filterVars('local')">Local ($let)</div>
-          </div>
-
-          <div id="var-simple-section">
-            <div class="fn-cat-header">Simple template variables — use in Simple script mode</div>
-            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:7px;margin-bottom:20px" id="simple-var-grid"></div>
-          </div>
-
-          <div id="var-bds-section">
-            <div class="fn-cat-header">BDScript no-argument variables — available in BDScript and BDScript 2</div>
-            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:7px;margin-bottom:20px" id="bds-var-grid"></div>
-          </div>
-
-          <div id="var-local-section">
-            <div class="fn-cat-header">Local variables — store and reuse values within one response</div>
-            <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-bottom:14px">
-              <div style="font-size:13px;font-weight:600;margin-bottom:10px;font-family:var(--fh)">How local variables work</div>
-              <p style="color:var(--muted);font-size:12.5px;line-height:1.75;margin-bottom:12px">Local variables only exist within one command response. Use them to store calculated values so you don't have to repeat the expression.</p>
-              <div class="fp-ex">$let[score;$random[1;100]]
-Your score is $get[score] out of 100.
-$if[$get[score]>80;Amazing!;Keep trying!]</div>
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+            <div>
+              <h3 style="font-family:var(--fh);font-size:17px;font-weight:700;margin-bottom:4px">Variables</h3>
+              <p style="color:var(--muted);font-size:12px">Persistent data per-user, per-server, or globally. Changes take effect immediately — even while the bot is running.</p>
             </div>
-            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:7px" id="local-var-grid"></div>
+            <button class="btn btn-primary btn-sm" onclick="openModal('createvar-modal')">+ Create variable</button>
           </div>
+
+          <div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:16px">
+            <div>
+              <div class="fn-cat-header" style="margin-top:0">Filter by scope</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+                <div class="badge b-muted" id="vf-all" style="cursor:pointer;opacity:1" onclick="filterLiveVars('all')">All</div>
+                <div class="badge b-blue" id="vf-user" style="cursor:pointer;opacity:.5" onclick="filterLiveVars('user')">User</div>
+                <div class="badge b-cyan" id="vf-server" style="cursor:pointer;opacity:.5" onclick="filterLiveVars('server')">Server</div>
+                <div class="badge b-amber" id="vf-global" style="cursor:pointer;opacity:.5" onclick="filterLiveVars('global')">Global</div>
+              </div>
+            </div>
+            <div style="flex:1;min-width:180px">
+              <div class="fn-cat-header" style="margin-top:0">Search</div>
+              <input class="input" id="var-search" placeholder="Filter by name or ID…" style="margin-top:8px" oninput="renderLiveVars()">
+            </div>
+          </div>
+
+          <div id="live-vars-list" style="margin-bottom:24px"></div>
+
+          <div class="fn-cat-header">BDScript variable functions — click any to insert into editor</div>
+          <div style="margin-bottom:10px;display:flex;gap:6px;flex-wrap:wrap">
+            <div class="badge b-blue" style="cursor:pointer" onclick="setVarRefFilter('user')">User vars</div>
+            <div class="badge b-cyan" style="cursor:pointer" onclick="setVarRefFilter('server')">Server vars</div>
+            <div class="badge b-amber" style="cursor:pointer" onclick="setVarRefFilter('global')">Global vars</div>
+            <div class="badge b-purple" style="cursor:pointer" onclick="setVarRefFilter('local')">Local ($let)</div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:7px" id="var-ref-grid"></div>
         </div>
 
         <!-- Bot Settings -->
@@ -823,7 +858,7 @@ function switchWsTab(tab){
   if(tab==="logs"){loadLogs();startLogPoll()}else stopLogPoll();
   if(tab==="overview")loadStatus();
   if(tab==="functions")renderFns();
-  if(tab==="variables")initVarsTab();
+  if(tab==="variables"){renderVarRef();loadLiveVars()}
 }
 
 /* ── Auth ── */
@@ -922,8 +957,17 @@ async function loadBots(){
 }
 
 async function loadCmdCountForDash(){
-  try{const c=await api("/bots/"+currentBot.id+"/commands");id("ds-cmds").textContent=c.length}
-  catch{id("ds-cmds").textContent=getCmds().length}
+  try{
+    const [cmds,vars_]=await Promise.all([
+      api("/bots/"+currentBot.id+"/commands"),
+      api("/bots/"+currentBot.id+"/vars")
+    ]);
+    id("ds-cmds").textContent=cmds.length;
+    id("ds-vars").textContent=vars_.length;
+  }catch{
+    id("ds-cmds").textContent=getCmds().length;
+    const dv=id("ds-vars");if(dv)dv.textContent="?";
+  }
 }
 
 function openAddBot(){openModal("addbot-modal")}
@@ -1319,86 +1363,170 @@ const FN_DATA=[
   {sig:"$greatest[a;b;c]",args:[{n:"values…",d:"Numbers to compare"}],desc:"Returns the greatest of all provided values. BDScript 2 only.",ex:"$greatest[5;3;8;1] → 8",cat:"BDScript 2",v:2},
   {sig:"$smallest[a;b;c]",args:[{n:"values…",d:"Numbers to compare"}],desc:"Returns the smallest of all provided values. BDScript 2 only.",ex:"$smallest[5;3;8;1] → 1",cat:"BDScript 2",v:2},
   {sig:"$eval[code]",args:[{n:"code",d:"BDScript 2 code to evaluate"}],desc:"Evaluates a BDScript 2 expression and returns the result. BDScript 2 only.",ex:"$eval[$sum[2;3]] → 5",cat:"BDScript 2",v:2},
+  {sig:"$getUserVar[name]",args:[{n:"name",d:"Variable name"}],desc:"Get YOUR persistent variable value (defaults to 0 if not set).",ex:"You have $getUserVar[coins] coins!",cat:"Variables",v:1},
+  {sig:"$getUserVar[name;userID]",args:[{n:"name",d:"Variable name"},{n:"userID",d:"Target user's Discord ID"}],desc:"Get any user's persistent variable value.",ex:"$getUserVar[coins;$mentionedID]",cat:"Variables",v:1},
+  {sig:"$setUserVar[name;value]",args:[{n:"name",d:"Variable name"},{n:"value",d:"New value"}],desc:"Set YOUR persistent variable to a value.",ex:"$setUserVar[coins;100]",cat:"Variables",v:1},
+  {sig:"$setUserVar[name;value;userID]",args:[{n:"name",d:"Variable name"},{n:"value",d:"New value"},{n:"userID",d:"Target user ID"}],desc:"Set any user's persistent variable.",ex:"$setUserVar[coins;0;$mentionedID]",cat:"Variables",v:1},
+  {sig:"$addToUserVar[name;amount]",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount to add"}],desc:"Add to YOUR variable and return the new value. Use inline for dynamic responses.",ex:"You earned 50 coins! Total: $addToUserVar[coins;50]",cat:"Variables",v:1},
+  {sig:"$subtractFromUserVar[name;amount]",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount to subtract"}],desc:"Subtract from YOUR variable.",ex:"$subtractFromUserVar[coins;10]",cat:"Variables",v:1},
+  {sig:"$multiplyUserVar[name;factor]",args:[{n:"name",d:"Variable name"},{n:"factor",d:"Multiplication factor"}],desc:"Multiply YOUR variable by a factor.",ex:"$multiplyUserVar[coins;2]",cat:"Variables",v:1},
+  {sig:"$divideUserVar[name;factor]",args:[{n:"name",d:"Variable name"},{n:"factor",d:"Division factor"}],desc:"Divide YOUR variable.",ex:"$divideUserVar[coins;2]",cat:"Variables",v:1},
+  {sig:"$resetUserVar[name]",args:[{n:"name",d:"Variable name"}],desc:"Reset YOUR variable to 0.",ex:"$resetUserVar[streak]",cat:"Variables",v:1},
+  {sig:"$deleteUserVar[name]",args:[{n:"name",d:"Variable name"}],desc:"Delete YOUR variable entirely (removes the record).",ex:"$deleteUserVar[tempdata]",cat:"Variables",v:1},
+  {sig:"$userLeaderboard[name]",args:[{n:"name",d:"Variable name"},{n:"limit",d:"Max entries, default 10 (optional)"}],desc:"Show a ranked leaderboard of users by variable value.",ex:"$title[Top Coins 🏆]\n$description[$userLeaderboard[coins;10]]",cat:"Variables",v:1},
+  {sig:"$getServerVar[name]",args:[{n:"name",d:"Variable name"}],desc:"Get a server-wide variable (same value for everyone in the server).",ex:"Total plays: $getServerVar[plays]",cat:"Variables",v:1},
+  {sig:"$setServerVar[name;value]",args:[{n:"name",d:"Variable name"},{n:"value",d:"New value"}],desc:"Set a server-wide variable.",ex:"$setServerVar[event;active]",cat:"Variables",v:1},
+  {sig:"$addToServerVar[name;amount]",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount to add"}],desc:"Add to a server variable.",ex:"$addToServerVar[plays;1]",cat:"Variables",v:1},
+  {sig:"$subtractFromServerVar[name;amount]",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount to subtract"}],desc:"Subtract from a server variable.",ex:"$subtractFromServerVar[stock;1]",cat:"Variables",v:1},
+  {sig:"$resetServerVar[name]",args:[{n:"name",d:"Variable name"}],desc:"Reset a server variable to 0.",ex:"$resetServerVar[plays]",cat:"Variables",v:1},
+  {sig:"$getGlobalVar[name]",args:[{n:"name",d:"Variable name"}],desc:"Get a global variable (shared across all servers).",ex:"Global uses: $getGlobalVar[totalUses]",cat:"Variables",v:1},
+  {sig:"$setGlobalVar[name;value]",args:[{n:"name",d:"Variable name"},{n:"value",d:"New value"}],desc:"Set a global variable.",ex:"$setGlobalVar[version;2]",cat:"Variables",v:1},
+  {sig:"$addToGlobalVar[name;amount]",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount to add"}],desc:"Add to a global variable.",ex:"$addToGlobalVar[totalUses;1]",cat:"Variables",v:1},
+  {sig:"$let[name;value]",args:[{n:"name",d:"Variable name"},{n:"value",d:"Value to store"}],desc:"Store a value locally — only lasts for this one response.",ex:"$let[roll;$random[1;20]]\nYou rolled $get[roll]!",cat:"Variables",v:1},
+  {sig:"$get[name]",args:[{n:"name",d:"Variable name"}],desc:"Retrieve a local variable set with $let[].",ex:"$get[roll]",cat:"Variables",v:1},
 ];
 
 /* ── Variables tab data ── */
-const SIMPLE_VARS=[
-  {name:"{user}",desc:"Author's server nickname or username",ex:"Hey {user}!"},
-  {name:"{username}",desc:"Author's raw username",ex:"Username: {username}"},
-  {name:"{mention}",desc:"@mentions the author",ex:"Hi {mention}!"},
-  {name:"{id}",desc:"Author's Discord user ID",ex:"Your ID: {id}"},
-  {name:"{server}",desc:"Server name",ex:"Welcome to {server}!"},
-  {name:"{channel}",desc:"Current channel name",ex:"You're in #{channel}"},
-  {name:"{members}",desc:"Total member count",ex:"{server} has {members} members"},
-];
-const BDS_VARS=[
-  {name:"$authorID",desc:"Author's user ID"},
-  {name:"$authorUsername",desc:"Author's username"},
-  {name:"$authorMention",desc:"@mention the author"},
-  {name:"$authorNickname",desc:"Author's nickname"},
-  {name:"$authorAvatar",desc:"Author's avatar URL"},
-  {name:"$authorRoles",desc:"Author's role list"},
-  {name:"$guildName",desc:"Server name"},
-  {name:"$guildID",desc:"Server ID"},
-  {name:"$guildMemberCount",desc:"Member count"},
-  {name:"$guildOwnerID",desc:"Server owner's ID"},
-  {name:"$guildIcon",desc:"Server icon URL"},
-  {name:"$guildBoostCount",desc:"Boost count"},
-  {name:"$guildBoostTier",desc:"Boost tier (0–3)"},
-  {name:"$guildCreationDate",desc:"Server creation date"},
-  {name:"$channelID",desc:"Current channel ID"},
-  {name:"$channelName",desc:"Current channel name"},
-  {name:"$channelMention",desc:"Channel mention"},
-  {name:"$channelTopic",desc:"Channel topic"},
-  {name:"$botUsername",desc:"Bot's username"},
-  {name:"$botID",desc:"Bot's user ID"},
-  {name:"$botMention",desc:"@mention the bot"},
-  {name:"$botAvatar",desc:"Bot's avatar URL"},
-  {name:"$ping",desc:"Bot latency e.g. 42ms"},
-  {name:"$prefix",desc:"Command prefix"},
-  {name:"$message",desc:"Text after the command"},
-  {name:"$args",desc:"Alias for $message"},
-  {name:"$messageID",desc:"Trigger message ID"},
-  {name:"$messageLink",desc:"Link to the message"},
-  {name:"$noMentionMessage",desc:"Message without @s"},
-  {name:"$argsCount",desc:"Word count after command"},
-  {name:"$isArgs",desc:"'true' if args exist"},
-  {name:"$date",desc:"Current date YYYY-MM-DD"},
-  {name:"$time",desc:"Current time HH:MM:SS"},
-  {name:"$day",desc:"Day of week"},
-  {name:"$month",desc:"Month name"},
-  {name:"$year",desc:"Current year"},
-  {name:"$splitCount",desc:"Segments from last $split[]"},
-];
-const LOCAL_VARS=[
-  {name:"$let[name;value]",desc:"Store a value in a named variable",ex:"$let[score;$random[1;100]]"},
-  {name:"$get[name]",desc:"Retrieve a stored variable",ex:"$get[score]"},
-  {name:"$set[name;value]",desc:"Alias for $let",ex:"$set[x;42]"},
-];
+/* ── Persistent variable reference data ── */
+const VAR_REF={
+  user:[
+    {n:"$getUserVar[name]",d:"Get YOUR value of a variable",ex:"Coins: $getUserVar[coins]"},
+    {n:"$getUserVar[name;userID]",d:"Get any user's variable value",ex:"$getUserVar[coins;$mentionedID]"},
+    {n:"$setUserVar[name;value]",d:"Set YOUR variable to a value",ex:"$setUserVar[coins;100]"},
+    {n:"$setUserVar[name;value;userID]",d:"Set any user's variable",ex:"$setUserVar[coins;0;$mentionedID]"},
+    {n:"$addToUserVar[name;amount]",d:"Add to YOUR variable. Returns new value.",ex:"You now have $addToUserVar[coins;50] coins!"},
+    {n:"$addToUserVar[name;amount;userID]",d:"Add to any user's variable",ex:"$addToUserVar[xp;25;$mentionedID]"},
+    {n:"$subtractFromUserVar[name;amount]",d:"Subtract from YOUR variable",ex:"$subtractFromUserVar[coins;10]"},
+    {n:"$multiplyUserVar[name;factor]",d:"Multiply YOUR variable",ex:"$multiplyUserVar[coins;2]"},
+    {n:"$divideUserVar[name;factor]",d:"Divide YOUR variable",ex:"$divideUserVar[coins;2]"},
+    {n:"$resetUserVar[name]",d:"Reset YOUR variable to 0",ex:"$resetUserVar[coins]"},
+    {n:"$deleteUserVar[name]",d:"Delete YOUR variable entirely",ex:"$deleteUserVar[tempdata]"},
+    {n:"$userLeaderboard[name]",d:"Top 10 users sorted by variable value",ex:"$userLeaderboard[coins]"},
+    {n:"$userLeaderboard[name;limit]",d:"Top N users sorted by variable value",ex:"$userLeaderboard[xp;5]"},
+  ],
+  server:[
+    {n:"$getServerVar[name]",d:"Get a server-wide variable",ex:"Total plays: $getServerVar[plays]"},
+    {n:"$setServerVar[name;value]",d:"Set a server-wide variable",ex:"$setServerVar[plays;0]"},
+    {n:"$addToServerVar[name;amount]",d:"Add to a server variable",ex:"$addToServerVar[plays;1]"},
+    {n:"$subtractFromServerVar[name;amount]",d:"Subtract from a server variable",ex:"$subtractFromServerVar[stock;1]"},
+    {n:"$resetServerVar[name]",d:"Reset a server variable to 0",ex:"$resetServerVar[plays]"},
+  ],
+  global:[
+    {n:"$getGlobalVar[name]",d:"Get a global variable (shared across all servers)",ex:"$getGlobalVar[totalUses]"},
+    {n:"$setGlobalVar[name;value]",d:"Set a global variable",ex:"$setGlobalVar[totalUses;0]"},
+    {n:"$addToGlobalVar[name;amount]",d:"Add to a global variable",ex:"$addToGlobalVar[totalUses;1]"},
+  ],
+  local:[
+    {n:"$let[name;value]",d:"Store a value for this response only",ex:"$let[roll;$random[1;20]]"},
+    {n:"$get[name]",d:"Retrieve a response-local variable",ex:"You rolled $get[roll]!"},
+    {n:"$set[name;value]",d:"Alias for $let[]",ex:"$set[temp;$getUserVar[coins]]"},
+  ],
+};
 
-let _varFilter="all";
-function filterVars(f){
-  _varFilter=f;
-  id("var-simple-section").style.display=f==="all"||f==="simple"?"block":"none";
-  id("var-bds-section").style.display=f==="all"||f==="bds"?"block":"none";
-  id("var-local-section").style.display=f==="all"||f==="local"?"block":"none";
+let _varRefFilter="user",_liveVarFilter="all",_liveVars=[];
+
+function setVarRefFilter(f){
+  _varRefFilter=f;renderVarRef();
 }
 
-function buildVarGrid(containerId,items,clickFn){
-  const g=id(containerId);if(!g)return;g.innerHTML="";
+function renderVarRef(){
+  const g=id("var-ref-grid");if(!g)return;g.innerHTML="";
+  const items=VAR_REF[_varRefFilter]||[];
+  if(!items.length){g.innerHTML=`<div style="color:var(--muted);font-size:13px">No items.</div>`;return}
   items.forEach(v=>{
-    const c=document.createElement("div");c.className="var-card";
-    c.innerHTML=`<div class="vc-name">${esc(v.name)}</div><div class="vc-desc">${esc(v.desc)}</div>${v.ex?`<div class="vc-ex">${esc(v.ex)}</div>`:""}`;
-    c.onclick=()=>{insVar(v.name);switchWsTab("commands");const ed=id("cmd-editor");if(ed.classList.contains("hidden"))openCmdEditor(null);toast("Inserted '"+v.name+"' into editor","ok")};
+    const c=document.createElement("div");c.className="var-ref-card";
+    c.innerHTML=`<div class="vr-name">${esc(v.n)}</div><div class="vr-desc">${esc(v.d)}</div>${v.ex?`<div class="vr-ex">${esc(v.ex)}</div>`:""}`;
+    c.onclick=()=>{insVar(v.n);switchWsTab("commands");const ed=id("cmd-editor");if(ed.classList.contains("hidden"))openCmdEditor(null);toast("Inserted into editor","ok")};
     g.appendChild(c);
   });
 }
 
-function initVarsTab(){
-  buildVarGrid("simple-var-grid",SIMPLE_VARS);
-  buildVarGrid("bds-var-grid",BDS_VARS);
-  buildVarGrid("local-var-grid",LOCAL_VARS);
+async function loadLiveVars(){
+  const el=id("live-vars-list");if(!el)return;
+  if(!online){
+    el.innerHTML=`<div style="color:var(--muted);font-size:13px;padding:12px 0">Connect to the server to manage live variables.</div>`;return;
+  }
+  try{
+    _liveVars=await api("/bots/"+currentBot.id+"/vars");
+    const dv=id("ds-vars");if(dv)dv.textContent=_liveVars.length;
+    renderLiveVars();
+  }catch(e){
+    el.innerHTML=`<div style="color:var(--red);font-size:13px;padding:12px 0">${esc(e.message)}</div>`;
+  }
 }
+
+function filterLiveVars(f){
+  _liveVarFilter=f;
+  ["all","user","server","global"].forEach(x=>{const el=id("vf-"+x);if(el)el.style.opacity=x===f?"1":".5"});
+  renderLiveVars();
+}
+
+function renderLiveVars(){
+  const el=id("live-vars-list");if(!el)return;el.innerHTML="";
+  const search=(id("var-search")?.value||"").toLowerCase();
+  let vars=_liveVars;
+  if(_liveVarFilter!=="all")vars=vars.filter(v=>v.scope===_liveVarFilter);
+  if(search)vars=vars.filter(v=>v.name.toLowerCase().includes(search)||(v.scope_id||"").includes(search));
+  if(!vars.length){
+    el.innerHTML=`<div style="color:var(--muted);font-size:13px;padding:12px 0">No variables${_liveVarFilter!=="all"?" in this scope":""} yet. Create one with the button above.</div>`;return;
+  }
+  const scopeB={user:'<span class="badge b-blue">user</span>',server:'<span class="badge b-cyan">server</span>',global:'<span class="badge b-amber">global</span>'};
+  vars.forEach(v=>{
+    const row=document.createElement("div");row.className="lv-row";
+    const sid=v.scope_id?`<span class="lv-sid" title="${esc(v.scope_id)}">${esc(v.scope_id)}</span>`:`<span class="lv-sid" style="color:var(--muted)">—</span>`;
+    const valId=`lv-val-${esc(v.scope)}-${esc(v.scope_id||"global")}-${esc(v.name)}`;
+    row.innerHTML=`${scopeB[v.scope]||""}<span class="lv-name">${esc(v.name)}</span>${sid}<span class="lv-val" id="${valId}">${esc(v.value)}</span><div class="lv-acts"><button class="btn btn-ghost btn-xs lv-edit-btn">Edit</button><button class="btn btn-danger btn-xs lv-del-btn">Del</button></div>`;
+    row.querySelector(".lv-edit-btn").onclick=()=>startEditVar(v,valId);
+    row.querySelector(".lv-del-btn").onclick=()=>deleteVar(v);
+    el.appendChild(row);
+  });
+}
+
+function startEditVar(v,valId){
+  const valSpan=id(valId);if(!valSpan)return;
+  const inp=document.createElement("input");inp.className="lv-edit-input";inp.value=v.value;
+  valSpan.style.display="none";valSpan.parentElement.insertBefore(inp,valSpan.nextSibling);
+  inp.focus();inp.select();
+  const save=async()=>{
+    const newVal=inp.value;
+    try{
+      await api(`/bots/${currentBot.id}/vars/${v.scope}/${encodeURIComponent(v.name)}`,{method:"PUT",body:JSON.stringify({scope_id:v.scope_id||null,value:newVal})});
+      v.value=newVal;valSpan.textContent=newVal;
+    }catch(e){toast(e.message,"err")}
+    inp.remove();valSpan.style.display="";
+    const idx=_liveVars.findIndex(x=>x.scope===v.scope&&x.scope_id===v.scope_id&&x.name===v.name);
+    if(idx!==-1)_liveVars[idx].value=newVal;
+    toast("Variable updated","ok");
+  };
+  inp.addEventListener("keydown",e=>{if(e.key==="Enter")save();if(e.key==="Escape"){inp.remove();valSpan.style.display=""}});
+  inp.addEventListener("blur",save,{once:true});
+}
+
+async function deleteVar(v){
+  if(!confirm(`Delete variable "${v.name}"?`))return;
+  try{
+    const sid=v.scope_id?`?scope_id=${encodeURIComponent(v.scope_id)}`:"";
+    await api(`/bots/${currentBot.id}/vars/${v.scope}/${encodeURIComponent(v.name)}${sid}`,{method:"DELETE"});
+    _liveVars=_liveVars.filter(x=>!(x.scope===v.scope&&x.scope_id===v.scope_id&&x.name===v.name));
+    const dv=id("ds-vars");if(dv)dv.textContent=_liveVars.length;
+    renderLiveVars();toast("Variable deleted","info");
+  }catch(e){toast(e.message,"err")}
+}
+
+async function doCreateVar(){
+  const scope=id("cv-scope").value,sid=id("cv-sid")?.value.trim()||null;
+  const name=id("cv-name").value.trim(),value=id("cv-value").value||"0";
+  const err=id("cv-err");err.textContent="";
+  if(!name){err.textContent="Name is required";return}
+  if(!online){err.textContent="Server must be online to create variables";return}
+  try{
+    await api("/bots/"+currentBot.id+"/vars",{method:"POST",body:JSON.stringify({scope,scope_id:sid,name,value})});
+    closeModal("createvar-modal");
+    id("cv-name").value="";id("cv-value").value="0";id("cv-sid").value="";
+    toast("Variable created!","ok");loadLiveVars();
+  }catch(e){err.textContent=e.message}
+}
+
 
 let _fnFilter="bdscript";
 function filterFns(f){
@@ -1590,15 +1718,19 @@ function filterCmds(){
 /* ── Templates ── */
 const TEMPLATES=[
   {label:"🏓 Ping",trigger:"ping",desc:"Reply with pong",stype:"simple",response:"Pong! 🏓"},
+  {label:"💰 Check balance",trigger:"bal",desc:"Show your coin balance",stype:"bdscript",response:"$title[$authorNickname's Balance]\n$description[💰 **$getUserVar[coins]** coins]\n$color[#fbbf24]\n$thumbnail[$authorAvatar]\n$footer[Use $prefix daily to earn more!]"},
+  {label:"🎁 Daily reward",trigger:"daily",desc:"Claim daily coins",stype:"bdscript",response:"$let[gained;$random[50;200]]\n$addToUserVar[coins;$get[gained]]\n$title[Daily Reward! 🎁]\n$description[$authorMention claimed **$get[gained]** coins!\nNew balance: **$getUserVar[coins]** 💰]\n$color[#4ade80]"},
+  {label:"🎰 Gamble",trigger:"gamble",desc:"Bet your coins",stype:"bdscript",response:"$if[$isArgs==true;$if[$isNumber[$arg[1]]==true;$if[$getUserVar[coins]>=$arg[1];$if[$random[1;2]==1;$addToUserVar[coins;$arg[1]]\n$title[You Won! 🎰]\n$description[+**$arg[1]** coins!\nBalance: **$getUserVar[coins]** 💰]\n$color[#4ade80];$subtractFromUserVar[coins;$arg[1]]\n$title[You Lost! 💀]\n$description[-**$arg[1]** coins.\nBalance: **$getUserVar[coins]** 💰]\n$color[#f87171]];❌ You only have **$getUserVar[coins]** coins!];❌ Enter a valid number!];❌ Usage: !gamble <amount>]"},
+  {label:"🏆 Leaderboard",trigger:"top",desc:"Top 10 coin holders",stype:"bdscript",response:"$title[Coin Leaderboard 🏆]\n$description[$userLeaderboard[coins;10]]\n$color[#fbbf24]"},
+  {label:"🎁 Give coins",trigger:"give",desc:"Give coins to someone",stype:"bdscript",response:"$if[$isArgs==true;$if[$mentioned[1]!=;$if[$isNumber[$arg[2]]==true;$subtractFromUserVar[coins;$arg[2]]\n$addToUserVar[coins;$arg[2];$mentionedID]\n$title[Transfer Complete ✅]\n$description[$authorMention gave **$arg[2]** coins to $mentioned[1]!]\n$color[#4ade80];❌ Enter a valid amount!];❌ Mention someone!];❌ Usage: !give @user amount]"},
+  {label:"⚔️ RPG stats",trigger:"stats",desc:"Show RPG character stats",stype:"bdscript",response:"$title[$authorNickname's Stats]\n$addField[Level;$getUserVar[level];true]\n$addField[XP;$getUserVar[xp] / 1000;true]\n$addField[Coins;$getUserVar[coins];true]\n$addField[Wins;$getUserVar[wins];true]\n$addField[Losses;$getUserVar[losses];true]\n$addField[Streak;$getUserVar[streak];true]\n$thumbnail[$authorAvatar]\n$color[#6366f1]"},
   {label:"ℹ️ Server info",trigger:"server",desc:"Server info embed",stype:"bdscript",response:"$title[$guildName]\n$description[**Members:** $guildMemberCount\n**Created:** $guildCreationDate\n**Boost tier:** $guildBoostTier]\n$color[#3b82f6]\n$thumbnail[$guildIcon]\n$footer[Server ID: $guildID]"},
   {label:"👤 User info",trigger:"userinfo",desc:"User info embed",stype:"bdscript",response:"$title[User Info]\n$description[**Username:** $authorUsername\n**Nickname:** $authorNickname\n**ID:** $authorID\n**Account age:** $accountAge[]]\n$thumbnail[$authorAvatar]\n$color[#6366f1]"},
-  {label:"🎲 Random number",trigger:"random",desc:"Roll between 1 and 100",stype:"bdscript",response:"🎲 $authorMention rolled **$random[1;100]**!"},
   {label:"🪙 Coin flip",trigger:"flip",desc:"Heads or tails",stype:"bdscript2",response:"$randomText[🪙 Heads!;🪙 Tails!]"},
-  {label:"📊 Choice",trigger:"choose",desc:"Pick from your options",stype:"bdscript",response:"$if[$isArgs==true;$authorMention I choose: **$arg[$random[1;$argsCount]]**!;Give me options separated by spaces!]"},
-  {label:"🔢 Math",trigger:"math",desc:"Sum all numbers",stype:"bdscript",response:"$if[$isArgs==true;Result: **$sum[$split[$args; ]$splitText[1];$splitText[2];$splitText[3]]**;Give me some numbers!]"},
   {label:"📢 Say",trigger:"say",desc:"Bot repeats your message",stype:"bdscript",response:"$if[$isArgs==true;$noMentionMessage;❌ Provide a message!]\n$deleteCommand"},
-  {label:"🆙 Level check",trigger:"level",desc:"Show a mock level",stype:"bdscript",response:"$title[$authorNickname's Level]\n$description[Level: **$random[1;99]**\nXP: **$numberSeparator[$random[100;50000]]**]\n$color[$if[$hasPerms[administrator]==true;#f59e0b;#3b82f6]]\n$thumbnail[$authorAvatar]"},
-  {label:"❓ Help",trigger:"help",desc:"Command list embed",stype:"bdscript",response:"$title[$botUsername Help]\n$description[Use **$prefix** before any command.]\n$addField[Commands;ping, server, userinfo, help;false]\n$color[#22d3ee]\n$footer[Powered by BotForge]\n$timestamp"},
+  {label:"🎲 Random number",trigger:"roll",desc:"Roll a number",stype:"bdscript",response:"🎲 $authorMention rolled **$random[1;100]**!"},
+  {label:"🛡️ Role check",trigger:"checkrole",desc:"Check if user has a role",stype:"bdscript",response:"$if[$hasRole[$authorID;$roleID[Member]]==true;✅ $authorMention has the Member role!;❌ $authorMention doesn't have the Member role.]"},
+  {label:"❓ Help",trigger:"help",desc:"Command list embed",stype:"bdscript",response:"$title[$botUsername Help]\n$description[Use **$prefix** before any command.]\n$addField[Economy;bal, daily, gamble, top, give;false]\n$addField[Fun;flip, roll, choose;false]\n$addField[Info;server, userinfo, stats;false]\n$color[#22d3ee]\n$footer[Powered by BotForge]\n$timestamp"},
 ];
 
 let _templatesOpen=false;
