@@ -956,24 +956,29 @@ async function loadStatus(){
   catch{updateStatusUI({running:false})}
 }
 
+let _warnedAt5=false,_warnedAt1=false;
+
 function updateStatusUI(s){
   const dot=id("sdot"),sub=id("ws-bot-sub"),tn=id("timer-num"),bar=id("tbar");
   const sb=id("start-btn"),spb=id("stop-btn");
   if(s.running){
     dot.className="sdot on";sub.textContent="Online";
     sb.classList.add("hidden");spb.classList.remove("hidden");tn.classList.remove("hidden");
-    id("ds-status").textContent="🟢 Running";
+    const dsStatus=id("ds-status");if(dsStatus)dsStatus.textContent="🟢 Running";
     if(s.time_left!=null){
       const m=Math.floor(s.time_left/60),sec=s.time_left%60;
       tn.textContent=String(m).padStart(2,"0")+":"+String(sec).padStart(2,"0");
       const pct=(s.time_left/1800)*100;
       bar.style.width=pct+"%";bar.className="tbar"+(pct<25?" crit":pct<50?" warn":"");
+      if(s.time_left<=60&&!_warnedAt1){_warnedAt1=true;toast("⏰ Bot stops in under 1 minute!","err")}
+      else if(s.time_left<=300&&!_warnedAt5){_warnedAt5=true;toast("⏰ Bot stops in 5 minutes","info")}
     }
   }else{
     dot.className="sdot";sub.textContent="Offline";
     sb.classList.remove("hidden");spb.classList.add("hidden");tn.classList.add("hidden");
     bar.style.width="100%";bar.className="tbar";
-    id("ds-status").textContent="⚫ Offline";
+    const dsStatus=id("ds-status");if(dsStatus)dsStatus.textContent="⚫ Offline";
+    _warnedAt5=false;_warnedAt1=false;
   }
 }
 
@@ -1628,26 +1633,6 @@ function applyTemplate(t){
   toast("Template loaded — edit and save","info");
 }
 
-/* ── Auto-stop warning ── */
-let _warnedAt5=false,_warnedAt1=false;
-function checkAutoStopWarning(timeLeft){
-  if(!timeLeft)return;
-  if(timeLeft<=60&&!_warnedAt1){
-    _warnedAt1=true;
-    toast("⏰ Bot stops in 1 minute!","err");
-  }else if(timeLeft<=300&&!_warnedAt5){
-    _warnedAt5=true;
-    toast("⏰ Bot stops in 5 minutes","amber");
-  }
-}
-
-/* ── Override updateStatusUI to hook warning ── */
-const _origUpdateStatusUI=updateStatusUI;
-function updateStatusUI(s){
-  _origUpdateStatusUI(s);
-  if(s.running&&s.time_left!=null)checkAutoStopWarning(s.time_left);
-  if(!s.running){_warnedAt5=false;_warnedAt1=false}
-}
 
 function refreshPanel(){
   if(curPage==="dashboard")loadBots();
