@@ -1408,6 +1408,12 @@ const FN_DATA=[
   {sig:"{dm:message}",args:[{n:"message",d:"DM content"}],desc:"DM the command author.",ex:"{dm:Hey {user}, you used the command!}",cat:"Actions",lang:"cscript",v:1},
   {sig:"{dm:message|userID}",args:[{n:"message",d:"DM content"},{n:"userID",d:"Target user ID"}],desc:"DM any user.",ex:"{dm:Hello!|{mentioned.id:1}}",cat:"Actions",lang:"cscript",v:1},
   {sig:"{send:channelID|message}",args:[{n:"channelID",d:"Target channel ID"},{n:"message",d:"Message content"}],desc:"Send a message to another channel.",ex:"{send:{channel.id}|Command was used!}",cat:"Actions",lang:"cscript",v:1},
+  {sig:"{wait:ms}",args:[{n:"ms",d:"Milliseconds to pause (max 30000)"}],desc:"Pause before the next side effect. Used to time edits, reactions, or deletions.",ex:"{edit:Loading.}\n{wait:500}\n{edit:Loading..}\n{wait:500}\n{edit:Done! ✅}",cat:"Actions",lang:"cscript",v:1},
+  {sig:"{edit:text}",args:[{n:"text",d:"New message content"}],desc:"Edit the bot's sent message to new text. Use with {wait:ms} for animated messages.",ex:"{edit:text.}\n{wait:400}\n{edit:text..}\n{wait:400}\n{edit:text...}\n{wait:600}\n{deletebotmsg}\n{wait:200}\nDone!",cat:"Actions",lang:"cscript",v:1},
+  {sig:"{deletebotmsg}",desc:"Delete the bot's own response immediately.",ex:"{deletebotmsg}",cat:"Actions",lang:"cscript",v:1},
+  {sig:"{deletebotmsg:ms}",args:[{n:"ms",d:"Delay in milliseconds before deleting"}],desc:"Delete the bot's own response after a delay.",ex:"This message self-destructs in 3 seconds...\n{deletebotmsg:3000}",cat:"Actions",lang:"cscript",v:1},
+  {sig:"{purge:n}",args:[{n:"n",d:"Number of messages to delete (max 100)"}],desc:"Bulk delete the last N messages in the channel. Very fast — uses Discord's bulk delete API.",ex:"{purge:10}\n{react:🗑️}",cat:"Actions",lang:"cscript",v:1},
+  {sig:"{purge.user:n|userID}",args:[{n:"n",d:"Max messages to delete"},{n:"userID",d:"Target user ID (optional)"}],desc:"Purge messages from a specific user.",ex:"{purge.user:20|{mentioned.id:1}}",cat:"Actions",lang:"cscript",v:1},
   // ── ForgeScript — [[command]] and {{expression}} ────────────────────────────
   {sig:"[[title text]]",args:[{n:"text",d:"Embed title"}],desc:"Set the embed title.",ex:"[[title User Stats]]",cat:"Embed",lang:"cscript+",v:2},
   {sig:"[[desc text]]",args:[{n:"text",d:"Embed description"}],desc:"Set the embed description.",ex:"[[desc Hey {{user}}, welcome!]]",cat:"Embed",lang:"cscript+",v:2},
@@ -1452,6 +1458,14 @@ const FN_DATA=[
   {sig:"[[dm message]]",args:[{n:"message",d:"DM content"}],desc:"DM the command author.",ex:"[[dm Hey {{user}}, you used the command!]]",cat:"Actions",lang:"cscript+",v:2},
   {sig:"[[dm userid message]]",args:[{n:"userid",d:"Target user ID"},{n:"message",d:"DM content"}],desc:"DM any user by ID.",ex:"[[dm {{mentioned.1.id}} Hello!]]",cat:"Actions",lang:"cscript+",v:2},
   {sig:"[[send channelID message]]",args:[{n:"channelID",d:"Target channel ID"},{n:"message",d:"Content"}],desc:"Send to another channel.",ex:"[[send {{channel.id}} Command used!]]",cat:"Actions",lang:"cscript+",v:2},
+  {sig:"[[wait ms]]",args:[{n:"ms",d:"Milliseconds to pause (max 30000)"}],desc:"Pause execution before the next side effect. Essential for animated messages.",ex:"Typing...\n[[wait 600]]\n[[edit Typing...]]\n[[wait 600]]\n[[edit Done! ✅]]",cat:"Timing",lang:"cscript+",v:2},
+  {sig:"[[edit text]]",args:[{n:"text",d:"New message content"}],desc:"Edit the bot's sent message. Combine with [[wait]] to create animated sequences.",ex:"text.\n[[wait 400]]\n[[edit text..]]\n[[wait 400]]\n[[edit text...]]\n[[wait 600]]\n[[editdelete]]\n[[wait 300]]\n[[send {{channel.id}} Done! 🎉]]",cat:"Timing",lang:"cscript+",v:2},
+  {sig:"[[editdelete]]",desc:"Delete the bot's own sent message immediately.",ex:"[[editdelete]]",cat:"Timing",lang:"cscript+",v:2},
+  {sig:"[[editdelete ms]]",args:[{n:"ms",d:"Delay in milliseconds"}],desc:"Delete the bot's own message after a delay.",ex:"This message will disappear...\n[[editdelete 5000]]",cat:"Timing",lang:"cscript+",v:2},
+  {sig:"[[deletebotmsg ms]]",desc:"Alias for [[editdelete ms]].",ex:"[[deletebotmsg 3000]]",cat:"Timing",lang:"cscript+",v:2},
+  {sig:"[[purge n]]",args:[{n:"n",d:"Number of messages to delete (max 100)"}],desc:"Bulk delete the last N messages. Uses Discord's fast bulk delete API — very quick even for large counts.",ex:"[[purge 50]]\n[[react 🗑️]]",cat:"Timing",lang:"cscript+",v:2},
+  {sig:"[[purge n userId]]",args:[{n:"n",d:"Max messages to scan"},{n:"userId",d:"Target user ID"}],desc:"Bulk delete messages from a specific user.",ex:"[[purge 20 {{mentioned.1.id}}]]",cat:"Timing",lang:"cscript+",v:2},
+  {sig:"[[purge.bot n]]",args:[{n:"n",d:"Max bot messages to delete"}],desc:"Delete the bot's own recent messages from the channel.",ex:"[[purge.bot 5]]",cat:"Timing",lang:"cscript+",v:2},
   {sig:"[[say text]]",args:[{n:"text",d:"Text to output"}],desc:"Output a line of text (useful inside if-blocks).",ex:"[[if {{uvar.coins}}>0]]\n[[say You have coins!]]\n[[end]]",cat:"Actions",lang:"cscript+",v:2},
   {sig:"[[addrole userId roleId]]",args:[{n:"userId",d:"Discord user ID"},{n:"roleId",d:"Discord role ID"}],desc:"Add a role to a user. Bot needs MANAGE_ROLES permission.",ex:"[[addrole {{user.id}} {{role.id.Member}}]]",cat:"Actions",lang:"cscript+",v:2},
   {sig:"[[removerole userId roleId]]",args:[{n:"userId",d:"Discord user ID"},{n:"roleId",d:"Discord role ID"}],desc:"Remove a role from a user.",ex:"[[removerole {{mentioned.1.id}} {{role.id.Muted}}]]",cat:"Actions",lang:"cscript+",v:2},
@@ -1626,14 +1640,25 @@ function startEditVar(v,valId){
 }
 
 async function deleteVar(v){
-  if(!confirm(`Delete variable "${v.name}"?`))return;
+  if(!confirm(`Delete variable "${v.name}"?\nScope: ${v.scope}${v.scope_id?" ("+v.scope_id+")":""}\nValue: ${v.value}`))return;
+  if(!online){toast("Server must be online to delete variables","err");return}
   try{
-    const sid=v.scope_id?`?scope_id=${encodeURIComponent(v.scope_id)}`:"";
-    await api(`/bots/${currentBot.id}/vars/${v.scope}/${encodeURIComponent(v.name)}${sid}`,{method:"DELETE"});
-    _liveVars=_liveVars.filter(x=>!(x.scope===v.scope&&x.scope_id===v.scope_id&&x.name===v.name));
+    // Build URL — scope_id goes as query param, name in path
+    const base=`/bots/${currentBot.id}/vars/${encodeURIComponent(v.scope)}/${encodeURIComponent(v.name)}`;
+    const qs=v.scope_id!=null&&v.scope_id!==undefined&&v.scope_id!==""
+      ?`?scope_id=${encodeURIComponent(String(v.scope_id))}`
+      :"";
+    await api(base+qs,{method:"DELETE"});
+    // Use loose equality for scope_id (handles null/undefined/'')
+    const sid=v=>String(v.scope_id??'');
+    _liveVars=_liveVars.filter(x=>!(
+      x.scope===v.scope&&
+      sid(x)===sid(v)&&
+      x.name===v.name
+    ));
     const dv=id("ds-vars");if(dv)dv.textContent=_liveVars.length;
     renderLiveVars();toast("Variable deleted","info");
-  }catch(e){toast(e.message,"err")}
+  }catch(e){toast("Delete failed: "+e.message,"err")}
 }
 
 async function doCreateVar(){
