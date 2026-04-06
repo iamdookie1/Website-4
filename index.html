@@ -26,7 +26,55 @@ body::before{content:'';position:fixed;inset:0;opacity:.025;background-image:url
 h1,h2,h3,h4,h5{font-family:var(--fh);line-height:1.15}
 .hidden{display:none!important}
 
-/* ── Buttons ── */
+/* ── Themes ── */
+body.theme-midnight{
+  --bg:#000000;--surface:#0a0a0f;--surface2:#0f0f18;--surface3:#14141f;
+  --border:#1a1a2e;--border2:#252540;--accent:#7c3aed;--accent-lo:rgba(124,58,237,.13);
+  --accent-glo:rgba(124,58,237,.28);--cyan:#a78bfa;--green:#34d399;--red:#f87171;
+  --amber:#fbbf24;--purple:#c4b5fd;--text:#ede9fe;--muted:#5b5b80;--muted2:#8b83b0
+}
+body.theme-ocean{
+  --bg:#01101c;--surface:#041d2e;--surface2:#062840;--surface3:#0a3352;
+  --border:#0d3d5a;--border2:#145072;--accent:#0ea5e9;--accent-lo:rgba(14,165,233,.13);
+  --accent-glo:rgba(14,165,233,.28);--cyan:#38bdf8;--green:#4ade80;--red:#f87171;
+  --amber:#fbbf24;--purple:#a78bfa;--text:#e0f2fe;--muted:#325a70;--muted2:#60a5c8
+}
+body.theme-forest{
+  --bg:#020d06;--surface:#061612;--surface2:#0a201a;--surface3:#0f2c22;
+  --border:#153d2a;--border2:#1d5238;--accent:#10b981;--accent-lo:rgba(16,185,129,.13);
+  --accent-glo:rgba(16,185,129,.28);--cyan:#34d399;--green:#6ee7b7;--red:#f87171;
+  --amber:#fbbf24;--purple:#a78bfa;--text:#d1fae5;--muted:#2d5040;--muted2:#52876a
+}
+body.theme-crimson{
+  --bg:#0f0205;--surface:#1a0509;--surface2:#25080d;--surface3:#300b12;
+  --border:#4a0e18;--border2:#641524;--accent:#ef4444;--accent-lo:rgba(239,68,68,.13);
+  --accent-glo:rgba(239,68,68,.28);--cyan:#fb7185;--green:#4ade80;--red:#fca5a5;
+  --amber:#fbbf24;--purple:#a78bfa;--text:#fee2e2;--muted:#5e1d26;--muted2:#9b4050
+}
+body.theme-slate{
+  --bg:#0c0e10;--surface:#141618;--surface2:#1c1e22;--surface3:#24272c;
+  --border:#2e3138;--border2:#3c4048;--accent:#6366f1;--accent-lo:rgba(99,102,241,.13);
+  --accent-glo:rgba(99,102,241,.28);--cyan:#818cf8;--green:#4ade80;--red:#f87171;
+  --amber:#fbbf24;--purple:#c084fc;--text:#e2e4f0;--muted:#4a4d5e;--muted2:#7c7f96
+}
+/* ── Theme swatches ── */
+.theme-swatch{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:var(--radius);font-size:12px;cursor:pointer;border:2px solid transparent;background:var(--surface2);color:var(--muted2);transition:all .15s}
+.theme-swatch::before{content:'';width:10px;height:10px;border-radius:50%;background:var(--c);flex-shrink:0}
+.theme-swatch:hover{border-color:var(--c);color:var(--text)}
+.theme-swatch.active{border-color:var(--c);color:var(--text);background:var(--surface3)}
+/* ── Layouts ── */
+body.layout-compact{--sidebar:185px}
+body.layout-compact .page{padding:12px}
+body.layout-compact .stat-card{padding:10px 12px}
+body.layout-compact .stat-val{font-size:22px}
+body.layout-compact .cmd-row{padding:8px 11px}
+body.layout-compact .fn-card{padding:9px 11px}
+body.layout-compact .section-card{padding:14px 16px}
+body.layout-wide{--sidebar:260px}
+body.layout-wide .page{padding:28px 36px;max-width:1400px;margin:0 auto}
+body.layout-wide .fn-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+body.layout-wide .ov-grid{grid-template-columns:repeat(4,1fr)}
+body.layout-wide .dash-grid{grid-template-columns:repeat(4,1fr)}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:8px 18px;border-radius:var(--radius);font-family:var(--fm);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .14s;white-space:nowrap;text-decoration:none}
 .btn:disabled{opacity:.38;cursor:not-allowed;pointer-events:none}
 .btn-primary{background:var(--accent);color:#fff}
@@ -662,6 +710,39 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
       <h2 style="font-size:21px;font-weight:800;letter-spacing:-.5px;margin-bottom:20px">Settings</h2>
 
       <div class="section-card">
+        <h3>Appearance</h3>
+        <div class="sg">
+          <div class="field">
+            <label class="lbl">Theme</label>
+            <select class="select" id="theme-select" onchange="applyTheme(this.value)">
+              <option value="dark">🌑 Dark (default)</option>
+              <option value="midnight">🔮 Midnight</option>
+              <option value="ocean">🌊 Ocean</option>
+              <option value="forest">🌿 Forest</option>
+              <option value="crimson">🔴 Crimson</option>
+              <option value="slate">🩶 Slate</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="lbl">Layout</label>
+            <select class="select" id="layout-select" onchange="applyLayout(this.value)">
+              <option value="default">Default</option>
+              <option value="compact">Compact</option>
+              <option value="wide">Wide</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px" id="theme-preview-row">
+          <div onclick="applyTheme('dark')"     class="theme-swatch" style="--c:#3b82f6"  title="Dark">Dark</div>
+          <div onclick="applyTheme('midnight')" class="theme-swatch" style="--c:#7c3aed"  title="Midnight">Midnight</div>
+          <div onclick="applyTheme('ocean')"    class="theme-swatch" style="--c:#0ea5e9"  title="Ocean">Ocean</div>
+          <div onclick="applyTheme('forest')"   class="theme-swatch" style="--c:#10b981"  title="Forest">Forest</div>
+          <div onclick="applyTheme('crimson')"  class="theme-swatch" style="--c:#ef4444"  title="Crimson">Crimson</div>
+          <div onclick="applyTheme('slate')"    class="theme-swatch" style="--c:#6366f1"  title="Slate">Slate</div>
+        </div>
+      </div>
+
+      <div class="section-card">
         <h3>Account</h3>
         <div class="sg">
           <div class="field"><label class="lbl">Username</label><div style="display:flex;gap:7px"><input class="input" id="acc-name" placeholder="username"><button class="btn btn-ghost btn-sm" style="flex-shrink:0" onclick="changeUsername()">Save</button></div></div>
@@ -1055,7 +1136,7 @@ async function loadCommands(){
   renderCmds(cmds);
 }
 
-const SBADGE={simple:'<span class="badge b-muted">Simple</span>',cscript:'<span class="badge b-cyan">CScript</span>',"cscript+":'<span class="badge b-purple">CScript+</span>'};
+const SBADGE={simple:'<span class="badge b-muted">Simple</span>',cscript:'<span class="badge b-cyan">CScript</span>','cscript+':'<span class="badge b-purple">CScript+</span>',botscript:'<span class="badge b-cyan">CScript</span>',forgescript:'<span class="badge b-purple">CScript+</span>'};
 
 function renderCmds(cmds){
   const el=id("cmd-list");el.innerHTML="";
@@ -1114,7 +1195,7 @@ function switchStype(st){
     ta.placeholder="{embed.title:Daily Reward!}\n{embed.desc:Hey {user}! You got {adduvar:coins|50} coins!\nBalance: {uvar:coins} 💰}\n{embed.color:#4ade80}\n{react:🎁}";
     sc.style.display="none";bh.classList.remove("hidden");
   }else{
-    ta.placeholder="[[title Daily Reward!]]\n[[color #4ade80]]\n[[add coins 50]]\nHey {{user}}, you got 50 coins!\nBalance: {{uvar.coins}} 💰\n[[react 🎁]]";
+    ta.placeholder="[[title Daily Reward!]]\n[[color #4ade80]]\n[[add coins 50]]\nHey {{user}}, you got 50 coins!\nBalance: {{uvar.coins}} 💰\n[[react 🎁]]\n[[if {{uvar.coins}} >= 1000]]\n💎 High roller!\n[[end]]";
     sc.style.display="none";bh.classList.remove("hidden");
   }
 }
@@ -1237,7 +1318,7 @@ function updCharCount(){
 
 /* ── Function reference data (comprehensive) ── */
 const FN_DATA=[
-  // ── CScript — {tag} and {tag:arg1|arg2} ──────────────────────────────────
+  // ── BotScript — {tag} and {tag:arg1|arg2} ──────────────────────────────────
   {sig:"{user}",desc:"Author's server nickname.",ex:"Welcome {user}!",cat:"User",lang:"cscript",v:1},
   {sig:"{user.name}",desc:"Author's raw username.",ex:"Username: {user.name}",cat:"User",lang:"cscript",v:1},
   {sig:"{user.id}",desc:"Author's Discord user ID.",ex:"ID: {user.id}",cat:"User",lang:"cscript",v:1},
@@ -1327,7 +1408,7 @@ const FN_DATA=[
   {sig:"{dm:message}",args:[{n:"message",d:"DM content"}],desc:"DM the command author.",ex:"{dm:Hey {user}, you used the command!}",cat:"Actions",lang:"cscript",v:1},
   {sig:"{dm:message|userID}",args:[{n:"message",d:"DM content"},{n:"userID",d:"Target user ID"}],desc:"DM any user.",ex:"{dm:Hello!|{mentioned.id:1}}",cat:"Actions",lang:"cscript",v:1},
   {sig:"{send:channelID|message}",args:[{n:"channelID",d:"Target channel ID"},{n:"message",d:"Message content"}],desc:"Send a message to another channel.",ex:"{send:{channel.id}|Command was used!}",cat:"Actions",lang:"cscript",v:1},
-  // ── CScript+ — [[command]] and {{expression}} ────────────────────────────
+  // ── ForgeScript — [[command]] and {{expression}} ────────────────────────────
   {sig:"[[title text]]",args:[{n:"text",d:"Embed title"}],desc:"Set the embed title.",ex:"[[title User Stats]]",cat:"Embed",lang:"cscript+",v:2},
   {sig:"[[desc text]]",args:[{n:"text",d:"Embed description"}],desc:"Set the embed description.",ex:"[[desc Hey {{user}}, welcome!]]",cat:"Embed",lang:"cscript+",v:2},
   {sig:"[[color #hex]]",args:[{n:"#hex",d:"Hex color"}],desc:"Set the embed sidebar color.",ex:"[[color #3b82f6]]",cat:"Embed",lang:"cscript+",v:2},
@@ -1372,6 +1453,65 @@ const FN_DATA=[
   {sig:"[[dm userid message]]",args:[{n:"userid",d:"Target user ID"},{n:"message",d:"DM content"}],desc:"DM any user by ID.",ex:"[[dm {{mentioned.1.id}} Hello!]]",cat:"Actions",lang:"cscript+",v:2},
   {sig:"[[send channelID message]]",args:[{n:"channelID",d:"Target channel ID"},{n:"message",d:"Content"}],desc:"Send to another channel.",ex:"[[send {{channel.id}} Command used!]]",cat:"Actions",lang:"cscript+",v:2},
   {sig:"[[say text]]",args:[{n:"text",d:"Text to output"}],desc:"Output a line of text (useful inside if-blocks).",ex:"[[if {{uvar.coins}}>0]]\n[[say You have coins!]]\n[[end]]",cat:"Actions",lang:"cscript+",v:2},
+  {sig:"[[addrole userId roleId]]",args:[{n:"userId",d:"Discord user ID"},{n:"roleId",d:"Discord role ID"}],desc:"Add a role to a user. Bot needs MANAGE_ROLES permission.",ex:"[[addrole {{user.id}} {{role.id.Member}}]]",cat:"Actions",lang:"cscript+",v:2},
+  {sig:"[[removerole userId roleId]]",args:[{n:"userId",d:"Discord user ID"},{n:"roleId",d:"Discord role ID"}],desc:"Remove a role from a user.",ex:"[[removerole {{mentioned.1.id}} {{role.id.Muted}}]]",cat:"Actions",lang:"cscript+",v:2},
+  {sig:"[[pin]]",desc:"Pin the trigger message. Bot needs MANAGE_MESSAGES.",ex:"[[pin]]\n📌 Message pinned!",cat:"Actions",lang:"cscript+",v:2},
+  {sig:"[[thread Thread Name]]",args:[{n:"Thread Name",d:"Name for the new thread"}],desc:"Create a thread from the trigger message.",ex:"[[thread Discussion for {{user}}]]",cat:"Actions",lang:"cscript+",v:2},
+  {sig:"[[webhook url | message]]",args:[{n:"url",d:"Webhook URL"},{n:"message",d:"Message to send"}],desc:"Send a message to a Discord webhook.",ex:"[[webhook https://discord.com/api/webhooks/... | Hello!]]",cat:"Actions",lang:"cscript+",v:2},
+  {sig:"[[stop]]",desc:"Halt execution immediately. No response is sent.",ex:"[[if {{uvar.coins}} < 10]]\n[[stop]]\n[[end]]\nYou have enough coins!",cat:"Control",lang:"cscript+",v:2},
+  {sig:"[[stop message]]",args:[{n:"message",d:"Message to send before stopping"}],desc:"Stop execution and send an error message.",ex:"[[stop ❌ You don't have enough coins!]]",cat:"Control",lang:"cscript+",v:2},
+  {sig:"[[require permission]]",args:[{n:"permission",d:"e.g. administrator, kick_members, manage_messages"}],desc:"Silently stop if the author lacks the permission.",ex:"[[require administrator]]\nAdmin-only content here.",cat:"Control",lang:"cscript+",v:2},
+  {sig:"[[require.role RoleName]]",args:[{n:"RoleName",d:"Role name to require"}],desc:"Silently stop if the author doesn't have the role.",ex:"[[require.role Moderator]]\nMod-only content here.",cat:"Control",lang:"cscript+",v:2},
+  {sig:"[[while condition]]...[[end]]",desc:"Loop while condition is true (max 100 iterations). Use [[break]] to exit early.",ex:"[[set i 0]]\n[[while {{i}} < 5]]\n{{i}}, \n[[var.add i 1]]\n[[end]]",cat:"Control",lang:"cscript+",v:2},
+  {sig:"[[foreach var in a | b | c]]...[[end]]",desc:"Iterate over pipe-separated values. Inside: {{var}}, {{__index__}}, {{__first__}}, {{__last__}}. Use [[break]] to exit.",ex:"[[foreach fruit in apple | banana | cherry]]\n{{__index__}}. {{fruit}}\n[[end]]",cat:"Control",lang:"cscript+",v:2},
+  {sig:"[[foreach var in listname]]...[[end]]",args:[{n:"var",d:"Loop variable name"},{n:"listname",d:"Stored list name created with [[list.create]]"}],desc:"Iterate over a stored list.",ex:"[[list.create items one | two | three]]\n[[foreach x in items]]\n- {{x}}\n[[end]]",cat:"Control",lang:"cscript+",v:2},
+  {sig:"[[break]]",desc:"Exit a [[while]] or [[foreach]] loop early.",ex:"[[foreach x in a | b | c]]\n[[if {{x}} == b]][[break]][[end]]\n{{x}}\n[[end]]",cat:"Control",lang:"cscript+",v:2},
+  {sig:"[[upper text]]",desc:"Convert text to UPPERCASE.",ex:"[[upper hello world]] → HELLO WORLD",cat:"String",lang:"cscript+",v:2},
+  {sig:"[[lower text]]",desc:"Convert text to lowercase.",ex:"[[lower HELLO]] → hello",cat:"String",lang:"cscript+",v:2},
+  {sig:"[[trim text]]",desc:"Remove leading/trailing whitespace.",ex:"[[trim   hi   ]] → hi",cat:"String",lang:"cscript+",v:2},
+  {sig:"[[reverse text]]",desc:"Reverse a string.",ex:"[[reverse hello]] → olleh",cat:"String",lang:"cscript+",v:2},
+  {sig:"[[len text]]",desc:"Character count of text.",ex:"[[len hello]] → 5",cat:"String",lang:"cscript+",v:2},
+  {sig:"[[replace text | old | new]]",args:[{n:"text",d:"Source text"},{n:"old",d:"Find"},{n:"new",d:"Replace with"}],desc:"Replace all occurrences of old with new.",ex:"[[replace hello world | world | there]]",cat:"String",lang:"cscript+",v:2},
+  {sig:"[[split text | sep | idx]]",args:[{n:"text",d:"Text to split"},{n:"sep",d:"Separator"},{n:"idx",d:"Part index (0-based)"}],desc:"Split text and return the part at index.",ex:"[[split a,b,c | , | 1]] → b",cat:"String",lang:"cscript+",v:2},
+  {sig:"[[join sep | a | b | c]]",args:[{n:"sep",d:"Separator"},{n:"values",d:"Values to join"}],desc:"Join values with a separator.",ex:"[[join , | one | two | three]] → one,two,three",cat:"String",lang:"cscript+",v:2},
+  {sig:"[[format number]]",desc:"Format a number with comma separators.",ex:"[[format 1000000]] → 1,000,000",cat:"String",lang:"cscript+",v:2},
+  {sig:"[[pad text | width | char]]",args:[{n:"text",d:"Text"},{n:"width",d:"Minimum width"},{n:"char",d:"Padding character (default space)"}],desc:"Left-pad text to minimum width.",ex:"[[pad 5 | 3 | 0]] → 005",cat:"String",lang:"cscript+",v:2},
+  {sig:"[[substr text | start | end]]",args:[{n:"start",d:"Start index (0-based)"},{n:"end",d:"End index (exclusive, optional)"}],desc:"Extract a substring.",ex:"[[substr hello | 1 | 4]] → ell",cat:"String",lang:"cscript+",v:2},
+  {sig:"[[contains text | substr]]",desc:"Returns 'true' if text contains substr.",ex:"[[if [[contains {{args}} | hello]] == true]]\nYou said hello!\n[[end]]",cat:"String",lang:"cscript+",v:2},
+  {sig:"[[random.choice a | b | c]]",args:[{n:"options",d:"Two or more options separated by |"}],desc:"Pick a random option from the list.",ex:"[[random.choice heads | tails]]",cat:"Math",lang:"cscript+",v:2},
+  {sig:"[[abs n]]",desc:"Absolute value.",ex:"[[abs -5]] → 5",cat:"Math",lang:"cscript+",v:2},
+  {sig:"[[sqrt n]]",desc:"Square root.",ex:"[[sqrt 16]] → 4",cat:"Math",lang:"cscript+",v:2},
+  {sig:"[[pow base exp]]",args:[{n:"base",d:"Base number"},{n:"exp",d:"Exponent"}],desc:"Raise base to the power of exp.",ex:"[[pow 2 10]] → 1024",cat:"Math",lang:"cscript+",v:2},
+  {sig:"[[sin degrees]]",desc:"Sine of an angle in degrees.",ex:"[[sin 90]] → 1",cat:"Math",lang:"cscript+",v:2},
+  {sig:"[[cos degrees]]",desc:"Cosine of an angle in degrees.",ex:"[[cos 0]] → 1",cat:"Math",lang:"cscript+",v:2},
+  {sig:"[[log n base?]]",args:[{n:"n",d:"Number"},{n:"base",d:"Log base (optional, default e)"}],desc:"Logarithm of n. Defaults to natural log.",ex:"[[log 1000 10]] → 3",cat:"Math",lang:"cscript+",v:2},
+  {sig:"[[clamp n min max]]",args:[{n:"n",d:"Value"},{n:"min",d:"Minimum"},{n:"max",d:"Maximum"}],desc:"Clamp a value between min and max.",ex:"[[clamp 150 0 100]] → 100",cat:"Math",lang:"cscript+",v:2},
+  {sig:"[[var.add name amount]]",args:[{n:"name",d:"Local variable name"},{n:"amount",d:"Amount to add"}],desc:"Add to a local variable and return the new value.",ex:"[[var.add score 10]]\nScore: {{score}}",cat:"Variables",lang:"cscript+",v:2},
+  {sig:"[[var.sub name amount]]",desc:"Subtract from a local variable.",ex:"[[var.sub lives 1]]",cat:"Variables",lang:"cscript+",v:2},
+  {sig:"[[var.mul name factor]]",desc:"Multiply a local variable.",ex:"[[var.mul score 2]]",cat:"Variables",lang:"cscript+",v:2},
+  {sig:"[[var.div name factor]]",desc:"Divide a local variable.",ex:"[[var.div score 2]]",cat:"Variables",lang:"cscript+",v:2},
+  {sig:"[[list.create name a | b | c]]",args:[{n:"name",d:"List name"},{n:"items",d:"Pipe-separated items"}],desc:"Create a local list for use in [[foreach]] or [[list.*]] commands.",ex:"[[list.create fruits apple | banana | cherry]]",cat:"Lists",lang:"cscript+",v:2},
+  {sig:"[[list.add name item]]",args:[{n:"name",d:"List name"},{n:"item",d:"Item to append"}],desc:"Add an item to an existing list.",ex:"[[list.add fruits mango]]",cat:"Lists",lang:"cscript+",v:2},
+  {sig:"[[list.get name idx]]",args:[{n:"name",d:"List name"},{n:"idx",d:"Index (0-based)"}],desc:"Get an item from a list by index.",ex:"[[list.get fruits 0]] → apple",cat:"Lists",lang:"cscript+",v:2},
+  {sig:"[[list.size name]]",args:[{n:"name",d:"List name"}],desc:"Get the number of items in a list.",ex:"[[list.size fruits]] → 3",cat:"Lists",lang:"cscript+",v:2},
+  {sig:"[[list.join name sep]]",args:[{n:"name",d:"List name"},{n:"sep",d:"Separator (optional, default ', ')"}],desc:"Join all list items into a string.",ex:"[[list.join fruits , ]] → apple, banana, cherry",cat:"Lists",lang:"cscript+",v:2},
+  {sig:"[[list.sort name desc?]]",args:[{n:"name",d:"List name"},{n:"desc",d:"Pass 'desc' to sort descending (optional)"}],desc:"Sort a list in place (numeric-aware).",ex:"[[list.create nums 3|1|2]]\n[[list.sort nums]]\n[[list.join nums ,]] → 1,2,3",cat:"Lists",lang:"cscript+",v:2},
+  {sig:"[[list.shuffle name]]",desc:"Shuffle a list in place randomly.",ex:"[[list.shuffle fruits]]",cat:"Lists",lang:"cscript+",v:2},
+  {sig:"[[list.remove name idx]]",args:[{n:"name",d:"List name"},{n:"idx",d:"Index to remove (0-based)"}],desc:"Remove an item from a list by index.",ex:"[[list.remove fruits 1]]",cat:"Lists",lang:"cscript+",v:2},
+  {sig:"[[list.contains name item]]",args:[{n:"name",d:"List name"},{n:"item",d:"Item to search for"}],desc:"Returns 'true' if the item is in the list.",ex:"[[if [[list.contains fruits apple]] == true]]\nApple found!\n[[end]]",cat:"Lists",lang:"cscript+",v:2},
+  {sig:"{{list.name.idx}}",args:[{n:"name",d:"List name"},{n:"idx",d:"Index (0-based), or 'size', 'first', 'last', 'random'"}],desc:"Get a list item or property as an expression.",ex:"{{list.fruits.0}} → apple\n{{list.fruits.size}} → 3\n{{list.fruits.random}} → random item",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{user.color}}",desc:"Author's top role color as hex.",ex:"[[color {{user.color}}]]",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{user.joindate}}",desc:"Date the author joined the server.",ex:"Joined: {{user.joindate}}",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{user.boost}}",desc:"'true' if the author is a Nitro booster.",ex:"[[if {{user.boost}} == true]]\n🚀 Thanks for boosting!\n[[end]]",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{user.hasperm.permission}}",args:[{n:"permission",d:"e.g. administrator, kick_members"}],desc:"'true' if the author has the permission.",ex:"[[if {{user.hasperm.administrator}} == true]]\nAdmin!\n[[end]]",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{user.hasrole.RoleName}}",args:[{n:"RoleName",d:"Role name"}],desc:"'true' if the author has the named role.",ex:"[[if {{user.hasrole.Member}} == true]]\nMember!\n[[end]]",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{mentioned.n.prop}}",args:[{n:"n",d:"Mention position (1-based)"},{n:"prop",d:"mention, id, name, avatar, joindate, color"}],desc:"Access properties of a mentioned user.",ex:"{{mentioned.1.name}}'s coins: {{uvar.coins.{{mentioned.1.id}}}}",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{role.id.RoleName}}",args:[{n:"RoleName",d:"Role name"}],desc:"Get a role's ID by name.",ex:"Role ID: {{role.id.Moderator}}",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{role.color.roleId}}",args:[{n:"roleId",d:"Role ID"}],desc:"Get a role's hex color.",ex:"[[color {{role.color.{{role.id.Admin}}}}]]",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{uvar.name.userid}}",args:[{n:"name",d:"Variable name"},{n:"userid",d:"Target user ID"}],desc:"Get any user's persistent variable.",ex:"{{mentioned.1.name}}: {{uvar.coins.{{mentioned.1.id}}}} coins",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{time.format.strftime}}",args:[{n:"strftime",d:"Python strftime format e.g. %d %B %Y"}],desc:"Format the current time with a custom pattern.",ex:"{{time.format.%d %B %Y}}",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{server.rolecount}}",desc:"Number of roles in the server.",ex:"Roles: {{server.rolecount}}",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{server.channelcount}}",desc:"Number of channels in the server.",ex:"Channels: {{server.channelcount}}",cat:"Expressions",lang:"cscript+",v:2},
 ]; 
 
 
@@ -1656,6 +1796,42 @@ function loadSettingsPage(){
     id("sb-name").value=currentBot.name||"";id("sb-prefix").value=currentBot.prefix||"!";
     id("sb-status").value=currentBot.status_message||"";id("sb-activity").value=currentBot.activity_type||"playing";
   }else bc.classList.add("hidden");
+  // Restore theme/layout selectors to match current state
+  const ts=id("theme-select"),ls=id("layout-select");
+  if(ts)ts.value=ls_get("bf_theme")||"dark";
+  if(ls)ls.value=ls_get("bf_layout")||"default";
+  _markActiveSwatch(ls_get("bf_theme")||"dark");
+}
+
+function ls_get(k){return localStorage.getItem(k)}
+function ls_set(k,v){localStorage.setItem(k,v)}
+
+function applyTheme(t){
+  const themes=["dark","midnight","ocean","forest","crimson","slate"];
+  themes.forEach(n=>document.body.classList.remove("theme-"+n));
+  if(t!=="dark") document.body.classList.add("theme-"+t);
+  ls_set("bf_theme",t);
+  const sel=id("theme-select");if(sel)sel.value=t;
+  _markActiveSwatch(t);
+}
+
+function _markActiveSwatch(t){
+  document.querySelectorAll(".theme-swatch").forEach(el=>{
+    el.classList.toggle("active",el.title===t.charAt(0).toUpperCase()+t.slice(1)||(t==="dark"&&el.title==="Dark"));
+  });
+}
+
+function applyLayout(l){
+  ["compact","wide"].forEach(n=>document.body.classList.remove("layout-"+n));
+  if(l!=="default") document.body.classList.add("layout-"+l);
+  ls_set("bf_layout",l);
+  const sel=id("layout-select");if(sel)sel.value=l;
+}
+
+function _restorePreferences(){
+  const t=ls_get("bf_theme")||"dark";
+  const l=ls_get("bf_layout")||"default";
+  applyTheme(t);applyLayout(l);
 }
 
 async function changeUsername(){
@@ -1704,31 +1880,31 @@ function filterCmds(){
 const TEMPLATES=[
   {label:"🏓 Ping",trigger:"ping",desc:"Reply with pong",stype:"simple",
    response:"Pong! 🏓 {mention}"},
-  {label:"💰 Balance (CScript)",trigger:"bal",desc:"Show your coin balance",stype:"cscript",
+  {label:"💰 Balance (BotScript)",trigger:"bal",desc:"Show your coin balance",stype:"botscript",
    response:"{embed.title:{user}'s Balance}\n{embed.desc:💰 You have **{number:{uvar:coins}}** coins!}\n{embed.color:#fbbf24}\n{embed.thumb:{user.avatar}}\n{embed.footer:Use {prefix}daily to earn more!}"},
-  {label:"🎁 Daily reward (CScript)",trigger:"daily",desc:"Claim daily coins",stype:"cscript",
+  {label:"🎁 Daily reward (BotScript)",trigger:"daily",desc:"Claim daily coins",stype:"botscript",
    response:"{set:gained|{random:50|200}}\n{adduvar:coins|{get:gained}}\n{embed.title:Daily Reward! 🎁}\n{embed.desc:{user.mention} claimed **{get:gained}** coins!\nNew balance: **{number:{uvar:coins}}** 💰}\n{embed.color:#4ade80}"},
-  {label:"🎰 Gamble (CScript)",trigger:"gamble",desc:"Bet your coins",stype:"cscript",
+  {label:"🎰 Gamble (BotScript)",trigger:"gamble",desc:"Bet your coins",stype:"botscript",
    response:"{if:{hasargs}|{if:{contains:{arg:1}|}|{if:{uvar:coins}>={arg:1}|{if:{random:1|2}==1|{adduvar:coins|{arg:1}}\n{embed.title:You Won! 🎰}\n{embed.desc:+**{arg:1}** coins!\nBalance: **{uvar:coins}** 💰}\n{embed.color:#4ade80}|{subuvar:coins|{arg:1}}\n{embed.title:You Lost! 💀}\n{embed.desc:-**{arg:1}** coins.\nBalance: **{uvar:coins}** 💰}\n{embed.color:#f87171}}|❌ Not enough coins! You have **{uvar:coins}**}|❌ Enter a valid amount!}|❌ Usage: {prefix}gamble <amount>}"},
-  {label:"🏆 Leaderboard (CScript)",trigger:"top",desc:"Top 10 coin holders",stype:"cscript",
+  {label:"🏆 Leaderboard (BotScript)",trigger:"top",desc:"Top 10 coin holders",stype:"botscript",
    response:"{embed.title:Coin Leaderboard 🏆}\n{embed.desc:{top:coins|10}}\n{embed.color:#fbbf24}"},
-  {label:"💸 Give coins (CScript)",trigger:"give",desc:"Give coins to someone",stype:"cscript",
+  {label:"💸 Give coins (BotScript)",trigger:"give",desc:"Give coins to someone",stype:"botscript",
    response:"{if:{mentioned:1}!={if:{uvar:coins}>={arg:2}|{subuvar:coins|{arg:2}}{setuvar:coins|{math:{uvar:coins|{mentioned.id:1}}+{arg:2}}|{mentioned.id:1}}\n{embed.title:Transfer ✅}\n{embed.desc:{user.mention} gave **{arg:2}** coins to {mentioned:1}!}\n{embed.color:#4ade80}|❌ Not enough coins!}|❌ Mention a user!}"},
-  {label:"⚔️ RPG Stats (CScript)",trigger:"stats",desc:"Show RPG character stats",stype:"cscript",
+  {label:"⚔️ RPG Stats (BotScript)",trigger:"stats",desc:"Show RPG character stats",stype:"botscript",
    response:"{embed.title:{user}'s Stats}\n{embed.field:Level|{uvar:level}|true}\n{embed.field:XP|{uvar:xp} / 1000|true}\n{embed.field:Coins|{number:{uvar:coins}}|true}\n{embed.field:Wins|{uvar:wins}|true}\n{embed.field:Losses|{uvar:losses}|true}\n{embed.field:Streak|{uvar:streak}|true}\n{embed.thumb:{user.avatar}}\n{embed.color:#6366f1}"},
-  {label:"📊 Daily (CScript+)",trigger:"daily2",desc:"Daily reward using CScript+",stype:"cscript+",
+  {label:"📊 Daily (ForgeScript)",trigger:"daily2",desc:"Daily reward using ForgeScript",stype:"forgescript",
    response:"[[add coins {{random.50.200}}]]\n[[title Daily Reward! 🎁]]\n[[color #4ade80]]\nHey {{user.mention}}!\nYou claimed **{{random.50.200}}** coins.\nBalance: **{{uvar.coins}}** 💰\n[[react 🎁]]"},
-  {label:"🏅 Level up (CScript+)",trigger:"xp",desc:"Add XP and check level",stype:"cscript+",
+  {label:"🏅 Level up (ForgeScript)",trigger:"xp",desc:"Add XP and check level",stype:"forgescript",
    response:"[[add xp 25]]\n[[if {{uvar.xp}} >= 1000]]\n[[setuvar xp 0]]\n[[add level 1]]\n[[title Level Up! 🎉]]\n[[color #fbbf24]]\nYou reached **Level {{uvar.level}}**, {{user}}!\n[[react 🎉]]\n[[else]]\n[[title XP Gained]]\n[[color #6366f1]]\n+25 XP! Total: **{{uvar.xp}}/1000**, {{user}}.\n[[end]]"},
-  {label:"ℹ️ Server info (CScript)",trigger:"server",desc:"Server info embed",stype:"cscript",
+  {label:"ℹ️ Server info (BotScript)",trigger:"server",desc:"Server info embed",stype:"botscript",
    response:"{embed.title:{server}}\n{embed.desc:**Members:** {server.members}\n**Created:** {server.created}\n**Boost tier:** {server.boosttier}}\n{embed.color:#3b82f6}\n{embed.thumb:{server.icon}}\n{embed.footer:Server ID: {server.id}}"},
-  {label:"👤 User info (CScript)",trigger:"userinfo",desc:"User info embed",stype:"cscript",
+  {label:"👤 User info (BotScript)",trigger:"userinfo",desc:"User info embed",stype:"botscript",
    response:"{embed.title:User Info}\n{embed.desc:**Username:** {user.name}\n**Nickname:** {user}\n**ID:** {user.id}\n**Account age:** {user.age}}\n{embed.thumb:{user.avatar}}\n{embed.color:#6366f1}"},
-  {label:"📢 Say (CScript)",trigger:"say",desc:"Bot repeats your message",stype:"cscript",
+  {label:"📢 Say (BotScript)",trigger:"say",desc:"Bot repeats your message",stype:"botscript",
    response:"{if:{hasargs}|{nomentions}|❌ Provide a message!}\n{delete}"},
-  {label:"🪙 Coin flip (CScript)",trigger:"flip",desc:"Heads or tails",stype:"cscript",
+  {label:"🪙 Coin flip (BotScript)",trigger:"flip",desc:"Heads or tails",stype:"botscript",
    response:"{choose:🪙 Heads!|🪙 Tails!}"},
-  {label:"❓ Help (CScript)",trigger:"help",desc:"Command list embed",stype:"cscript",
+  {label:"❓ Help (BotScript)",trigger:"help",desc:"Command list embed",stype:"botscript",
    response:"{embed.title:{bot} Help}\n{embed.desc:Use **{prefix}** before any command.}\n{embed.field:Economy|bal, daily, gamble, top, give|false}\n{embed.field:Fun|flip, roll, choose|false}\n{embed.field:Info|server, userinfo, stats|false}\n{embed.color:#22d3ee}\n{embed.footer:Powered by BotForge}\n{embed.timestamp}"},
 ]; 
 
@@ -1776,6 +1952,7 @@ function refreshPanel(){
 
 /* ── Init ── */
 (async()=>{
+  _restorePreferences();
   await loadAPIURL();
   await checkAPI();
   setInterval(checkAPI,10000);
