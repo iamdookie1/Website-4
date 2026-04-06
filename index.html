@@ -582,8 +582,8 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
           <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
             <div><h3 style="font-family:var(--fh);font-size:17px;font-weight:700">Function Reference</h3><p style="color:var(--muted);font-size:12px;margin-top:2px">Click any function to see details and insert it into the editor.</p></div>
             <div style="display:flex;gap:6px">
-              <div class="badge b-cyan" id="fn-filter-bots" style="cursor:pointer" onclick="filterFns('botscript')">BotScript</div>
-              <div class="badge b-purple" id="fn-filter-forge" style="cursor:pointer" onclick="filterFns('forgescript')">ForgeScript</div>
+              <div class="badge b-cyan" id="fn-filter-bots" style="cursor:pointer" onclick="filterFns('cscript')">CScript</div>
+              <div class="badge b-purple" id="fn-filter-forge" style="cursor:pointer" onclick="filterFns('cscript+')">CScript+</div>
               <div class="badge b-muted" id="fn-filter-all" style="cursor:pointer;opacity:.5" onclick="filterFns('all')">All</div>
             </div>
           </div>
@@ -1055,11 +1055,7 @@ async function loadCommands(){
   renderCmds(cmds);
 }
 
-const const SBADGE = {
-  simple: 'Simple',
-  cscript: 'CScript',
-  'cscript+': 'CScript+'
-};={simple:'<span class="badge b-muted">Simple</span>',botscript:'<span class="badge b-cyan">BotScript</span>',forgescript:'<span class="badge b-purple">ForgeScript</span>'};
+const SBADGE={simple:'<span class="badge b-muted">Simple</span>',cscript:'<span class="badge b-cyan">CScript</span>',"cscript+":'<span class="badge b-purple">CScript+</span>'};
 
 function renderCmds(cmds){
   const el=id("cmd-list");el.innerHTML="";
@@ -1096,17 +1092,10 @@ function openCmdEditor(cmdId){
     delBtn.classList.remove("hidden");dupBtn.classList.remove("hidden");
     const cmd=getCmds().find(c=>String(c.id)===String(cmdId));
     if(cmd){
-      id("e-trigger").value = cmd.trigger;
-id("e-response").value = cmd.response;
-id("e-desc").value = cmd.description || "";
-
-let st = cmd.script_type || "simple";
-
-// fix old saved values
-if (st === "botscript") st = "cscript";
-if (st === "forgescript") st = "cscript+";
-
-switchStype(st);
+      id("e-trigger").value=cmd.trigger;
+      id("e-response").value=cmd.response;
+      id("e-desc").value=cmd.description||"";
+      switchStype(cmd.script_type||"simple");
     }
   }
   updCharCount();
@@ -1114,41 +1103,19 @@ switchStype(st);
 }
 function closeCmdEditor(){id("cmd-editor").classList.add("hidden");editingCmdId=null}
 
-function switchStype(st) {
-  currentStype = st;
-
-  // buttons active state
-  document.querySelectorAll('.stype-tab').forEach(el => {
-    el.classList.toggle('active', el.dataset.st === st);
-  });
-
-  const ta = document.getElementById("codeArea");     // textarea
-  const sc = document.getElementById("simpleCtrls");  // simple controls
-  const bh = document.getElementById("builderHelp");  // builder/help UI
-
-  // DEFAULT (fallback safety)
-  if (!st) st = "simple";
-
-  if (st === "simple") {
-    ta.placeholder = "Hey {user}! Welcome to {server}.";
-    sc.style.display = "block";
-    bh.classList.add("hidden");
-
-  } else if (st === "cscript") {
-    ta.placeholder = "{embed.title:Daily Reward!}...";
-    sc.style.display = "none";
-    bh.classList.remove("hidden");
-
-  } else if (st === "cscript+") {
-    ta.placeholder = "[[title Daily Reward!]]...";
-    sc.style.display = "none";
-    bh.classList.remove("hidden");
-
-  } else {
-    // fallback if something weird comes in
-    ta.placeholder = "Hey {user}! Welcome to {server}.";
-    sc.style.display = "block";
-    bh.classList.add("hidden");
+function switchStype(st){
+  currentStype=st;
+  document.querySelectorAll(".stype-tab").forEach(t=>t.classList.toggle("active",t.dataset.st===st));
+  const ta=id("e-response"),sc=id("simple-chips"),bh=id("bds-hint");
+  if(st==="simple"){
+    ta.placeholder="Hey {user}! Welcome to {server}.";
+    sc.style.display="block";bh.classList.add("hidden");
+  }else if(st==="cscript"){
+    ta.placeholder="{embed.title:Daily Reward!}\n{embed.desc:Hey {user}! You got {adduvar:coins|50} coins!\nBalance: {uvar:coins} 💰}\n{embed.color:#4ade80}\n{react:🎁}";
+    sc.style.display="none";bh.classList.remove("hidden");
+  }else{
+    ta.placeholder="[[title Daily Reward!]]\n[[color #4ade80]]\n[[add coins 50]]\nHey {{user}}, you got 50 coins!\nBalance: {{uvar.coins}} 💰\n[[react 🎁]]";
+    sc.style.display="none";bh.classList.remove("hidden");
   }
 }
 
@@ -1270,141 +1237,141 @@ function updCharCount(){
 
 /* ── Function reference data (comprehensive) ── */
 const FN_DATA=[
-  // ── BotScript — {tag} and {tag:arg1|arg2} ──────────────────────────────────
-  {sig:"{user}",desc:"Author's server nickname.",ex:"Welcome {user}!",cat:"User",lang:"botscript",v:1},
-  {sig:"{user.name}",desc:"Author's raw username.",ex:"Username: {user.name}",cat:"User",lang:"botscript",v:1},
-  {sig:"{user.id}",desc:"Author's Discord user ID.",ex:"ID: {user.id}",cat:"User",lang:"botscript",v:1},
-  {sig:"{user.mention}",desc:"@mentions the author.",ex:"Hi {user.mention}!",cat:"User",lang:"botscript",v:1},
-  {sig:"{user.avatar}",desc:"URL of author's avatar.",ex:"{embed.thumb:{user.avatar}}",cat:"User",lang:"botscript",v:1},
-  {sig:"{user.roles}",desc:"Author's role names, comma-separated.",ex:"Roles: {user.roles}",cat:"User",lang:"botscript",v:1},
-  {sig:"{user.age}",desc:"How many days old the author's account is.",ex:"Account age: {user.age}",cat:"User",lang:"botscript",v:1},
-  {sig:"{user.hasrole:RoleName}",args:[{n:"RoleName",d:"Role name to check"}],desc:"Returns 'true' if the author has this role.",ex:"{if:{user.hasrole:Member}|You're a member!|You're not a member.}",cat:"User",lang:"botscript",v:1},
-  {sig:"{user.hasperm:permission}",args:[{n:"permission",d:"e.g. administrator, kick_members"}],desc:"Returns 'true' if the author has this Discord permission.",ex:"{if:{user.hasperm:administrator}|Admin!|Not admin.}",cat:"User",lang:"botscript",v:1},
-  {sig:"{mentioned:1}",args:[{n:"n",d:"Position of the mention (1-based)"}],desc:"@mention of the nth mentioned user.",ex:"You mentioned {mentioned:1}",cat:"User",lang:"botscript",v:1},
-  {sig:"{mentioned.id:1}",args:[{n:"n",d:"Position of the mention (1-based)"}],desc:"ID of the nth mentioned user.",ex:"ID: {mentioned.id:1}",cat:"User",lang:"botscript",v:1},
-  {sig:"{mentioned.name:1}",args:[{n:"n",d:"Position (1-based)"}],desc:"Nickname of the nth mentioned user.",ex:"{mentioned.name:1}'s coins: {uvar:coins|{mentioned.id:1}}",cat:"User",lang:"botscript",v:1},
-  {sig:"{server}",desc:"Server name.",ex:"Welcome to {server}!",cat:"Server",lang:"botscript",v:1},
-  {sig:"{server.id}",desc:"Server ID.",ex:"Server ID: {server.id}",cat:"Server",lang:"botscript",v:1},
-  {sig:"{server.members}",desc:"Total member count.",ex:"{server} has {server.members} members.",cat:"Server",lang:"botscript",v:1},
-  {sig:"{server.icon}",desc:"Server icon URL.",ex:"{embed.thumb:{server.icon}}",cat:"Server",lang:"botscript",v:1},
-  {sig:"{server.boosts}",desc:"Number of active boosts.",ex:"Boosts: {server.boosts}",cat:"Server",lang:"botscript",v:1},
-  {sig:"{server.boosttier}",desc:"Boost tier (0–3).",ex:"Tier {server.boosttier}",cat:"Server",lang:"botscript",v:1},
-  {sig:"{server.created}",desc:"Date the server was created.",ex:"Created: {server.created}",cat:"Server",lang:"botscript",v:1},
-  {sig:"{channel}",desc:"Current channel name.",ex:"You're in #{channel}",cat:"Server",lang:"botscript",v:1},
-  {sig:"{channel.id}",desc:"Current channel ID.",ex:"Channel: {channel.id}",cat:"Server",lang:"botscript",v:1},
-  {sig:"{channel.mention}",desc:"Clickable channel mention.",ex:"Post in {channel.mention}",cat:"Server",lang:"botscript",v:1},
-  {sig:"{channel.topic}",desc:"Channel topic.",ex:"Topic: {channel.topic}",cat:"Server",lang:"botscript",v:1},
-  {sig:"{bot}",desc:"Bot's username.",ex:"I am {bot}",cat:"Bot",lang:"botscript",v:1},
-  {sig:"{bot.id}",desc:"Bot's user ID.",ex:"Bot ID: {bot.id}",cat:"Bot",lang:"botscript",v:1},
-  {sig:"{bot.mention}",desc:"Mentions the bot.",ex:"Ping {bot.mention}",cat:"Bot",lang:"botscript",v:1},
-  {sig:"{ping}",desc:"Bot's current latency.",ex:"Latency: {ping}",cat:"Bot",lang:"botscript",v:1},
-  {sig:"{prefix}",desc:"Command prefix.",ex:"Use {prefix}help",cat:"Bot",lang:"botscript",v:1},
-  {sig:"{args}",desc:"Text after the command.",ex:"You said: {args}",cat:"Message",lang:"botscript",v:1},
-  {sig:"{arg:1}",args:[{n:"n",d:"Index, 1-based"}],desc:"The nth word after the command.",ex:"First word: {arg:1}",cat:"Message",lang:"botscript",v:1},
-  {sig:"{argcount}",desc:"Number of words after the command.",ex:"{argcount} words given",cat:"Message",lang:"botscript",v:1},
-  {sig:"{hasargs}",desc:"'true' if user typed anything after the command.",ex:"{if:{hasargs}|{args}|No args!}",cat:"Message",lang:"botscript",v:1},
-  {sig:"{nomentions}",desc:"Message text with all @mentions stripped.",ex:"You said: {nomentions}",cat:"Message",lang:"botscript",v:1},
-  {sig:"{date}",desc:"Current date YYYY-MM-DD.",ex:"Today: {date}",cat:"Time",lang:"botscript",v:1},
-  {sig:"{time}",desc:"Current time HH:MM:SS.",ex:"Time: {time}",cat:"Time",lang:"botscript",v:1},
-  {sig:"{day}",desc:"Day of the week.",ex:"Happy {day}!",cat:"Time",lang:"botscript",v:1},
-  {sig:"{month}",desc:"Month name.",ex:"It's {month}",cat:"Time",lang:"botscript",v:1},
-  {sig:"{year}",desc:"Current year.",ex:"Year: {year}",cat:"Time",lang:"botscript",v:1},
-  {sig:"{unix}",desc:"Current Unix timestamp.",ex:"Stamp: {unix}",cat:"Time",lang:"botscript",v:1},
-  {sig:"{math:expr}",args:[{n:"expr",d:"Math expression e.g. 2+2*5"}],desc:"Evaluates a math expression.",ex:"Result: {math:10*3+5}",cat:"Math",lang:"botscript",v:1},
-  {sig:"{random:min|max}",args:[{n:"min",d:"Minimum (inclusive)"},{n:"max",d:"Maximum (inclusive)"}],desc:"Random integer between min and max.",ex:"You rolled {random:1|6}!",cat:"Math",lang:"botscript",v:1},
-  {sig:"{choose:a|b|c}",args:[{n:"options",d:"Two or more choices separated by |"}],desc:"Pick a random option from the list.",ex:"{choose:Heads|Tails}",cat:"Math",lang:"botscript",v:1},
-  {sig:"{round:value}",args:[{n:"value",d:"Number to round"}],desc:"Round a number to the nearest integer.",ex:"{round:4.7} → 5",cat:"Math",lang:"botscript",v:1},
-  {sig:"{abs:value}",args:[{n:"value",d:"Number"}],desc:"Absolute value.",ex:"{abs:-5} → 5",cat:"Math",lang:"botscript",v:1},
-  {sig:"{chance:percent}",args:[{n:"percent",d:"0–100"}],desc:"Returns 'true' the given percent of the time.",ex:"{if:{chance:50}|Lucky!|Unlucky!}",cat:"Math",lang:"botscript",v:1},
-  {sig:"{number:value}",args:[{n:"value",d:"Number"}],desc:"Format number with commas: 1,000,000.",ex:"{number:{uvar:coins}}",cat:"Math",lang:"botscript",v:1},
-  {sig:"{upper:text}",args:[{n:"text",d:"Input text"}],desc:"Convert to UPPERCASE.",ex:"{upper:hello} → HELLO",cat:"String",lang:"botscript",v:1},
-  {sig:"{lower:text}",args:[{n:"text",d:"Input text"}],desc:"Convert to lowercase.",ex:"{lower:HELLO} → hello",cat:"String",lang:"botscript",v:1},
-  {sig:"{len:text}",args:[{n:"text",d:"Input text"}],desc:"Character count.",ex:"{len:hello} → 5",cat:"String",lang:"botscript",v:1},
-  {sig:"{trim:text}",args:[{n:"text",d:"Input text"}],desc:"Remove surrounding whitespace.",ex:"{trim:  hi  } → hi",cat:"String",lang:"botscript",v:1},
-  {sig:"{replace:text|old|new}",args:[{n:"text",d:"Source"},{n:"old",d:"Find this"},{n:"new",d:"Replace with"}],desc:"Replace all occurrences of old with new.",ex:"{replace:hello world|world|there}",cat:"String",lang:"botscript",v:1},
-  {sig:"{contains:text|str}",args:[{n:"text",d:"Source"},{n:"str",d:"Substring"}],desc:"'true' if text contains str.",ex:"{if:{contains:{args}|hello}|You said hello!|No hello.}",cat:"String",lang:"botscript",v:1},
-  {sig:"{repeat:text|n}",args:[{n:"text",d:"Text to repeat"},{n:"n",d:"Times"}],desc:"Repeat text n times.",ex:"{repeat:ha|3} → hahaha",cat:"String",lang:"botscript",v:1},
-  {sig:"{role.id:name}",args:[{n:"name",d:"Role name"}],desc:"Get role ID by name.",ex:"Role ID: {role.id:Moderator}",cat:"Roles",lang:"botscript",v:1},
-  {sig:"{role.mention:id}",args:[{n:"id",d:"Role ID"}],desc:"@mention a role.",ex:"Ping {role.mention:{role.id:Staff}}",cat:"Roles",lang:"botscript",v:1},
-  {sig:"{role.color:id}",args:[{n:"id",d:"Role ID"}],desc:"Hex color of a role.",ex:"{embed.color:{role.color:{role.id:Admin}}}",cat:"Roles",lang:"botscript",v:1},
-  {sig:"{if:cond|then|else}",args:[{n:"cond",d:"Condition"},{n:"then",d:"Value if true"},{n:"else",d:"Value if false (optional)"}],desc:"Inline conditional. Use == != > < >= <= for comparisons.",ex:"{if:{uvar:coins}>100|You're rich!|Keep saving!}",cat:"Logic",lang:"botscript",v:1},
-  {sig:"{if:cond}{else}{/if}",desc:"Multi-line conditional block.",ex:"{if:{uvar:coins}>500}\n💎 You're wealthy!\n{else}\n🪙 Keep grinding!\n{/if}",cat:"Logic",lang:"botscript",v:1},
-  {sig:"{uvar:name}",args:[{n:"name",d:"Variable name"}],desc:"Get YOUR persistent user variable (defaults to 0).",ex:"Coins: {uvar:coins}",cat:"Variables",lang:"botscript",v:1},
-  {sig:"{uvar:name|userID}",args:[{n:"name",d:"Variable name"},{n:"userID",d:"Target user's ID"}],desc:"Get any user's persistent variable.",ex:"{uvar:coins|{mentioned.id:1}}",cat:"Variables",lang:"botscript",v:1},
-  {sig:"{setuvar:name|value}",args:[{n:"name",d:"Variable name"},{n:"value",d:"New value"}],desc:"Set YOUR persistent variable.",ex:"{setuvar:coins|100}",cat:"Variables",lang:"botscript",v:1},
-  {sig:"{adduvar:name|amount}",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount to add"}],desc:"Add to YOUR variable. Returns new value.",ex:"You now have {adduvar:coins|50} coins!",cat:"Variables",lang:"botscript",v:1},
-  {sig:"{subuvar:name|amount}",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount to subtract"}],desc:"Subtract from YOUR variable.",ex:"{subuvar:coins|10}",cat:"Variables",lang:"botscript",v:1},
-  {sig:"{muluvar:name|factor}",args:[{n:"name",d:"Variable name"},{n:"factor",d:"Multiplication factor"}],desc:"Multiply YOUR variable.",ex:"{muluvar:coins|2}",cat:"Variables",lang:"botscript",v:1},
-  {sig:"{resetuvar:name}",args:[{n:"name",d:"Variable name"}],desc:"Reset YOUR variable to 0.",ex:"{resetuvar:streak}",cat:"Variables",lang:"botscript",v:1},
-  {sig:"{svar:name}",args:[{n:"name",d:"Variable name"}],desc:"Get a server-wide variable.",ex:"Total plays: {svar:plays}",cat:"Variables",lang:"botscript",v:1},
-  {sig:"{setsvar:name|value}",args:[{n:"name",d:"Variable name"},{n:"value",d:"New value"}],desc:"Set a server-wide variable.",ex:"{setsvar:event|active}",cat:"Variables",lang:"botscript",v:1},
-  {sig:"{addsvar:name|amount}",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount"}],desc:"Add to a server variable.",ex:"{addsvar:plays|1}",cat:"Variables",lang:"botscript",v:1},
-  {sig:"{gvar:name}",args:[{n:"name",d:"Variable name"}],desc:"Get a global variable (all servers).",ex:"{gvar:totalUses}",cat:"Variables",lang:"botscript",v:1},
-  {sig:"{setgvar:name|value}",args:[{n:"name",d:"Variable name"},{n:"value",d:"New value"}],desc:"Set a global variable.",ex:"{setgvar:version|2}",cat:"Variables",lang:"botscript",v:1},
-  {sig:"{addgvar:name|amount}",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount"}],desc:"Add to a global variable.",ex:"{addgvar:totalUses|1}",cat:"Variables",lang:"botscript",v:1},
-  {sig:"{set:name|value}",args:[{n:"name",d:"Variable name"},{n:"value",d:"Value"}],desc:"Set a local (response-only) variable.",ex:"{set:roll|{random:1|20}}",cat:"Variables",lang:"botscript",v:1},
-  {sig:"{get:name}",args:[{n:"name",d:"Variable name"}],desc:"Get a local variable.",ex:"You rolled {get:roll}!",cat:"Variables",lang:"botscript",v:1},
-  {sig:"{top:varname}",args:[{n:"varname",d:"Variable name"},{n:"limit",d:"Max entries (optional, default 10)"}],desc:"Show ranked leaderboard for a user variable.",ex:"{embed.title:Coin Leaderboard}\n{embed.desc:{top:coins|10}}",cat:"Variables",lang:"botscript",v:1},
-  {sig:"{embed.title:text}",args:[{n:"text",d:"Embed title"}],desc:"Set the embed title.",ex:"{embed.title:Hello!}",cat:"Embed",lang:"botscript",v:1},
-  {sig:"{embed.desc:text}",args:[{n:"text",d:"Embed description"}],desc:"Set the embed description/body.",ex:"{embed.desc:Hello everyone!}",cat:"Embed",lang:"botscript",v:1},
-  {sig:"{embed.color:#hex}",args:[{n:"#hex",d:"Hex color e.g. #3b82f6"}],desc:"Set the embed sidebar color.",ex:"{embed.color:#3b82f6}",cat:"Embed",lang:"botscript",v:1},
-  {sig:"{embed.footer:text}",args:[{n:"text",d:"Footer text"}],desc:"Set the embed footer.",ex:"{embed.footer:Powered by BotForge}",cat:"Embed",lang:"botscript",v:1},
-  {sig:"{embed.thumb:url}",args:[{n:"url",d:"Image URL"}],desc:"Small thumbnail image (top-right).",ex:"{embed.thumb:{user.avatar}}",cat:"Embed",lang:"botscript",v:1},
-  {sig:"{embed.image:url}",args:[{n:"url",d:"Image URL"}],desc:"Large image at the bottom.",ex:"{embed.image:https://example.com/banner.png}",cat:"Embed",lang:"botscript",v:1},
-  {sig:"{embed.author:name|iconURL}",args:[{n:"name",d:"Author name"},{n:"iconURL",d:"Icon URL (optional)"}],desc:"Set the embed author section.",ex:"{embed.author:{user}|{user.avatar}}",cat:"Embed",lang:"botscript",v:1},
-  {sig:"{embed.field:name|value|inline}",args:[{n:"name",d:"Field title"},{n:"value",d:"Field body"},{n:"inline",d:"true or false (optional)"}],desc:"Add a field to the embed.",ex:"{embed.field:Coins|{uvar:coins}|true}",cat:"Embed",lang:"botscript",v:1},
-  {sig:"{embed.url:url}",args:[{n:"url",d:"URL"}],desc:"Makes the embed title a clickable link.",ex:"{embed.url:https://discord.com}",cat:"Embed",lang:"botscript",v:1},
-  {sig:"{embed.timestamp}",desc:"Add the current timestamp to the embed.",ex:"{embed.title:Log}\n{embed.timestamp}",cat:"Embed",lang:"botscript",v:1},
-  {sig:"{delete}",desc:"Delete the trigger message.",ex:"{delete}\n✅ Done!",cat:"Actions",lang:"botscript",v:1},
-  {sig:"{react:emoji}",args:[{n:"emoji",d:"Emoji character"}],desc:"Add a reaction to the trigger message.",ex:"{react:✅}",cat:"Actions",lang:"botscript",v:1},
-  {sig:"{dm:message}",args:[{n:"message",d:"DM content"}],desc:"DM the command author.",ex:"{dm:Hey {user}, you used the command!}",cat:"Actions",lang:"botscript",v:1},
-  {sig:"{dm:message|userID}",args:[{n:"message",d:"DM content"},{n:"userID",d:"Target user ID"}],desc:"DM any user.",ex:"{dm:Hello!|{mentioned.id:1}}",cat:"Actions",lang:"botscript",v:1},
-  {sig:"{send:channelID|message}",args:[{n:"channelID",d:"Target channel ID"},{n:"message",d:"Message content"}],desc:"Send a message to another channel.",ex:"{send:{channel.id}|Command was used!}",cat:"Actions",lang:"botscript",v:1},
-  // ── ForgeScript — [[command]] and {{expression}} ────────────────────────────
-  {sig:"[[title text]]",args:[{n:"text",d:"Embed title"}],desc:"Set the embed title.",ex:"[[title User Stats]]",cat:"Embed",lang:"forgescript",v:2},
-  {sig:"[[desc text]]",args:[{n:"text",d:"Embed description"}],desc:"Set the embed description.",ex:"[[desc Hey {{user}}, welcome!]]",cat:"Embed",lang:"forgescript",v:2},
-  {sig:"[[color #hex]]",args:[{n:"#hex",d:"Hex color"}],desc:"Set the embed sidebar color.",ex:"[[color #3b82f6]]",cat:"Embed",lang:"forgescript",v:2},
-  {sig:"[[footer text]]",args:[{n:"text",d:"Footer text"}],desc:"Set the embed footer.",ex:"[[footer Powered by BotForge]]",cat:"Embed",lang:"forgescript",v:2},
-  {sig:"[[thumb url]]",args:[{n:"url",d:"Image URL"}],desc:"Small thumbnail image.",ex:"[[thumb {{user.avatar}}]]",cat:"Embed",lang:"forgescript",v:2},
-  {sig:"[[image url]]",args:[{n:"url",d:"Image URL"}],desc:"Large bottom image.",ex:"[[image https://example.com/img.png]]",cat:"Embed",lang:"forgescript",v:2},
-  {sig:"[[author name | iconURL]]",args:[{n:"name",d:"Author name"},{n:"iconURL",d:"Icon URL (optional)"}],desc:"Set embed author.",ex:"[[author {{user}} | {{user.avatar}}]]",cat:"Embed",lang:"forgescript",v:2},
-  {sig:"[[field name | value | inline]]",args:[{n:"name",d:"Field title"},{n:"value",d:"Field body"},{n:"inline",d:"true/false (optional)"}],desc:"Add a field to the embed.",ex:"[[field Coins | {{uvar.coins}} | true]]",cat:"Embed",lang:"forgescript",v:2},
-  {sig:"[[timestamp]]",desc:"Add current timestamp to embed.",ex:"[[title Log]]\n[[timestamp]]",cat:"Embed",lang:"forgescript",v:2},
-  {sig:"[[if condition]]...[[end]]",desc:"Block conditional. Supports [[elif condition]] and [[else]].",ex:"[[if {{uvar.coins}} >= 1000]]\n💎 Whale!\n[[elif {{uvar.coins}} >= 100]]\n💰 Rich!\n[[else]]\n🪙 Grind more.\n[[end]]",cat:"Logic",lang:"forgescript",v:2},
-  {sig:"[[set name value]]",args:[{n:"name",d:"Variable name"},{n:"value",d:"Value"}],desc:"Set a local (response-only) variable.",ex:"[[set roll {{random.1.100}}]]\nYou rolled {{var.roll}}!",cat:"Logic",lang:"forgescript",v:2},
-  {sig:"[[add varname amount]]",args:[{n:"varname",d:"User variable name"},{n:"amount",d:"Amount to add"}],desc:"Add to the current user's persistent variable. Outputs new value inline.",ex:"[[add coins 50]]\nNew balance: {{uvar.coins}}",cat:"Variables",lang:"forgescript",v:2},
-  {sig:"[[sub varname amount]]",args:[{n:"varname",d:"User variable name"},{n:"amount",d:"Amount to subtract"}],desc:"Subtract from the current user's variable.",ex:"[[sub coins 10]]",cat:"Variables",lang:"forgescript",v:2},
-  {sig:"[[mul varname factor]]",args:[{n:"varname",d:"Variable name"},{n:"factor",d:"Multiply by"}],desc:"Multiply the current user's variable.",ex:"[[mul coins 2]]",cat:"Variables",lang:"forgescript",v:2},
-  {sig:"[[div varname factor]]",args:[{n:"varname",d:"Variable name"},{n:"factor",d:"Divide by"}],desc:"Divide the current user's variable.",ex:"[[div coins 2]]",cat:"Variables",lang:"forgescript",v:2},
-  {sig:"[[setuvar name value]]",args:[{n:"name",d:"Variable name"},{n:"value",d:"New value"}],desc:"Set the current user's persistent variable.",ex:"[[setuvar coins 100]]",cat:"Variables",lang:"forgescript",v:2},
-  {sig:"[[setuvar name value userid]]",args:[{n:"name",d:"Variable"},{n:"value",d:"New value"},{n:"userid",d:"Target user ID"}],desc:"Set any user's persistent variable.",ex:"[[setuvar coins 0 {{mentioned.1.id}}]]",cat:"Variables",lang:"forgescript",v:2},
-  {sig:"[[reset varname]]",args:[{n:"varname",d:"Variable name"}],desc:"Reset a user variable to 0.",ex:"[[reset streak]]",cat:"Variables",lang:"forgescript",v:2},
-  {sig:"[[setsvar name value]]",args:[{n:"name",d:"Variable name"},{n:"value",d:"New value"}],desc:"Set a server-wide variable.",ex:"[[setsvar event active]]",cat:"Variables",lang:"forgescript",v:2},
-  {sig:"[[addsvar name amount]]",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount"}],desc:"Add to a server variable.",ex:"[[addsvar plays 1]]",cat:"Variables",lang:"forgescript",v:2},
-  {sig:"[[top varname limit]]",args:[{n:"varname",d:"Variable name"},{n:"limit",d:"Max entries"}],desc:"Output a ranked leaderboard.",ex:"[[title Leaderboard]]\n[[desc]]\n[[top coins 10]]",cat:"Variables",lang:"forgescript",v:2},
-  {sig:"{{user}}",desc:"Author's display name.",ex:"Hey {{user}}!",cat:"Expressions",lang:"forgescript",v:2},
-  {sig:"{{user.id}}",desc:"Author's user ID.",ex:"ID: {{user.id}}",cat:"Expressions",lang:"forgescript",v:2},
-  {sig:"{{user.mention}}",desc:"@mention the author.",ex:"Hi {{user.mention}}!",cat:"Expressions",lang:"forgescript",v:2},
-  {sig:"{{user.avatar}}",desc:"Author's avatar URL.",ex:"[[thumb {{user.avatar}}]]",cat:"Expressions",lang:"forgescript",v:2},
-  {sig:"{{user.roles}}",desc:"Author's role names.",ex:"Roles: {{user.roles}}",cat:"Expressions",lang:"forgescript",v:2},
-  {sig:"{{server}}",desc:"Server name.",ex:"Welcome to {{server}}!",cat:"Expressions",lang:"forgescript",v:2},
-  {sig:"{{server.members}}",desc:"Server member count.",ex:"{{server}} has {{server.members}} members",cat:"Expressions",lang:"forgescript",v:2},
-  {sig:"{{channel}}",desc:"Channel name.",ex:"You're in #{{channel}}",cat:"Expressions",lang:"forgescript",v:2},
-  {sig:"{{args}}",desc:"Text after the command.",ex:"You said: {{args}}",cat:"Expressions",lang:"forgescript",v:2},
-  {sig:"{{arg.1}}",args:[{n:"n",d:"Index, 1-based"}],desc:"The nth word after the command.",ex:"First word: {{arg.1}}",cat:"Expressions",lang:"forgescript",v:2},
-  {sig:"{{uvar.name}}",args:[{n:"name",d:"Variable name"}],desc:"Current user's persistent variable value.",ex:"Coins: {{uvar.coins}}",cat:"Expressions",lang:"forgescript",v:2},
-  {sig:"{{svar.name}}",args:[{n:"name",d:"Variable name"}],desc:"Server variable value.",ex:"Plays: {{svar.plays}}",cat:"Expressions",lang:"forgescript",v:2},
-  {sig:"{{gvar.name}}",args:[{n:"name",d:"Variable name"}],desc:"Global variable value.",ex:"Uses: {{gvar.totalUses}}",cat:"Expressions",lang:"forgescript",v:2},
-  {sig:"{{var.name}}",args:[{n:"name",d:"Local variable name"}],desc:"Get a local variable set with [[set]].",ex:"[[set roll {{random.1.20}}]]\nYou rolled {{var.roll}}!",cat:"Expressions",lang:"forgescript",v:2},
-  {sig:"{{ping}}",desc:"Bot latency.",ex:"Pong! {{ping}}",cat:"Expressions",lang:"forgescript",v:2},
-  {sig:"{{date}} / {{time}}",desc:"Current date or time.",ex:"Today is {{date}} at {{time}}",cat:"Expressions",lang:"forgescript",v:2},
-  {sig:"{{random.min.max}}",args:[{n:"min",d:"Minimum"},{n:"max",d:"Maximum"}],desc:"Random integer. Uses dots as separators.",ex:"You rolled {{random.1.6}}!",cat:"Expressions",lang:"forgescript",v:2},
-  {sig:"[[delete]]",desc:"Delete the trigger message.",ex:"[[delete]]\n✅ Done!",cat:"Actions",lang:"forgescript",v:2},
-  {sig:"[[react emoji]]",args:[{n:"emoji",d:"Emoji character"}],desc:"Add a reaction to the trigger message.",ex:"[[react ✅]]",cat:"Actions",lang:"forgescript",v:2},
-  {sig:"[[dm message]]",args:[{n:"message",d:"DM content"}],desc:"DM the command author.",ex:"[[dm Hey {{user}}, you used the command!]]",cat:"Actions",lang:"forgescript",v:2},
-  {sig:"[[dm userid message]]",args:[{n:"userid",d:"Target user ID"},{n:"message",d:"DM content"}],desc:"DM any user by ID.",ex:"[[dm {{mentioned.1.id}} Hello!]]",cat:"Actions",lang:"forgescript",v:2},
-  {sig:"[[send channelID message]]",args:[{n:"channelID",d:"Target channel ID"},{n:"message",d:"Content"}],desc:"Send to another channel.",ex:"[[send {{channel.id}} Command used!]]",cat:"Actions",lang:"forgescript",v:2},
-  {sig:"[[say text]]",args:[{n:"text",d:"Text to output"}],desc:"Output a line of text (useful inside if-blocks).",ex:"[[if {{uvar.coins}}>0]]\n[[say You have coins!]]\n[[end]]",cat:"Actions",lang:"forgescript",v:2},
+  // ── CScript — {tag} and {tag:arg1|arg2} ──────────────────────────────────
+  {sig:"{user}",desc:"Author's server nickname.",ex:"Welcome {user}!",cat:"User",lang:"cscript",v:1},
+  {sig:"{user.name}",desc:"Author's raw username.",ex:"Username: {user.name}",cat:"User",lang:"cscript",v:1},
+  {sig:"{user.id}",desc:"Author's Discord user ID.",ex:"ID: {user.id}",cat:"User",lang:"cscript",v:1},
+  {sig:"{user.mention}",desc:"@mentions the author.",ex:"Hi {user.mention}!",cat:"User",lang:"cscript",v:1},
+  {sig:"{user.avatar}",desc:"URL of author's avatar.",ex:"{embed.thumb:{user.avatar}}",cat:"User",lang:"cscript",v:1},
+  {sig:"{user.roles}",desc:"Author's role names, comma-separated.",ex:"Roles: {user.roles}",cat:"User",lang:"cscript",v:1},
+  {sig:"{user.age}",desc:"How many days old the author's account is.",ex:"Account age: {user.age}",cat:"User",lang:"cscript",v:1},
+  {sig:"{user.hasrole:RoleName}",args:[{n:"RoleName",d:"Role name to check"}],desc:"Returns 'true' if the author has this role.",ex:"{if:{user.hasrole:Member}|You're a member!|You're not a member.}",cat:"User",lang:"cscript",v:1},
+  {sig:"{user.hasperm:permission}",args:[{n:"permission",d:"e.g. administrator, kick_members"}],desc:"Returns 'true' if the author has this Discord permission.",ex:"{if:{user.hasperm:administrator}|Admin!|Not admin.}",cat:"User",lang:"cscript",v:1},
+  {sig:"{mentioned:1}",args:[{n:"n",d:"Position of the mention (1-based)"}],desc:"@mention of the nth mentioned user.",ex:"You mentioned {mentioned:1}",cat:"User",lang:"cscript",v:1},
+  {sig:"{mentioned.id:1}",args:[{n:"n",d:"Position of the mention (1-based)"}],desc:"ID of the nth mentioned user.",ex:"ID: {mentioned.id:1}",cat:"User",lang:"cscript",v:1},
+  {sig:"{mentioned.name:1}",args:[{n:"n",d:"Position (1-based)"}],desc:"Nickname of the nth mentioned user.",ex:"{mentioned.name:1}'s coins: {uvar:coins|{mentioned.id:1}}",cat:"User",lang:"cscript",v:1},
+  {sig:"{server}",desc:"Server name.",ex:"Welcome to {server}!",cat:"Server",lang:"cscript",v:1},
+  {sig:"{server.id}",desc:"Server ID.",ex:"Server ID: {server.id}",cat:"Server",lang:"cscript",v:1},
+  {sig:"{server.members}",desc:"Total member count.",ex:"{server} has {server.members} members.",cat:"Server",lang:"cscript",v:1},
+  {sig:"{server.icon}",desc:"Server icon URL.",ex:"{embed.thumb:{server.icon}}",cat:"Server",lang:"cscript",v:1},
+  {sig:"{server.boosts}",desc:"Number of active boosts.",ex:"Boosts: {server.boosts}",cat:"Server",lang:"cscript",v:1},
+  {sig:"{server.boosttier}",desc:"Boost tier (0–3).",ex:"Tier {server.boosttier}",cat:"Server",lang:"cscript",v:1},
+  {sig:"{server.created}",desc:"Date the server was created.",ex:"Created: {server.created}",cat:"Server",lang:"cscript",v:1},
+  {sig:"{channel}",desc:"Current channel name.",ex:"You're in #{channel}",cat:"Server",lang:"cscript",v:1},
+  {sig:"{channel.id}",desc:"Current channel ID.",ex:"Channel: {channel.id}",cat:"Server",lang:"cscript",v:1},
+  {sig:"{channel.mention}",desc:"Clickable channel mention.",ex:"Post in {channel.mention}",cat:"Server",lang:"cscript",v:1},
+  {sig:"{channel.topic}",desc:"Channel topic.",ex:"Topic: {channel.topic}",cat:"Server",lang:"cscript",v:1},
+  {sig:"{bot}",desc:"Bot's username.",ex:"I am {bot}",cat:"Bot",lang:"cscript",v:1},
+  {sig:"{bot.id}",desc:"Bot's user ID.",ex:"Bot ID: {bot.id}",cat:"Bot",lang:"cscript",v:1},
+  {sig:"{bot.mention}",desc:"Mentions the bot.",ex:"Ping {bot.mention}",cat:"Bot",lang:"cscript",v:1},
+  {sig:"{ping}",desc:"Bot's current latency.",ex:"Latency: {ping}",cat:"Bot",lang:"cscript",v:1},
+  {sig:"{prefix}",desc:"Command prefix.",ex:"Use {prefix}help",cat:"Bot",lang:"cscript",v:1},
+  {sig:"{args}",desc:"Text after the command.",ex:"You said: {args}",cat:"Message",lang:"cscript",v:1},
+  {sig:"{arg:1}",args:[{n:"n",d:"Index, 1-based"}],desc:"The nth word after the command.",ex:"First word: {arg:1}",cat:"Message",lang:"cscript",v:1},
+  {sig:"{argcount}",desc:"Number of words after the command.",ex:"{argcount} words given",cat:"Message",lang:"cscript",v:1},
+  {sig:"{hasargs}",desc:"'true' if user typed anything after the command.",ex:"{if:{hasargs}|{args}|No args!}",cat:"Message",lang:"cscript",v:1},
+  {sig:"{nomentions}",desc:"Message text with all @mentions stripped.",ex:"You said: {nomentions}",cat:"Message",lang:"cscript",v:1},
+  {sig:"{date}",desc:"Current date YYYY-MM-DD.",ex:"Today: {date}",cat:"Time",lang:"cscript",v:1},
+  {sig:"{time}",desc:"Current time HH:MM:SS.",ex:"Time: {time}",cat:"Time",lang:"cscript",v:1},
+  {sig:"{day}",desc:"Day of the week.",ex:"Happy {day}!",cat:"Time",lang:"cscript",v:1},
+  {sig:"{month}",desc:"Month name.",ex:"It's {month}",cat:"Time",lang:"cscript",v:1},
+  {sig:"{year}",desc:"Current year.",ex:"Year: {year}",cat:"Time",lang:"cscript",v:1},
+  {sig:"{unix}",desc:"Current Unix timestamp.",ex:"Stamp: {unix}",cat:"Time",lang:"cscript",v:1},
+  {sig:"{math:expr}",args:[{n:"expr",d:"Math expression e.g. 2+2*5"}],desc:"Evaluates a math expression.",ex:"Result: {math:10*3+5}",cat:"Math",lang:"cscript",v:1},
+  {sig:"{random:min|max}",args:[{n:"min",d:"Minimum (inclusive)"},{n:"max",d:"Maximum (inclusive)"}],desc:"Random integer between min and max.",ex:"You rolled {random:1|6}!",cat:"Math",lang:"cscript",v:1},
+  {sig:"{choose:a|b|c}",args:[{n:"options",d:"Two or more choices separated by |"}],desc:"Pick a random option from the list.",ex:"{choose:Heads|Tails}",cat:"Math",lang:"cscript",v:1},
+  {sig:"{round:value}",args:[{n:"value",d:"Number to round"}],desc:"Round a number to the nearest integer.",ex:"{round:4.7} → 5",cat:"Math",lang:"cscript",v:1},
+  {sig:"{abs:value}",args:[{n:"value",d:"Number"}],desc:"Absolute value.",ex:"{abs:-5} → 5",cat:"Math",lang:"cscript",v:1},
+  {sig:"{chance:percent}",args:[{n:"percent",d:"0–100"}],desc:"Returns 'true' the given percent of the time.",ex:"{if:{chance:50}|Lucky!|Unlucky!}",cat:"Math",lang:"cscript",v:1},
+  {sig:"{number:value}",args:[{n:"value",d:"Number"}],desc:"Format number with commas: 1,000,000.",ex:"{number:{uvar:coins}}",cat:"Math",lang:"cscript",v:1},
+  {sig:"{upper:text}",args:[{n:"text",d:"Input text"}],desc:"Convert to UPPERCASE.",ex:"{upper:hello} → HELLO",cat:"String",lang:"cscript",v:1},
+  {sig:"{lower:text}",args:[{n:"text",d:"Input text"}],desc:"Convert to lowercase.",ex:"{lower:HELLO} → hello",cat:"String",lang:"cscript",v:1},
+  {sig:"{len:text}",args:[{n:"text",d:"Input text"}],desc:"Character count.",ex:"{len:hello} → 5",cat:"String",lang:"cscript",v:1},
+  {sig:"{trim:text}",args:[{n:"text",d:"Input text"}],desc:"Remove surrounding whitespace.",ex:"{trim:  hi  } → hi",cat:"String",lang:"cscript",v:1},
+  {sig:"{replace:text|old|new}",args:[{n:"text",d:"Source"},{n:"old",d:"Find this"},{n:"new",d:"Replace with"}],desc:"Replace all occurrences of old with new.",ex:"{replace:hello world|world|there}",cat:"String",lang:"cscript",v:1},
+  {sig:"{contains:text|str}",args:[{n:"text",d:"Source"},{n:"str",d:"Substring"}],desc:"'true' if text contains str.",ex:"{if:{contains:{args}|hello}|You said hello!|No hello.}",cat:"String",lang:"cscript",v:1},
+  {sig:"{repeat:text|n}",args:[{n:"text",d:"Text to repeat"},{n:"n",d:"Times"}],desc:"Repeat text n times.",ex:"{repeat:ha|3} → hahaha",cat:"String",lang:"cscript",v:1},
+  {sig:"{role.id:name}",args:[{n:"name",d:"Role name"}],desc:"Get role ID by name.",ex:"Role ID: {role.id:Moderator}",cat:"Roles",lang:"cscript",v:1},
+  {sig:"{role.mention:id}",args:[{n:"id",d:"Role ID"}],desc:"@mention a role.",ex:"Ping {role.mention:{role.id:Staff}}",cat:"Roles",lang:"cscript",v:1},
+  {sig:"{role.color:id}",args:[{n:"id",d:"Role ID"}],desc:"Hex color of a role.",ex:"{embed.color:{role.color:{role.id:Admin}}}",cat:"Roles",lang:"cscript",v:1},
+  {sig:"{if:cond|then|else}",args:[{n:"cond",d:"Condition"},{n:"then",d:"Value if true"},{n:"else",d:"Value if false (optional)"}],desc:"Inline conditional. Use == != > < >= <= for comparisons.",ex:"{if:{uvar:coins}>100|You're rich!|Keep saving!}",cat:"Logic",lang:"cscript",v:1},
+  {sig:"{if:cond}{else}{/if}",desc:"Multi-line conditional block.",ex:"{if:{uvar:coins}>500}\n💎 You're wealthy!\n{else}\n🪙 Keep grinding!\n{/if}",cat:"Logic",lang:"cscript",v:1},
+  {sig:"{uvar:name}",args:[{n:"name",d:"Variable name"}],desc:"Get YOUR persistent user variable (defaults to 0).",ex:"Coins: {uvar:coins}",cat:"Variables",lang:"cscript",v:1},
+  {sig:"{uvar:name|userID}",args:[{n:"name",d:"Variable name"},{n:"userID",d:"Target user's ID"}],desc:"Get any user's persistent variable.",ex:"{uvar:coins|{mentioned.id:1}}",cat:"Variables",lang:"cscript",v:1},
+  {sig:"{setuvar:name|value}",args:[{n:"name",d:"Variable name"},{n:"value",d:"New value"}],desc:"Set YOUR persistent variable.",ex:"{setuvar:coins|100}",cat:"Variables",lang:"cscript",v:1},
+  {sig:"{adduvar:name|amount}",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount to add"}],desc:"Add to YOUR variable. Returns new value.",ex:"You now have {adduvar:coins|50} coins!",cat:"Variables",lang:"cscript",v:1},
+  {sig:"{subuvar:name|amount}",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount to subtract"}],desc:"Subtract from YOUR variable.",ex:"{subuvar:coins|10}",cat:"Variables",lang:"cscript",v:1},
+  {sig:"{muluvar:name|factor}",args:[{n:"name",d:"Variable name"},{n:"factor",d:"Multiplication factor"}],desc:"Multiply YOUR variable.",ex:"{muluvar:coins|2}",cat:"Variables",lang:"cscript",v:1},
+  {sig:"{resetuvar:name}",args:[{n:"name",d:"Variable name"}],desc:"Reset YOUR variable to 0.",ex:"{resetuvar:streak}",cat:"Variables",lang:"cscript",v:1},
+  {sig:"{svar:name}",args:[{n:"name",d:"Variable name"}],desc:"Get a server-wide variable.",ex:"Total plays: {svar:plays}",cat:"Variables",lang:"cscript",v:1},
+  {sig:"{setsvar:name|value}",args:[{n:"name",d:"Variable name"},{n:"value",d:"New value"}],desc:"Set a server-wide variable.",ex:"{setsvar:event|active}",cat:"Variables",lang:"cscript",v:1},
+  {sig:"{addsvar:name|amount}",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount"}],desc:"Add to a server variable.",ex:"{addsvar:plays|1}",cat:"Variables",lang:"cscript",v:1},
+  {sig:"{gvar:name}",args:[{n:"name",d:"Variable name"}],desc:"Get a global variable (all servers).",ex:"{gvar:totalUses}",cat:"Variables",lang:"cscript",v:1},
+  {sig:"{setgvar:name|value}",args:[{n:"name",d:"Variable name"},{n:"value",d:"New value"}],desc:"Set a global variable.",ex:"{setgvar:version|2}",cat:"Variables",lang:"cscript",v:1},
+  {sig:"{addgvar:name|amount}",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount"}],desc:"Add to a global variable.",ex:"{addgvar:totalUses|1}",cat:"Variables",lang:"cscript",v:1},
+  {sig:"{set:name|value}",args:[{n:"name",d:"Variable name"},{n:"value",d:"Value"}],desc:"Set a local (response-only) variable.",ex:"{set:roll|{random:1|20}}",cat:"Variables",lang:"cscript",v:1},
+  {sig:"{get:name}",args:[{n:"name",d:"Variable name"}],desc:"Get a local variable.",ex:"You rolled {get:roll}!",cat:"Variables",lang:"cscript",v:1},
+  {sig:"{top:varname}",args:[{n:"varname",d:"Variable name"},{n:"limit",d:"Max entries (optional, default 10)"}],desc:"Show ranked leaderboard for a user variable.",ex:"{embed.title:Coin Leaderboard}\n{embed.desc:{top:coins|10}}",cat:"Variables",lang:"cscript",v:1},
+  {sig:"{embed.title:text}",args:[{n:"text",d:"Embed title"}],desc:"Set the embed title.",ex:"{embed.title:Hello!}",cat:"Embed",lang:"cscript",v:1},
+  {sig:"{embed.desc:text}",args:[{n:"text",d:"Embed description"}],desc:"Set the embed description/body.",ex:"{embed.desc:Hello everyone!}",cat:"Embed",lang:"cscript",v:1},
+  {sig:"{embed.color:#hex}",args:[{n:"#hex",d:"Hex color e.g. #3b82f6"}],desc:"Set the embed sidebar color.",ex:"{embed.color:#3b82f6}",cat:"Embed",lang:"cscript",v:1},
+  {sig:"{embed.footer:text}",args:[{n:"text",d:"Footer text"}],desc:"Set the embed footer.",ex:"{embed.footer:Powered by BotForge}",cat:"Embed",lang:"cscript",v:1},
+  {sig:"{embed.thumb:url}",args:[{n:"url",d:"Image URL"}],desc:"Small thumbnail image (top-right).",ex:"{embed.thumb:{user.avatar}}",cat:"Embed",lang:"cscript",v:1},
+  {sig:"{embed.image:url}",args:[{n:"url",d:"Image URL"}],desc:"Large image at the bottom.",ex:"{embed.image:https://example.com/banner.png}",cat:"Embed",lang:"cscript",v:1},
+  {sig:"{embed.author:name|iconURL}",args:[{n:"name",d:"Author name"},{n:"iconURL",d:"Icon URL (optional)"}],desc:"Set the embed author section.",ex:"{embed.author:{user}|{user.avatar}}",cat:"Embed",lang:"cscript",v:1},
+  {sig:"{embed.field:name|value|inline}",args:[{n:"name",d:"Field title"},{n:"value",d:"Field body"},{n:"inline",d:"true or false (optional)"}],desc:"Add a field to the embed.",ex:"{embed.field:Coins|{uvar:coins}|true}",cat:"Embed",lang:"cscript",v:1},
+  {sig:"{embed.url:url}",args:[{n:"url",d:"URL"}],desc:"Makes the embed title a clickable link.",ex:"{embed.url:https://discord.com}",cat:"Embed",lang:"cscript",v:1},
+  {sig:"{embed.timestamp}",desc:"Add the current timestamp to the embed.",ex:"{embed.title:Log}\n{embed.timestamp}",cat:"Embed",lang:"cscript",v:1},
+  {sig:"{delete}",desc:"Delete the trigger message.",ex:"{delete}\n✅ Done!",cat:"Actions",lang:"cscript",v:1},
+  {sig:"{react:emoji}",args:[{n:"emoji",d:"Emoji character"}],desc:"Add a reaction to the trigger message.",ex:"{react:✅}",cat:"Actions",lang:"cscript",v:1},
+  {sig:"{dm:message}",args:[{n:"message",d:"DM content"}],desc:"DM the command author.",ex:"{dm:Hey {user}, you used the command!}",cat:"Actions",lang:"cscript",v:1},
+  {sig:"{dm:message|userID}",args:[{n:"message",d:"DM content"},{n:"userID",d:"Target user ID"}],desc:"DM any user.",ex:"{dm:Hello!|{mentioned.id:1}}",cat:"Actions",lang:"cscript",v:1},
+  {sig:"{send:channelID|message}",args:[{n:"channelID",d:"Target channel ID"},{n:"message",d:"Message content"}],desc:"Send a message to another channel.",ex:"{send:{channel.id}|Command was used!}",cat:"Actions",lang:"cscript",v:1},
+  // ── CScript+ — [[command]] and {{expression}} ────────────────────────────
+  {sig:"[[title text]]",args:[{n:"text",d:"Embed title"}],desc:"Set the embed title.",ex:"[[title User Stats]]",cat:"Embed",lang:"cscript+",v:2},
+  {sig:"[[desc text]]",args:[{n:"text",d:"Embed description"}],desc:"Set the embed description.",ex:"[[desc Hey {{user}}, welcome!]]",cat:"Embed",lang:"cscript+",v:2},
+  {sig:"[[color #hex]]",args:[{n:"#hex",d:"Hex color"}],desc:"Set the embed sidebar color.",ex:"[[color #3b82f6]]",cat:"Embed",lang:"cscript+",v:2},
+  {sig:"[[footer text]]",args:[{n:"text",d:"Footer text"}],desc:"Set the embed footer.",ex:"[[footer Powered by BotForge]]",cat:"Embed",lang:"cscript+",v:2},
+  {sig:"[[thumb url]]",args:[{n:"url",d:"Image URL"}],desc:"Small thumbnail image.",ex:"[[thumb {{user.avatar}}]]",cat:"Embed",lang:"cscript+",v:2},
+  {sig:"[[image url]]",args:[{n:"url",d:"Image URL"}],desc:"Large bottom image.",ex:"[[image https://example.com/img.png]]",cat:"Embed",lang:"cscript+",v:2},
+  {sig:"[[author name | iconURL]]",args:[{n:"name",d:"Author name"},{n:"iconURL",d:"Icon URL (optional)"}],desc:"Set embed author.",ex:"[[author {{user}} | {{user.avatar}}]]",cat:"Embed",lang:"cscript+",v:2},
+  {sig:"[[field name | value | inline]]",args:[{n:"name",d:"Field title"},{n:"value",d:"Field body"},{n:"inline",d:"true/false (optional)"}],desc:"Add a field to the embed.",ex:"[[field Coins | {{uvar.coins}} | true]]",cat:"Embed",lang:"cscript+",v:2},
+  {sig:"[[timestamp]]",desc:"Add current timestamp to embed.",ex:"[[title Log]]\n[[timestamp]]",cat:"Embed",lang:"cscript+",v:2},
+  {sig:"[[if condition]]...[[end]]",desc:"Block conditional. Supports [[elif condition]] and [[else]].",ex:"[[if {{uvar.coins}} >= 1000]]\n💎 Whale!\n[[elif {{uvar.coins}} >= 100]]\n💰 Rich!\n[[else]]\n🪙 Grind more.\n[[end]]",cat:"Logic",lang:"cscript+",v:2},
+  {sig:"[[set name value]]",args:[{n:"name",d:"Variable name"},{n:"value",d:"Value"}],desc:"Set a local (response-only) variable.",ex:"[[set roll {{random.1.100}}]]\nYou rolled {{var.roll}}!",cat:"Logic",lang:"cscript+",v:2},
+  {sig:"[[add varname amount]]",args:[{n:"varname",d:"User variable name"},{n:"amount",d:"Amount to add"}],desc:"Add to the current user's persistent variable. Outputs new value inline.",ex:"[[add coins 50]]\nNew balance: {{uvar.coins}}",cat:"Variables",lang:"cscript+",v:2},
+  {sig:"[[sub varname amount]]",args:[{n:"varname",d:"User variable name"},{n:"amount",d:"Amount to subtract"}],desc:"Subtract from the current user's variable.",ex:"[[sub coins 10]]",cat:"Variables",lang:"cscript+",v:2},
+  {sig:"[[mul varname factor]]",args:[{n:"varname",d:"Variable name"},{n:"factor",d:"Multiply by"}],desc:"Multiply the current user's variable.",ex:"[[mul coins 2]]",cat:"Variables",lang:"cscript+",v:2},
+  {sig:"[[div varname factor]]",args:[{n:"varname",d:"Variable name"},{n:"factor",d:"Divide by"}],desc:"Divide the current user's variable.",ex:"[[div coins 2]]",cat:"Variables",lang:"cscript+",v:2},
+  {sig:"[[setuvar name value]]",args:[{n:"name",d:"Variable name"},{n:"value",d:"New value"}],desc:"Set the current user's persistent variable.",ex:"[[setuvar coins 100]]",cat:"Variables",lang:"cscript+",v:2},
+  {sig:"[[setuvar name value userid]]",args:[{n:"name",d:"Variable"},{n:"value",d:"New value"},{n:"userid",d:"Target user ID"}],desc:"Set any user's persistent variable.",ex:"[[setuvar coins 0 {{mentioned.1.id}}]]",cat:"Variables",lang:"cscript+",v:2},
+  {sig:"[[reset varname]]",args:[{n:"varname",d:"Variable name"}],desc:"Reset a user variable to 0.",ex:"[[reset streak]]",cat:"Variables",lang:"cscript+",v:2},
+  {sig:"[[setsvar name value]]",args:[{n:"name",d:"Variable name"},{n:"value",d:"New value"}],desc:"Set a server-wide variable.",ex:"[[setsvar event active]]",cat:"Variables",lang:"cscript+",v:2},
+  {sig:"[[addsvar name amount]]",args:[{n:"name",d:"Variable name"},{n:"amount",d:"Amount"}],desc:"Add to a server variable.",ex:"[[addsvar plays 1]]",cat:"Variables",lang:"cscript+",v:2},
+  {sig:"[[top varname limit]]",args:[{n:"varname",d:"Variable name"},{n:"limit",d:"Max entries"}],desc:"Output a ranked leaderboard.",ex:"[[title Leaderboard]]\n[[desc]]\n[[top coins 10]]",cat:"Variables",lang:"cscript+",v:2},
+  {sig:"{{user}}",desc:"Author's display name.",ex:"Hey {{user}}!",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{user.id}}",desc:"Author's user ID.",ex:"ID: {{user.id}}",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{user.mention}}",desc:"@mention the author.",ex:"Hi {{user.mention}}!",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{user.avatar}}",desc:"Author's avatar URL.",ex:"[[thumb {{user.avatar}}]]",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{user.roles}}",desc:"Author's role names.",ex:"Roles: {{user.roles}}",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{server}}",desc:"Server name.",ex:"Welcome to {{server}}!",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{server.members}}",desc:"Server member count.",ex:"{{server}} has {{server.members}} members",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{channel}}",desc:"Channel name.",ex:"You're in #{{channel}}",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{args}}",desc:"Text after the command.",ex:"You said: {{args}}",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{arg.1}}",args:[{n:"n",d:"Index, 1-based"}],desc:"The nth word after the command.",ex:"First word: {{arg.1}}",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{uvar.name}}",args:[{n:"name",d:"Variable name"}],desc:"Current user's persistent variable value.",ex:"Coins: {{uvar.coins}}",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{svar.name}}",args:[{n:"name",d:"Variable name"}],desc:"Server variable value.",ex:"Plays: {{svar.plays}}",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{gvar.name}}",args:[{n:"name",d:"Variable name"}],desc:"Global variable value.",ex:"Uses: {{gvar.totalUses}}",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{var.name}}",args:[{n:"name",d:"Local variable name"}],desc:"Get a local variable set with [[set]].",ex:"[[set roll {{random.1.20}}]]\nYou rolled {{var.roll}}!",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{ping}}",desc:"Bot latency.",ex:"Pong! {{ping}}",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{date}} / {{time}}",desc:"Current date or time.",ex:"Today is {{date}} at {{time}}",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"{{random.min.max}}",args:[{n:"min",d:"Minimum"},{n:"max",d:"Maximum"}],desc:"Random integer. Uses dots as separators.",ex:"You rolled {{random.1.6}}!",cat:"Expressions",lang:"cscript+",v:2},
+  {sig:"[[delete]]",desc:"Delete the trigger message.",ex:"[[delete]]\n✅ Done!",cat:"Actions",lang:"cscript+",v:2},
+  {sig:"[[react emoji]]",args:[{n:"emoji",d:"Emoji character"}],desc:"Add a reaction to the trigger message.",ex:"[[react ✅]]",cat:"Actions",lang:"cscript+",v:2},
+  {sig:"[[dm message]]",args:[{n:"message",d:"DM content"}],desc:"DM the command author.",ex:"[[dm Hey {{user}}, you used the command!]]",cat:"Actions",lang:"cscript+",v:2},
+  {sig:"[[dm userid message]]",args:[{n:"userid",d:"Target user ID"},{n:"message",d:"DM content"}],desc:"DM any user by ID.",ex:"[[dm {{mentioned.1.id}} Hello!]]",cat:"Actions",lang:"cscript+",v:2},
+  {sig:"[[send channelID message]]",args:[{n:"channelID",d:"Target channel ID"},{n:"message",d:"Content"}],desc:"Send to another channel.",ex:"[[send {{channel.id}} Command used!]]",cat:"Actions",lang:"cscript+",v:2},
+  {sig:"[[say text]]",args:[{n:"text",d:"Text to output"}],desc:"Output a line of text (useful inside if-blocks).",ex:"[[if {{uvar.coins}}>0]]\n[[say You have coins!]]\n[[end]]",cat:"Actions",lang:"cscript+",v:2},
 ]; 
 
 
@@ -1544,11 +1511,11 @@ async function doCreateVar(){
 }
 
 
-let _fnFilter="botscript";
+let _fnFilter="cscript";
 function filterFns(f){
   _fnFilter=f;
   ["bots","forge","all"].forEach(x=>id("fn-filter-"+x)?.style.setProperty("opacity","1"));
-  const active=f==="botscript"?"bots":f==="forgescript"?"forge":"all";
+  const active=f==="cscript"?"bots":f==="cscript+"?"forge":"all";
   id("fn-filter-"+active)?.style.setProperty("opacity",".45");
   renderFns();
 }
@@ -1559,8 +1526,8 @@ function renderFns(){
   grid.innerHTML="";
 
   let filtered=FN_DATA.filter(fn=>{
-    if(_fnFilter==="botscript"&&fn.lang!=="botscript")return false;
-    if(_fnFilter==="forgescript"&&fn.lang!=="forgescript")return false;
+    if(_fnFilter==="cscript"&&fn.lang!=="cscript")return false;
+    if(_fnFilter==="cscript+"&&fn.lang!=="cscript+")return false;
     if(search&&!fn.sig.toLowerCase().includes(search)&&!fn.desc.toLowerCase().includes(search)&&!fn.cat.toLowerCase().includes(search))return false;
     return true;
   });
@@ -1737,31 +1704,31 @@ function filterCmds(){
 const TEMPLATES=[
   {label:"🏓 Ping",trigger:"ping",desc:"Reply with pong",stype:"simple",
    response:"Pong! 🏓 {mention}"},
-  {label:"💰 Balance (BotScript)",trigger:"bal",desc:"Show your coin balance",stype:"botscript",
+  {label:"💰 Balance (CScript)",trigger:"bal",desc:"Show your coin balance",stype:"cscript",
    response:"{embed.title:{user}'s Balance}\n{embed.desc:💰 You have **{number:{uvar:coins}}** coins!}\n{embed.color:#fbbf24}\n{embed.thumb:{user.avatar}}\n{embed.footer:Use {prefix}daily to earn more!}"},
-  {label:"🎁 Daily reward (BotScript)",trigger:"daily",desc:"Claim daily coins",stype:"botscript",
+  {label:"🎁 Daily reward (CScript)",trigger:"daily",desc:"Claim daily coins",stype:"cscript",
    response:"{set:gained|{random:50|200}}\n{adduvar:coins|{get:gained}}\n{embed.title:Daily Reward! 🎁}\n{embed.desc:{user.mention} claimed **{get:gained}** coins!\nNew balance: **{number:{uvar:coins}}** 💰}\n{embed.color:#4ade80}"},
-  {label:"🎰 Gamble (BotScript)",trigger:"gamble",desc:"Bet your coins",stype:"botscript",
+  {label:"🎰 Gamble (CScript)",trigger:"gamble",desc:"Bet your coins",stype:"cscript",
    response:"{if:{hasargs}|{if:{contains:{arg:1}|}|{if:{uvar:coins}>={arg:1}|{if:{random:1|2}==1|{adduvar:coins|{arg:1}}\n{embed.title:You Won! 🎰}\n{embed.desc:+**{arg:1}** coins!\nBalance: **{uvar:coins}** 💰}\n{embed.color:#4ade80}|{subuvar:coins|{arg:1}}\n{embed.title:You Lost! 💀}\n{embed.desc:-**{arg:1}** coins.\nBalance: **{uvar:coins}** 💰}\n{embed.color:#f87171}}|❌ Not enough coins! You have **{uvar:coins}**}|❌ Enter a valid amount!}|❌ Usage: {prefix}gamble <amount>}"},
-  {label:"🏆 Leaderboard (BotScript)",trigger:"top",desc:"Top 10 coin holders",stype:"botscript",
+  {label:"🏆 Leaderboard (CScript)",trigger:"top",desc:"Top 10 coin holders",stype:"cscript",
    response:"{embed.title:Coin Leaderboard 🏆}\n{embed.desc:{top:coins|10}}\n{embed.color:#fbbf24}"},
-  {label:"💸 Give coins (BotScript)",trigger:"give",desc:"Give coins to someone",stype:"botscript",
+  {label:"💸 Give coins (CScript)",trigger:"give",desc:"Give coins to someone",stype:"cscript",
    response:"{if:{mentioned:1}!={if:{uvar:coins}>={arg:2}|{subuvar:coins|{arg:2}}{setuvar:coins|{math:{uvar:coins|{mentioned.id:1}}+{arg:2}}|{mentioned.id:1}}\n{embed.title:Transfer ✅}\n{embed.desc:{user.mention} gave **{arg:2}** coins to {mentioned:1}!}\n{embed.color:#4ade80}|❌ Not enough coins!}|❌ Mention a user!}"},
-  {label:"⚔️ RPG Stats (BotScript)",trigger:"stats",desc:"Show RPG character stats",stype:"botscript",
+  {label:"⚔️ RPG Stats (CScript)",trigger:"stats",desc:"Show RPG character stats",stype:"cscript",
    response:"{embed.title:{user}'s Stats}\n{embed.field:Level|{uvar:level}|true}\n{embed.field:XP|{uvar:xp} / 1000|true}\n{embed.field:Coins|{number:{uvar:coins}}|true}\n{embed.field:Wins|{uvar:wins}|true}\n{embed.field:Losses|{uvar:losses}|true}\n{embed.field:Streak|{uvar:streak}|true}\n{embed.thumb:{user.avatar}}\n{embed.color:#6366f1}"},
-  {label:"📊 Daily (ForgeScript)",trigger:"daily2",desc:"Daily reward using ForgeScript",stype:"forgescript",
+  {label:"📊 Daily (CScript+)",trigger:"daily2",desc:"Daily reward using CScript+",stype:"cscript+",
    response:"[[add coins {{random.50.200}}]]\n[[title Daily Reward! 🎁]]\n[[color #4ade80]]\nHey {{user.mention}}!\nYou claimed **{{random.50.200}}** coins.\nBalance: **{{uvar.coins}}** 💰\n[[react 🎁]]"},
-  {label:"🏅 Level up (ForgeScript)",trigger:"xp",desc:"Add XP and check level",stype:"forgescript",
+  {label:"🏅 Level up (CScript+)",trigger:"xp",desc:"Add XP and check level",stype:"cscript+",
    response:"[[add xp 25]]\n[[if {{uvar.xp}} >= 1000]]\n[[setuvar xp 0]]\n[[add level 1]]\n[[title Level Up! 🎉]]\n[[color #fbbf24]]\nYou reached **Level {{uvar.level}}**, {{user}}!\n[[react 🎉]]\n[[else]]\n[[title XP Gained]]\n[[color #6366f1]]\n+25 XP! Total: **{{uvar.xp}}/1000**, {{user}}.\n[[end]]"},
-  {label:"ℹ️ Server info (BotScript)",trigger:"server",desc:"Server info embed",stype:"botscript",
+  {label:"ℹ️ Server info (CScript)",trigger:"server",desc:"Server info embed",stype:"cscript",
    response:"{embed.title:{server}}\n{embed.desc:**Members:** {server.members}\n**Created:** {server.created}\n**Boost tier:** {server.boosttier}}\n{embed.color:#3b82f6}\n{embed.thumb:{server.icon}}\n{embed.footer:Server ID: {server.id}}"},
-  {label:"👤 User info (BotScript)",trigger:"userinfo",desc:"User info embed",stype:"botscript",
+  {label:"👤 User info (CScript)",trigger:"userinfo",desc:"User info embed",stype:"cscript",
    response:"{embed.title:User Info}\n{embed.desc:**Username:** {user.name}\n**Nickname:** {user}\n**ID:** {user.id}\n**Account age:** {user.age}}\n{embed.thumb:{user.avatar}}\n{embed.color:#6366f1}"},
-  {label:"📢 Say (BotScript)",trigger:"say",desc:"Bot repeats your message",stype:"botscript",
+  {label:"📢 Say (CScript)",trigger:"say",desc:"Bot repeats your message",stype:"cscript",
    response:"{if:{hasargs}|{nomentions}|❌ Provide a message!}\n{delete}"},
-  {label:"🪙 Coin flip (BotScript)",trigger:"flip",desc:"Heads or tails",stype:"botscript",
+  {label:"🪙 Coin flip (CScript)",trigger:"flip",desc:"Heads or tails",stype:"cscript",
    response:"{choose:🪙 Heads!|🪙 Tails!}"},
-  {label:"❓ Help (BotScript)",trigger:"help",desc:"Command list embed",stype:"botscript",
+  {label:"❓ Help (CScript)",trigger:"help",desc:"Command list embed",stype:"cscript",
    response:"{embed.title:{bot} Help}\n{embed.desc:Use **{prefix}** before any command.}\n{embed.field:Economy|bal, daily, gamble, top, give|false}\n{embed.field:Fun|flip, roll, choose|false}\n{embed.field:Info|server, userinfo, stats|false}\n{embed.color:#22d3ee}\n{embed.footer:Powered by BotForge}\n{embed.timestamp}"},
 ]; 
 
@@ -1824,7 +1791,7 @@ function refreshPanel(){
     }
   }
 
-  filterFns("botscript");
+  filterFns("cscript");
 
   document.addEventListener("keydown",e=>{
     if(e.key==="Escape"){
