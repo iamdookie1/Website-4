@@ -1055,7 +1055,11 @@ async function loadCommands(){
   renderCmds(cmds);
 }
 
-const SBADGE={simple:'<span class="badge b-muted">Simple</span>',botscript:'<span class="badge b-cyan">BotScript</span>',forgescript:'<span class="badge b-purple">ForgeScript</span>'};
+const const SBADGE = {
+  simple: 'Simple',
+  cscript: 'CScript',
+  'cscript+': 'CScript+'
+};={simple:'<span class="badge b-muted">Simple</span>',botscript:'<span class="badge b-cyan">BotScript</span>',forgescript:'<span class="badge b-purple">ForgeScript</span>'};
 
 function renderCmds(cmds){
   const el=id("cmd-list");el.innerHTML="";
@@ -1092,10 +1096,17 @@ function openCmdEditor(cmdId){
     delBtn.classList.remove("hidden");dupBtn.classList.remove("hidden");
     const cmd=getCmds().find(c=>String(c.id)===String(cmdId));
     if(cmd){
-      id("e-trigger").value=cmd.trigger;
-      id("e-response").value=cmd.response;
-      id("e-desc").value=cmd.description||"";
-      switchStype(cmd.script_type||"simple");
+      id("e-trigger").value = cmd.trigger;
+id("e-response").value = cmd.response;
+id("e-desc").value = cmd.description || "";
+
+let st = cmd.script_type || "simple";
+
+// fix old saved values
+if (st === "botscript") st = "cscript";
+if (st === "forgescript") st = "cscript+";
+
+switchStype(st);
     }
   }
   updCharCount();
@@ -1103,19 +1114,41 @@ function openCmdEditor(cmdId){
 }
 function closeCmdEditor(){id("cmd-editor").classList.add("hidden");editingCmdId=null}
 
-function switchStype(st){
-  currentStype=st;
-  document.querySelectorAll(".stype-tab").forEach(t=>t.classList.toggle("active",t.dataset.st===st));
-  const ta=id("e-response"),sc=id("simple-chips"),bh=id("bds-hint");
-  if(st==="simple"){
-    ta.placeholder="Hey {user}! Welcome to {server}.";
-    sc.style.display="block";bh.classList.add("hidden");
-  }else if(st==="botscript"){
-    ta.placeholder="{embed.title:Daily Reward!}\n{embed.desc:Hey {user}! You got {adduvar:coins|50} coins!\nBalance: {uvar:coins} 💰}\n{embed.color:#4ade80}\n{react:🎁}";
-    sc.style.display="none";bh.classList.remove("hidden");
-  }else{
-    ta.placeholder="[[title Daily Reward!]]\n[[color #4ade80]]\n[[add coins 50]]\nHey {{user}}, you got 50 coins!\nBalance: {{uvar.coins}} 💰\n[[react 🎁]]";
-    sc.style.display="none";bh.classList.remove("hidden");
+function switchStype(st) {
+  currentStype = st;
+
+  // buttons active state
+  document.querySelectorAll('.stype-tab').forEach(el => {
+    el.classList.toggle('active', el.dataset.st === st);
+  });
+
+  const ta = document.getElementById("codeArea");     // textarea
+  const sc = document.getElementById("simpleCtrls");  // simple controls
+  const bh = document.getElementById("builderHelp");  // builder/help UI
+
+  // DEFAULT (fallback safety)
+  if (!st) st = "simple";
+
+  if (st === "simple") {
+    ta.placeholder = "Hey {user}! Welcome to {server}.";
+    sc.style.display = "block";
+    bh.classList.add("hidden");
+
+  } else if (st === "cscript") {
+    ta.placeholder = "{embed.title:Daily Reward!}...";
+    sc.style.display = "none";
+    bh.classList.remove("hidden");
+
+  } else if (st === "cscript+") {
+    ta.placeholder = "[[title Daily Reward!]]...";
+    sc.style.display = "none";
+    bh.classList.remove("hidden");
+
+  } else {
+    // fallback if something weird comes in
+    ta.placeholder = "Hey {user}! Welcome to {server}.";
+    sc.style.display = "block";
+    bh.classList.add("hidden");
   }
 }
 
