@@ -1568,7 +1568,8 @@ function setVarRefFilter(f){
 
 function renderVarRef(){
   const g=id("var-ref-grid");if(!g)return;g.innerHTML="";
-  const items=VAR_REF[_varRefFilter]||[];
+  const source = VAR_REF_OVERRIDE || VAR_REF;
+  const items=source[_varRefFilter]||[];
   if(!items.length){g.innerHTML=`<div style="color:var(--muted);font-size:13px">No items.</div>`;return}
   items.forEach(v=>{
     const c=document.createElement("div");c.className="var-ref-card";
@@ -1690,7 +1691,8 @@ function renderFns(){
   const grid=id("fn-grid");if(!grid)return;
   grid.innerHTML="";
 
-  let filtered=FN_DATA.filter(fn=>{
+  const source = FN_DEFS_OVERRIDE || FN_DATA;
+  let filtered=source.filter(fn=>{
     if(_fnFilter==="cscript"&&fn.lang!=="cscript")return false;
     if(_fnFilter==="cscript+"&&fn.lang!=="cscript+")return false;
     if(search&&!fn.sig.toLowerCase().includes(search)&&!fn.desc.toLowerCase().includes(search)&&!fn.cat.toLowerCase().includes(search))return false;
@@ -1901,37 +1903,45 @@ function filterCmds(){
   });
 }
 
-/* ── Templates ── */
-const TEMPLATES=[
+/* ── Meta data — loaded from server, falls back to built-in defaults ── */
+let TEMPLATES = [];
+let FN_DEFS_OVERRIDE = null;   // null = use built-in FN_DEFS below
+let VAR_REF_OVERRIDE = null;   // null = use built-in VAR_REF below
+
+async function loadMeta() {
+  if (!API) return;
+  try {
+    const [fns, vr, tmpl] = await Promise.all([
+      fetch(API.replace(/\/+$/,"") + "/meta/functions").then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(API.replace(/\/+$/,"") + "/meta/var-ref").then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(API.replace(/\/+$/,"") + "/meta/templates").then(r => r.ok ? r.json() : null).catch(() => null),
+    ]);
+    if (fns)  FN_DEFS_OVERRIDE = fns;
+    if (vr)   VAR_REF_OVERRIDE = vr;
+    if (tmpl) TEMPLATES = tmpl;
+    // Re-render if already on these panels
+    if (curWsTab === "functions")  renderFns();
+    if (curWsTab === "variables")  renderVarRef();
+  } catch {}
+}
+
+// Built-in fallback templates (used when server is offline)
+const TEMPLATES_DEFAULT = [
   {label:"🏓 Ping",trigger:"ping",desc:"Reply with pong",stype:"simple",
    response:"Pong! 🏓 {mention}"},
-  {label:"💰 Balance (BotScript)",trigger:"bal",desc:"Show your coin balance",stype:"botscript",
+  {label:"💰 Balance (CScript)",trigger:"bal",desc:"Show your coin balance",stype:"cscript",
    response:"{embed.title:{user}'s Balance}\n{embed.desc:💰 You have **{number:{uvar:coins}}** coins!}\n{embed.color:#fbbf24}\n{embed.thumb:{user.avatar}}\n{embed.footer:Use {prefix}daily to earn more!}"},
-  {label:"🎁 Daily reward (BotScript)",trigger:"daily",desc:"Claim daily coins",stype:"botscript",
+  {label:"🎁 Daily reward (CScript)",trigger:"daily",desc:"Claim daily coins",stype:"cscript",
    response:"{set:gained|{random:50|200}}\n{adduvar:coins|{get:gained}}\n{embed.title:Daily Reward! 🎁}\n{embed.desc:{user.mention} claimed **{get:gained}** coins!\nNew balance: **{number:{uvar:coins}}** 💰}\n{embed.color:#4ade80}"},
-  {label:"🎰 Gamble (BotScript)",trigger:"gamble",desc:"Bet your coins",stype:"botscript",
-   response:"{if:{hasargs}|{if:{contains:{arg:1}|}|{if:{uvar:coins}>={arg:1}|{if:{random:1|2}==1|{adduvar:coins|{arg:1}}\n{embed.title:You Won! 🎰}\n{embed.desc:+**{arg:1}** coins!\nBalance: **{uvar:coins}** 💰}\n{embed.color:#4ade80}|{subuvar:coins|{arg:1}}\n{embed.title:You Lost! 💀}\n{embed.desc:-**{arg:1}** coins.\nBalance: **{uvar:coins}** 💰}\n{embed.color:#f87171}}|❌ Not enough coins! You have **{uvar:coins}**}|❌ Enter a valid amount!}|❌ Usage: {prefix}gamble <amount>}"},
-  {label:"🏆 Leaderboard (BotScript)",trigger:"top",desc:"Top 10 coin holders",stype:"botscript",
+  {label:"🎰 Gamble (CScript)",trigger:"gamble",desc:"Bet your coins",stype:"cscript",
+   response:"{if:{hasargs}|{if:{uvar:coins}>={arg:1}|{if:{random:1|2}==1|{adduvar:coins|{arg:1}}\n{embed.title:You Won! 🎰}\n{embed.desc:+**{arg:1}** coins!\nBalance: **{uvar:coins}** 💰}\n{embed.color:#4ade80}|{subuvar:coins|{arg:1}}\n{embed.title:You Lost! 💀}\n{embed.desc:-**{arg:1}** coins.\nBalance: **{uvar:coins}** 💰}\n{embed.color:#f87171}}|❌ Not enough coins! You have **{uvar:coins}**}|❌ Usage: {prefix}gamble <amount>}"},
+  {label:"🏆 Leaderboard (CScript)",trigger:"top",desc:"Top 10 coin holders",stype:"cscript",
    response:"{embed.title:Coin Leaderboard 🏆}\n{embed.desc:{top:coins|10}}\n{embed.color:#fbbf24}"},
-  {label:"💸 Give coins (BotScript)",trigger:"give",desc:"Give coins to someone",stype:"botscript",
-   response:"{if:{mentioned:1}!={if:{uvar:coins}>={arg:2}|{subuvar:coins|{arg:2}}{setuvar:coins|{math:{uvar:coins|{mentioned.id:1}}+{arg:2}}|{mentioned.id:1}}\n{embed.title:Transfer ✅}\n{embed.desc:{user.mention} gave **{arg:2}** coins to {mentioned:1}!}\n{embed.color:#4ade80}|❌ Not enough coins!}|❌ Mention a user!}"},
-  {label:"⚔️ RPG Stats (BotScript)",trigger:"stats",desc:"Show RPG character stats",stype:"botscript",
-   response:"{embed.title:{user}'s Stats}\n{embed.field:Level|{uvar:level}|true}\n{embed.field:XP|{uvar:xp} / 1000|true}\n{embed.field:Coins|{number:{uvar:coins}}|true}\n{embed.field:Wins|{uvar:wins}|true}\n{embed.field:Losses|{uvar:losses}|true}\n{embed.field:Streak|{uvar:streak}|true}\n{embed.thumb:{user.avatar}}\n{embed.color:#6366f1}"},
-  {label:"📊 Daily (ForgeScript)",trigger:"daily2",desc:"Daily reward using ForgeScript",stype:"forgescript",
-   response:"[[add coins {{random.50.200}}]]\n[[title Daily Reward! 🎁]]\n[[color #4ade80]]\nHey {{user.mention}}!\nYou claimed **{{random.50.200}}** coins.\nBalance: **{{uvar.coins}}** 💰\n[[react 🎁]]"},
-  {label:"🏅 Level up (ForgeScript)",trigger:"xp",desc:"Add XP and check level",stype:"forgescript",
-   response:"[[add xp 25]]\n[[if {{uvar.xp}} >= 1000]]\n[[setuvar xp 0]]\n[[add level 1]]\n[[title Level Up! 🎉]]\n[[color #fbbf24]]\nYou reached **Level {{uvar.level}}**, {{user}}!\n[[react 🎉]]\n[[else]]\n[[title XP Gained]]\n[[color #6366f1]]\n+25 XP! Total: **{{uvar.xp}}/1000**, {{user}}.\n[[end]]"},
-  {label:"ℹ️ Server info (BotScript)",trigger:"server",desc:"Server info embed",stype:"botscript",
-   response:"{embed.title:{server}}\n{embed.desc:**Members:** {server.members}\n**Created:** {server.created}\n**Boost tier:** {server.boosttier}}\n{embed.color:#3b82f6}\n{embed.thumb:{server.icon}}\n{embed.footer:Server ID: {server.id}}"},
-  {label:"👤 User info (BotScript)",trigger:"userinfo",desc:"User info embed",stype:"botscript",
-   response:"{embed.title:User Info}\n{embed.desc:**Username:** {user.name}\n**Nickname:** {user}\n**ID:** {user.id}\n**Account age:** {user.age}}\n{embed.thumb:{user.avatar}}\n{embed.color:#6366f1}"},
-  {label:"📢 Say (BotScript)",trigger:"say",desc:"Bot repeats your message",stype:"botscript",
-   response:"{if:{hasargs}|{nomentions}|❌ Provide a message!}\n{delete}"},
-  {label:"🪙 Coin flip (BotScript)",trigger:"flip",desc:"Heads or tails",stype:"botscript",
-   response:"{choose:🪙 Heads!|🪙 Tails!}"},
-  {label:"❓ Help (BotScript)",trigger:"help",desc:"Command list embed",stype:"botscript",
-   response:"{embed.title:{bot} Help}\n{embed.desc:Use **{prefix}** before any command.}\n{embed.field:Economy|bal, daily, gamble, top, give|false}\n{embed.field:Fun|flip, roll, choose|false}\n{embed.field:Info|server, userinfo, stats|false}\n{embed.color:#22d3ee}\n{embed.footer:Powered by BotForge}\n{embed.timestamp}"},
-]; 
+  {label:"⚔️ RPG Stats (CScript)",trigger:"stats",desc:"Show RPG character stats",stype:"cscript",
+   response:"{embed.title:{user}'s Stats}\n{embed.field:Level|{uvar:level}|true}\n{embed.field:XP|{uvar:xp} / 1000|true}\n{embed.field:Coins|{number:{uvar:coins}}|true}\n{embed.thumb:{user.avatar}}\n{embed.color:#6366f1}"},
+  {label:"❓ Help (CScript)",trigger:"help",desc:"Command list embed",stype:"cscript",
+   response:"{embed.title:{bot} Help}\n{embed.desc:Use **{prefix}** before any command.}\n{embed.field:Economy|bal, daily, gamble, top|false}\n{embed.field:Fun|flip, roll|false}\n{embed.field:Info|server, userinfo, stats|false}\n{embed.color:#22d3ee}\n{embed.footer:Powered by BotForge}\n{embed.timestamp}"},
+];
 
 let _templatesOpen=false;
 function toggleTemplates(){
@@ -1940,7 +1950,8 @@ function toggleTemplates(){
   if(!_templatesOpen){menu.classList.add("hidden");return}
   menu.classList.remove("hidden");
   menu.innerHTML="";
-  TEMPLATES.forEach(t=>{
+  const list = TEMPLATES.length ? TEMPLATES : TEMPLATES_DEFAULT;
+  list.forEach(t=>{
     const item=document.createElement("div");
     item.style.cssText="padding:9px 14px;cursor:pointer;font-size:12.5px;border-bottom:1px solid var(--border);transition:background .1s";
     item.textContent=t.label;
@@ -1980,6 +1991,7 @@ function refreshPanel(){
   _restorePreferences();
   await loadAPIURL();
   await checkAPI();
+  await loadMeta();   // fetch functions / var-ref / templates from Python server
   setInterval(checkAPI,10000);
   updPendingBadge();
   setInterval(()=>{const c=id("blink-cur");if(c)c.style.opacity=c.style.opacity==="0"?"1":"0"},580);
