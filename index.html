@@ -57,6 +57,24 @@ body.theme-slate{
   --accent-glo:rgba(99,102,241,.28);--cyan:#818cf8;--green:#4ade80;--red:#f87171;
   --amber:#fbbf24;--purple:#c084fc;--text:#e2e4f0;--muted:#4a4d5e;--muted2:#7c7f96
 }
+body.theme-pink{
+  --bg:#0f0508;--surface:#1a0d14;--surface2:#23111c;--surface3:#2d1524;
+  --border:#4a1533;--border2:#6b1d49;--accent:#ec4899;--accent-lo:rgba(236,72,153,.13);
+  --accent-glo:rgba(236,72,153,.28);--cyan:#f9a8d4;--green:#86efac;--red:#fca5a5;
+  --amber:#fcd34d;--purple:#e879f9;--text:#fce7f3;--muted:#6b3050;--muted2:#c47a9a
+}
+body.theme-sunset{
+  --bg:#0f0800;--surface:#1a1000;--surface2:#261900;--surface3:#322200;
+  --border:#4a2e00;--border2:#6b4200;--accent:#f97316;--accent-lo:rgba(249,115,22,.13);
+  --accent-glo:rgba(249,115,22,.28);--cyan:#fb923c;--green:#a3e635;--red:#f87171;
+  --amber:#fbbf24;--purple:#e879f9;--text:#fff7ed;--muted:#6b4000;--muted2:#b07030
+}
+body.theme-nord{
+  --bg:#1a1f2e;--surface:#1f2535;--surface2:#262d3f;--surface3:#2e3650;
+  --border:#3b4666;--border2:#4c5980;--accent:#81a1c1;--accent-lo:rgba(129,161,193,.13);
+  --accent-glo:rgba(129,161,193,.28);--cyan:#88c0d0;--green:#a3be8c;--red:#bf616a;
+  --amber:#ebcb8b;--purple:#b48ead;--text:#eceff4;--muted:#4c566a;--muted2:#6e7d9c
+}
 /* ── Theme swatches ── */
 .theme-swatch{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:var(--radius);font-size:12px;cursor:pointer;border:2px solid transparent;background:var(--surface2);color:var(--muted2);transition:all .15s}
 .theme-swatch::before{content:'';width:10px;height:10px;border-radius:50%;background:var(--c);flex-shrink:0}
@@ -75,6 +93,31 @@ body.layout-wide .page{padding:28px 36px;max-width:1400px;margin:0 auto}
 body.layout-wide .fn-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
 body.layout-wide .ov-grid{grid-template-columns:repeat(4,1fr)}
 body.layout-wide .dash-grid{grid-template-columns:repeat(4,1fr)}
+body.layout-sidebar-right #app{flex-direction:row-reverse}
+body.layout-sidebar-right #sidebar{border-right:none;border-left:1px solid var(--border)}
+body.layout-icon-rail{--sidebar:58px}
+body.layout-icon-rail .sidebar-sec{display:none}
+body.layout-icon-rail .sidebar-logo{padding:14px 0;justify-content:center;font-size:0;gap:0}
+body.layout-icon-rail .sidebar-logo .logo-dot{display:inline-block!important;width:14px!important;height:14px!important;margin:0!important}
+body.layout-icon-rail .sidebar-logo span:not(.logo-dot){display:none}
+body.layout-icon-rail .nav-item{justify-content:center;padding:10px 0;font-size:0;gap:0}
+body.layout-icon-rail .nav-item .ni{font-size:18px;width:auto;margin:0}
+body.layout-icon-rail .sidebar-bottom{padding:8px 0}
+body.layout-icon-rail .user-chip{justify-content:center;padding:8px 0;gap:0}
+body.layout-icon-rail .user-chip>div:not(.ua){display:none}
+body.layout-ultra-wide{--sidebar:300px}
+body.layout-ultra-wide .page{padding:28px 48px;max-width:1800px;margin:0 auto}
+body.layout-ultra-wide .fn-grid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+body.layout-ultra-wide .ov-grid{grid-template-columns:repeat(4,1fr)}
+body.layout-ultra-wide .dash-grid{grid-template-columns:repeat(5,1fr)}
+body.layout-cozy .page{padding:28px 32px}
+body.layout-cozy .stat-card{padding:20px 24px}
+body.layout-cozy .stat-val{font-size:32px}
+body.layout-cozy .cmd-row{padding:14px 18px}
+body.layout-cozy .fn-card{padding:16px 18px}
+body.layout-cozy .section-card{padding:24px 28px}
+body.layout-cozy .nav-item{padding:11px 12px;font-size:14px}
+body.layout-cozy .bot-card{padding:22px 24px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:8px 18px;border-radius:var(--radius);font-family:var(--fm);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .14s;white-space:nowrap;text-decoration:none}
 .btn:disabled{opacity:.38;cursor:not-allowed;pointer-events:none}
 .btn-primary{background:var(--accent);color:#fff}
@@ -235,7 +278,7 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
 .ov-lbl{color:var(--muted);font-size:11px;margin-top:5px}
 
 /* ── Commands panel ── */
-.cmd-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.cmd-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;z-index:10!important}
 .cmd-toolbar h3{font-family:var(--fh);font-size:17px;font-weight:700}
 .cmd-toolbar p{color:var(--muted);font-size:12px;margin-top:1px}
 .cmd-list{display:flex;flex-direction:column;gap:5px}
@@ -721,6 +764,9 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
               <option value="forest">🌿 Forest</option>
               <option value="crimson">🔴 Crimson</option>
               <option value="slate">🩶 Slate</option>
+              <option value="pink">🌸 Soft Pink</option>
+              <option value="sunset">🌅 Sunset</option>
+              <option value="nord">❄️ Nord</option>
             </select>
           </div>
           <div class="field">
@@ -729,6 +775,10 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
               <option value="default">Default</option>
               <option value="compact">Compact</option>
               <option value="wide">Wide</option>
+              <option value="sidebar-right">Sidebar Right</option>
+              <option value="icon-rail">Icon Rail</option>
+              <option value="ultra-wide">Ultra Wide</option>
+              <option value="cozy">Cozy</option>
             </select>
           </div>
         </div>
@@ -739,6 +789,9 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
           <div onclick="applyTheme('forest')"   class="theme-swatch" style="--c:#10b981"  title="Forest">Forest</div>
           <div onclick="applyTheme('crimson')"  class="theme-swatch" style="--c:#ef4444"  title="Crimson">Crimson</div>
           <div onclick="applyTheme('slate')"    class="theme-swatch" style="--c:#6366f1"  title="Slate">Slate</div>
+          <div onclick="applyTheme('pink')"     class="theme-swatch" style="--c:#ec4899"  title="Pink">Soft Pink</div>
+          <div onclick="applyTheme('sunset')"   class="theme-swatch" style="--c:#f97316"  title="Sunset">Sunset</div>
+          <div onclick="applyTheme('nord')"     class="theme-swatch" style="--c:#81a1c1"  title="Nord">Nord</div>
         </div>
       </div>
 
@@ -1649,12 +1702,13 @@ async function deleteVar(v){
     const qs=v.scope_id!=null&&v.scope_id!==undefined&&v.scope_id!==""
       ?`?scope_id=${encodeURIComponent(String(v.scope_id))}`
       :"";
-    await api(base+qs,{method:"DELETE"});
+    await api(base+qs,{method:"DELETE",body:JSON.stringify({scope_id:v.scope_id??null})});
     // Use loose equality for scope_id (handles null/undefined/'')
-    const sid=v=>String(v.scope_id??'');
+    const sid=w=>String(w.scope_id??'');
+    const delSid=String(v.scope_id??'');
     _liveVars=_liveVars.filter(x=>!(
       x.scope===v.scope&&
-      sid(x)===sid(v)&&
+      sid(x)===delSid&&
       x.name===v.name
     ));
     const dv=id("ds-vars");if(dv)dv.textContent=_liveVars.length;
@@ -1834,7 +1888,7 @@ function ls_get(k){return localStorage.getItem(k)}
 function ls_set(k,v){localStorage.setItem(k,v)}
 
 function applyTheme(t){
-  const themes=["dark","midnight","ocean","forest","crimson","slate"];
+  const themes=["dark","midnight","ocean","forest","crimson","slate","pink","sunset","nord"];
   themes.forEach(n=>document.body.classList.remove("theme-"+n));
   if(t!=="dark") document.body.classList.add("theme-"+t);
   ls_set("bf_theme",t);
@@ -1849,7 +1903,7 @@ function _markActiveSwatch(t){
 }
 
 function applyLayout(l){
-  ["compact","wide"].forEach(n=>document.body.classList.remove("layout-"+n));
+  ["compact","wide","sidebar-right","icon-rail","ultra-wide","cozy"].forEach(n=>document.body.classList.remove("layout-"+n));
   if(l!=="default") document.body.classList.add("layout-"+l);
   ls_set("bf_layout",l);
   const sel=id("layout-select");if(sel)sel.value=l;
