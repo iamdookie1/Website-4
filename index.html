@@ -627,9 +627,9 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
     <!-- Step 3: success -->
     <div class="hosting-step" id="hosting-step3">
       <div style="text-align:center;padding:10px 0">
-        <div style="font-size:40px;margin-bottom:12px">✅</div>
-        <div style="font-family:var(--fh);font-size:17px;font-weight:700;margin-bottom:8px">Hosting confirmed!</div>
-        <p style="color:var(--muted2);font-size:13px" id="hosting-success-msg">Your bot's run time has been extended.</p>
+        <div style="font-size:40px;margin-bottom:12px">📨</div>
+        <div style="font-family:var(--fh);font-size:17px;font-weight:700;margin-bottom:8px">Request submitted!</div>
+        <p style="color:var(--muted2);font-size:13px" id="hosting-success-msg">Your hosting request has been sent for approval. You'll be notified once it's accepted.</p>
         <button class="btn btn-ghost btn-sm" style="margin-top:16px" onclick="closeModal('hosting-modal')">Close</button>
       </div>
     </div>
@@ -1271,6 +1271,7 @@ function updateStatusUI(s){
     sb.classList.add("hidden");spb.classList.remove("hidden");tn.classList.remove("hidden");
     const dsStatus=id("ds-status");if(dsStatus)dsStatus.textContent="🟢 Running";
     if(s.time_left!=null){
+      _tickLeft=s.time_left;
       const m=Math.floor(s.time_left/60),sec=s.time_left%60;
       tn.textContent=String(m).padStart(2,"0")+":"+String(sec).padStart(2,"0");
       const pct=(s.time_left/1800)*100;
@@ -1298,9 +1299,27 @@ async function stopBot(){
   catch(e){toast(e.message,"err")}
 }
 
-let _sInt=null;
-function startStatusPoll(){clearInterval(_sInt);_sInt=setInterval(loadStatus,5000);statusInt=_sInt}
-function stopPolling(){clearInterval(statusInt);stopLogPoll()}
+let _sInt=null,_tickInt=null,_tickLeft=null;
+
+function startStatusPoll(){
+  clearInterval(_sInt);
+  _sInt=setInterval(loadStatus,5000);
+  statusInt=_sInt;
+  // client-side ticker — no server hit, just counts down the display
+  clearInterval(_tickInt);
+  _tickInt=setInterval(()=>{
+    if(_tickLeft==null||_tickLeft<=0)return;
+    _tickLeft--;
+    const tn=id("timer-num");if(!tn||tn.classList.contains("hidden"))return;
+    const m=Math.floor(_tickLeft/60),s=_tickLeft%60;
+    tn.textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+    const bar=id("tbar");if(bar){
+      const pct=(_tickLeft/1800)*100;
+      bar.style.width=pct+"%";bar.className="tbar"+(pct<25?" crit":pct<50?" warn":"");
+    }
+  },1000);
+}
+function stopPolling(){clearInterval(statusInt);clearInterval(_tickInt);_tickLeft=null;stopLogPoll()}
 
 /* ── Commands ── */
 async function loadCommands(){
@@ -2219,8 +2238,8 @@ async function doHostingVerify(){
     id("hosting-step3").classList.add("active");
     id("hosting-modal-title").textContent="Confirmed!";
     const mins=parseInt(id("hosting-slider").value)||60;
-    id("hosting-success-msg").textContent=`Your bot's run time has been extended by ${mins} minute${mins===1?"":"s"}.`;
-    toast("Hosting extended!","ok");
+    id("hosting-success-msg").textContent=`Your request for ${mins} extra minute${mins===1?"":"s"} has been sent for approval.`;
+    toast("Hosting request submitted!","ok");
   }catch(e){err.textContent=e.message||"Verification failed"}
   finally{btn.disabled=false;btn.textContent="Confirm code →"}
 }
