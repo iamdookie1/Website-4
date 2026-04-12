@@ -75,6 +75,30 @@ body.theme-nord{
   --accent-glo:rgba(129,161,193,.28);--cyan:#88c0d0;--green:#a3be8c;--red:#bf616a;
   --amber:#ebcb8b;--purple:#b48ead;--text:#eceff4;--muted:#4c566a;--muted2:#6e7d9c
 }
+body.theme-dracula{
+  --bg:#0e0e1a;--surface:#14141f;--surface2:#1e1e2e;--surface3:#252535;
+  --border:#383850;--border2:#4e4e72;--accent:#bd93f9;--accent-lo:rgba(189,147,249,.13);
+  --accent-glo:rgba(189,147,249,.28);--cyan:#8be9fd;--green:#50fa7b;--red:#ff5555;
+  --amber:#f1fa8c;--purple:#ff79c6;--text:#f8f8f2;--muted:#6272a4;--muted2:#9ca3c4
+}
+body.theme-mocha{
+  --bg:#0c0906;--surface:#15100b;--surface2:#1e170f;--surface3:#271f15;
+  --border:#3d2e1e;--border2:#5a4228;--accent:#c08040;--accent-lo:rgba(192,128,64,.13);
+  --accent-glo:rgba(192,128,64,.28);--cyan:#e8b472;--green:#98c379;--red:#e06c75;
+  --amber:#d4a851;--purple:#c678dd;--text:#eddbb8;--muted:#5c4a30;--muted2:#9a7a50
+}
+body.theme-neon{
+  --bg:#010306;--surface:#040d10;--surface2:#071318;--surface3:#0a1c22;
+  --border:#0d3020;--border2:#124a30;--accent:#00ff88;--accent-lo:rgba(0,255,136,.1);
+  --accent-glo:rgba(0,255,136,.25);--cyan:#00e5ff;--green:#39ff14;--red:#ff2b5e;
+  --amber:#ffe600;--purple:#bf5fff;--text:#ccffe8;--muted:#1a4d35;--muted2:#40997a
+}
+body.theme-rose{
+  --bg:#0e080b;--surface:#170c10;--surface2:#201016;--surface3:#2a141d;
+  --border:#45202d;--border2:#622d3f;--accent:#e8927c;--accent-lo:rgba(232,146,124,.13);
+  --accent-glo:rgba(232,146,124,.28);--cyan:#f4c4b0;--green:#a8d8a8;--red:#ff8a80;
+  --amber:#ffd580;--purple:#d4a0c8;--text:#fdeee8;--muted:#6b3040;--muted2:#b07068
+}
 /* ── Theme swatches ── */
 .theme-swatch{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:var(--radius);font-size:12px;cursor:pointer;border:2px solid transparent;background:var(--surface2);color:var(--muted2);transition:all .15s}
 .theme-swatch::before{content:'';width:10px;height:10px;border-radius:50%;background:var(--c);flex-shrink:0}
@@ -359,6 +383,30 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
 .danger-card{border-color:rgba(248,113,113,.25)!important}
 .danger-card h3{color:var(--red)}
 
+/* ── Collapsible sections ── */
+.section-card h3{display:flex;align-items:center;justify-content:space-between}
+.sec-toggle{background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px;padding:2px 6px;border-radius:3px;transition:color .12s,background .12s;line-height:1;flex-shrink:0}
+.sec-toggle:hover{color:var(--text);background:var(--surface2)}
+.section-card.collapsed>*:not(h3){display:none}
+.section-card.collapsed h3{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.sec-toggle .chev{display:inline-block;transition:transform .18s}
+.section-card.collapsed .sec-toggle .chev{transform:rotate(-90deg)}
+
+/* ── Custom snippets ── */
+.snippet-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 13px;cursor:pointer;transition:all .13s;display:flex;align-items:flex-start;gap:10px}
+.snippet-card:hover{border-color:var(--accent)}
+.snip-body{flex:1;min-width:0}
+.snip-name{font-family:var(--fm);font-size:12px;color:var(--cyan);font-weight:500;margin-bottom:3px}
+.snip-code{font-family:var(--fm);font-size:11px;color:var(--muted2);white-space:pre;overflow:hidden;text-overflow:ellipsis;max-height:30px;line-height:1.5}
+.snip-acts{display:flex;gap:4px;flex-shrink:0}
+
+/* ── Hosting flow ── */
+.hosting-step{display:none}.hosting-step.active{display:block}
+.hours-slider-wrap{padding:8px 0}
+.hours-slider{width:100%;accent-color:var(--accent)}
+.hours-val{font-family:var(--fh);font-size:22px;font-weight:800;color:var(--accent);text-align:center;margin:6px 0}
+.code-input-big{text-align:center;font-size:22px;letter-spacing:6px;font-family:var(--fm);padding:12px;font-weight:700}
+
 /* ── Sync indicator ── */
 #sync-ind{position:fixed;bottom:20px;left:20px;background:var(--surface2);border:1px solid var(--amber);border-radius:var(--radius);padding:7px 13px;font-size:12px;color:var(--amber);z-index:300;display:none;align-items:center;gap:7px}
 
@@ -423,6 +471,7 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
     <div class="hero-btns">
       <button class="btn btn-primary" onclick="openAuth('register')" style="padding:10px 26px;font-size:14px;">Create free account</button>
       <button class="btn btn-ghost" onclick="openAuth('login')" style="padding:10px 20px;font-size:14px;">I have an account</button>
+      <button class="btn btn-ghost" onclick="openHostingApply()" style="padding:10px 20px;font-size:14px;border-color:var(--accent-glo);color:var(--accent)">⏱ Request hosting</button>
     </div>
     <div class="term fu2">
       <div class="term-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="term-ttl">botforge — console</span></div>
@@ -545,6 +594,49 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
   </div>
 </div>
 
+<!-- ══ HOSTING MODAL ══ -->
+<div id="hosting-modal" class="overlay hidden" onclick="if(event.target===this)closeModal('hosting-modal')">
+  <div class="mbox" onclick="event.stopPropagation()" style="max-width:420px">
+    <div class="mbox-hdr">
+      <div><div style="font-family:var(--fh);font-size:17px;font-weight:700" id="hosting-modal-title">Request Hosting</div><div style="font-size:12px;color:var(--muted);margin-top:2px">Extend your bot's run time</div></div>
+      <button class="btn btn-ghost btn-xs" onclick="closeModal('hosting-modal')">✕</button>
+    </div>
+    <!-- Step 1: pick duration -->
+    <div class="hosting-step active" id="hosting-step1">
+      <p style="color:var(--muted2);font-size:13px;margin-bottom:18px">Choose how many extra minutes to request. A verification code will be sent to confirm.</p>
+      <label class="lbl">Extra time</label>
+      <div class="hours-slider-wrap">
+        <input type="range" class="hours-slider" id="hosting-slider" min="30" max="120" step="5" value="60" oninput="updHostingVal()">
+        <div class="hours-val"><span id="hosting-min-display">60</span> min</div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:2px"><span>30 min</span><span>2 hrs</span></div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:10px" id="hosting-apply-btn" onclick="doHostingApply()">Request →</button>
+      <div id="hosting-step1-err" style="font-size:12px;margin-top:8px;color:var(--red)"></div>
+    </div>
+    <!-- Step 2: enter code -->
+    <div class="hosting-step" id="hosting-step2">
+      <div style="text-align:center;margin-bottom:16px">
+        <div style="font-size:32px;margin-bottom:8px">📬</div>
+        <p style="color:var(--muted2);font-size:13px;line-height:1.6">A verification code was sent. Enter it below to confirm your hosting request.</p>
+      </div>
+      <label class="lbl">Verification code</label>
+      <input class="input code-input-big" id="hosting-code" type="text" placeholder="000000" maxlength="8" autocomplete="one-time-code">
+      <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:12px" id="hosting-verify-btn" onclick="doHostingVerify()">Confirm code →</button>
+      <button class="btn btn-ghost btn-sm" style="width:100%;justify-content:center;margin-top:8px" onclick="hostingBack()">← Back</button>
+      <div id="hosting-step2-err" style="font-size:12px;margin-top:8px;color:var(--red)"></div>
+    </div>
+    <!-- Step 3: success -->
+    <div class="hosting-step" id="hosting-step3">
+      <div style="text-align:center;padding:10px 0">
+        <div style="font-size:40px;margin-bottom:12px">✅</div>
+        <div style="font-family:var(--fh);font-size:17px;font-weight:700;margin-bottom:8px">Hosting confirmed!</div>
+        <p style="color:var(--muted2);font-size:13px" id="hosting-success-msg">Your bot's run time has been extended.</p>
+        <button class="btn btn-ghost btn-sm" style="margin-top:16px" onclick="closeModal('hosting-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ══ APP SHELL ══ -->
 <div id="app" class="hidden">
   <aside id="sidebar">
@@ -610,6 +702,7 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
             <div style="display:flex;gap:8px;flex-wrap:wrap">
               <button class="btn btn-success btn-sm" id="start-btn" onclick="startBot()">▶ Start Bot</button>
               <button class="btn btn-danger btn-sm hidden" id="stop-btn" onclick="stopBot()">■ Stop Bot</button>
+              <button class="btn btn-ghost btn-sm" onclick="openHostingApply()" title="Request extra hosting time">⏱ Extend</button>
             </div>
           </div>
           <div class="tbar-wrap"><div class="tbar" id="tbar" style="width:100%"></div></div>
@@ -680,6 +773,30 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
           </div>
           <div class="fn-search-wrap"><span class="si">🔍</span><input class="input" id="fn-search" placeholder="Search functions…" oninput="renderFns()"></div>
           <div id="fn-grid"></div>
+
+          <!-- Custom snippets -->
+          <div style="margin-top:28px;border-top:1px solid var(--border);padding-top:20px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+              <div>
+                <div style="font-family:var(--fh);font-size:15px;font-weight:700">My Snippets</div>
+                <div style="color:var(--muted);font-size:12px;margin-top:2px">Save reusable code fragments. Click any to insert into the editor.</div>
+              </div>
+              <button class="btn btn-ghost btn-sm" onclick="openSnippetEditor(null)">+ New snippet</button>
+            </div>
+            <div id="snippets-list"></div>
+          </div>
+
+          <!-- Snippet editor (inline) -->
+          <div id="snippet-editor" class="cmd-editor hidden" style="margin-top:10px">
+            <h4 id="snip-editor-title" style="font-family:var(--fh);font-size:15px;font-weight:700;margin-bottom:14px">New Snippet</h4>
+            <div class="field"><label class="lbl">Snippet name</label><input class="input" id="snip-name" placeholder="e.g. embed-template"></div>
+            <div class="field"><label class="lbl">Code</label><textarea class="textarea" id="snip-code" rows="5" placeholder="{embed.title:Title}\n{embed.desc:Description}\n{embed.color:#3b82f6}"></textarea></div>
+            <div style="display:flex;gap:7px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" onclick="saveSnippet()">Save snippet</button>
+              <button class="btn btn-ghost btn-sm" onclick="closeSnippetEditor()">Cancel</button>
+              <button class="btn btn-danger btn-sm hidden" id="del-snip-btn" onclick="deleteSnippet()">Delete</button>
+            </div>
+          </div>
         </div>
 
         <!-- Variables -->
@@ -753,7 +870,7 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
       <h2 style="font-size:21px;font-weight:800;letter-spacing:-.5px;margin-bottom:20px">Settings</h2>
 
       <div class="section-card">
-        <h3>Appearance</h3>
+        <h3>Appearance <button class="sec-toggle" onclick="toggleSection(this)" title="Collapse"><span class="chev">▾</span></button></h3>
         <div class="sg">
           <div class="field">
             <label class="lbl">Theme</label>
@@ -767,6 +884,10 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
               <option value="pink">🌸 Soft Pink</option>
               <option value="sunset">🌅 Sunset</option>
               <option value="nord">❄️ Nord</option>
+              <option value="dracula">🧛 Dracula</option>
+              <option value="mocha">☕ Mocha</option>
+              <option value="neon">⚡ Neon</option>
+              <option value="rose">🌹 Rose Gold</option>
             </select>
           </div>
           <div class="field">
@@ -792,11 +913,15 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
           <div onclick="applyTheme('pink')"     class="theme-swatch" style="--c:#ec4899"  title="Pink">Soft Pink</div>
           <div onclick="applyTheme('sunset')"   class="theme-swatch" style="--c:#f97316"  title="Sunset">Sunset</div>
           <div onclick="applyTheme('nord')"     class="theme-swatch" style="--c:#81a1c1"  title="Nord">Nord</div>
+          <div onclick="applyTheme('dracula')"  class="theme-swatch" style="--c:#bd93f9"  title="Dracula">Dracula</div>
+          <div onclick="applyTheme('mocha')"    class="theme-swatch" style="--c:#c08040"  title="Mocha">Mocha</div>
+          <div onclick="applyTheme('neon')"     class="theme-swatch" style="--c:#00ff88"  title="Neon">Neon</div>
+          <div onclick="applyTheme('rose')"     class="theme-swatch" style="--c:#e8927c"  title="Rose">Rose Gold</div>
         </div>
       </div>
 
       <div class="section-card">
-        <h3>Account</h3>
+        <h3>Account <button class="sec-toggle" onclick="toggleSection(this)" title="Collapse"><span class="chev">▾</span></button></h3>
         <div class="sg">
           <div class="field"><label class="lbl">Username</label><div style="display:flex;gap:7px"><input class="input" id="acc-name" placeholder="username"><button class="btn btn-ghost btn-sm" style="flex-shrink:0" onclick="changeUsername()">Save</button></div></div>
           <div class="field"><label class="lbl">Email</label><input class="input" id="acc-email" disabled style="opacity:.45"></div>
@@ -812,7 +937,7 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
       </div>
 
       <div class="section-card" id="settings-bot-card">
-        <h3>Bot</h3>
+        <h3>Bot <button class="sec-toggle" onclick="toggleSection(this)" title="Collapse"><span class="chev">▾</span></button></h3>
         <div class="sg">
           <div class="field"><label class="lbl">Bot name</label><input class="input" id="sb-name" placeholder="My Cool Bot"></div>
           <div class="field"><label class="lbl">Prefix</label><input class="input" id="sb-prefix" placeholder="!" maxlength="5"></div>
@@ -823,7 +948,7 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
       </div>
 
       <div class="section-card danger-card">
-        <h3>Danger zone</h3>
+        <h3>Danger zone <button class="sec-toggle" onclick="toggleSection(this)" title="Collapse"><span class="chev">▾</span></button></h3>
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
           <div><div style="font-size:13px;font-weight:500">Delete account</div><div style="color:var(--muted);font-size:12px">Permanently removes your account and bot.</div></div>
           <button class="btn btn-danger btn-sm" onclick="toast('Contact the administrator to delete your account.','info')">Delete account</button>
@@ -994,7 +1119,7 @@ function switchWsTab(tab){
   document.querySelectorAll(".ws-panel").forEach(el=>el.classList.toggle("active",el.id==="panel-"+tab));
   if(tab==="logs"){loadLogs();startLogPoll()}else stopLogPoll();
   if(tab==="overview")loadStatus();
-  if(tab==="functions")renderFns();
+  if(tab==="functions"){renderFns();renderSnippets()}
   if(tab==="variables"){renderVarRef();loadLiveVars()}
 }
 
@@ -1893,7 +2018,7 @@ function ls_get(k){return localStorage.getItem(k)}
 function ls_set(k,v){localStorage.setItem(k,v)}
 
 function applyTheme(t){
-  const themes=["dark","midnight","ocean","forest","crimson","slate","pink","sunset","nord"];
+  const themes=["dark","midnight","ocean","forest","crimson","slate","pink","sunset","nord","dracula","mocha","neon","rose"];
   themes.forEach(n=>document.body.classList.remove("theme-"+n));
   if(t!=="dark") document.body.classList.add("theme-"+t);
   ls_set("bf_theme",t);
@@ -2036,6 +2161,146 @@ function applyTemplate(t){
 }
 
 
+/* ── Collapsible sections ── */
+function toggleSection(btn){
+  const card=btn.closest(".section-card");
+  card.classList.toggle("collapsed");
+}
+
+/* ── Hosting apply / verify ── */
+let _hostingExtraHours=1;
+
+function openHostingApply(){
+  // reset to step 1
+  ["hosting-step1","hosting-step2","hosting-step3"].forEach((id_,i)=>{
+    const el=id(id_);if(el)el.classList.toggle("active",i===0);
+  });
+  id("hosting-step1-err").textContent="";
+  id("hosting-modal-title").textContent="Request Hosting";
+  openModal("hosting-modal");
+}
+
+function updHostingVal(){
+  const mins=parseInt(id("hosting-slider").value)||60;
+  id("hosting-min-display").textContent=mins;
+  _hostingExtraHours=+(mins/60).toFixed(4);
+}
+
+async function doHostingApply(){
+  const btn=id("hosting-apply-btn"),err=id("hosting-step1-err");
+  err.textContent="";btn.disabled=true;btn.textContent="Sending…";
+  updHostingVal();
+  try{
+    await api("/hosting/apply",{method:"POST",body:JSON.stringify({extra_hours:_hostingExtraHours})});
+    // go to step 2
+    id("hosting-step1").classList.remove("active");
+    id("hosting-step2").classList.add("active");
+    id("hosting-code").value="";
+    id("hosting-step2-err").textContent="";
+    id("hosting-modal-title").textContent="Enter Code";
+    setTimeout(()=>{const c=id("hosting-code");if(c)c.focus()},100);
+  }catch(e){err.textContent=e.message||"Request failed"}
+  finally{btn.disabled=false;btn.textContent="Request →"}
+}
+
+function hostingBack(){
+  id("hosting-step2").classList.remove("active");
+  id("hosting-step1").classList.add("active");
+  id("hosting-modal-title").textContent="Request Hosting";
+}
+
+async function doHostingVerify(){
+  const btn=id("hosting-verify-btn"),err=id("hosting-step2-err");
+  const code=id("hosting-code").value.trim();
+  if(!code){err.textContent="Enter the code first";return}
+  err.textContent="";btn.disabled=true;btn.textContent="Verifying…";
+  try{
+    await api("/hosting/verify",{method:"POST",body:JSON.stringify({code})});
+    id("hosting-step2").classList.remove("active");
+    id("hosting-step3").classList.add("active");
+    id("hosting-modal-title").textContent="Confirmed!";
+    const mins=parseInt(id("hosting-slider").value)||60;
+    id("hosting-success-msg").textContent=`Your bot's run time has been extended by ${mins} minute${mins===1?"":"s"}.`;
+    toast("Hosting extended!","ok");
+  }catch(e){err.textContent=e.message||"Verification failed"}
+  finally{btn.disabled=false;btn.textContent="Confirm code →"}
+}
+
+/* ── Custom snippets ── */
+const LS_SNIPS="bf_snips";
+let _editingSnipId=null;
+
+function getSnips(){try{return JSON.parse(ls(LS_SNIPS)||"[]")}catch{return[]}}
+function setSnips(s){lss(LS_SNIPS,JSON.stringify(s))}
+
+function renderSnippets(){
+  const el=id("snippets-list");if(!el)return;
+  const snips=getSnips();
+  if(!snips.length){
+    el.innerHTML=`<div style="color:var(--muted);font-size:12.5px;padding:12px 0">No snippets yet — save code fragments to reuse across commands.</div>`;
+    return;
+  }
+  el.innerHTML="";
+  snips.forEach(s=>{
+    const card=document.createElement("div");card.className="snippet-card";
+    card.innerHTML=`<div class="snip-body"><div class="snip-name">${esc(s.name)}</div><div class="snip-code">${esc(s.code)}</div></div><div class="snip-acts"><button class="btn btn-ghost btn-xs" data-act="edit" data-id="${esc(s.id)}" title="Edit">✎</button><button class="btn btn-ghost btn-xs" data-act="insert" data-id="${esc(s.id)}" title="Insert into editor" style="color:var(--cyan)">↗</button></div>`;
+    card.querySelector("[data-act='insert']").onclick=e=>{e.stopPropagation();insertSnippet(s.id)};
+    card.querySelector("[data-act='edit']").onclick=e=>{e.stopPropagation();openSnippetEditor(s.id)};
+    card.ondblclick=()=>insertSnippet(s.id);
+    el.appendChild(card);
+  });
+}
+
+function insertSnippet(sid){
+  const s=getSnips().find(x=>x.id===sid);if(!s)return;
+  const ta=id("e-response");if(!ta){toast("Open the command editor first","info");return}
+  const pos=ta.selectionStart;
+  ta.value=ta.value.slice(0,pos)+s.code+ta.value.slice(ta.selectionEnd);
+  ta.selectionStart=ta.selectionEnd=pos+s.code.length;
+  ta.focus();updCharCount();
+  toast("Snippet inserted","ok");
+}
+
+function openSnippetEditor(sid){
+  _editingSnipId=sid;
+  const del=id("del-snip-btn"),title=id("snip-editor-title");
+  if(sid){
+    const s=getSnips().find(x=>x.id===sid);if(!s)return;
+    id("snip-name").value=s.name;id("snip-code").value=s.code;
+    title.textContent="Edit Snippet";del.classList.remove("hidden");
+  }else{
+    id("snip-name").value="";id("snip-code").value="";
+    title.textContent="New Snippet";del.classList.add("hidden");
+  }
+  id("snippet-editor").classList.remove("hidden");
+  id("snip-name").focus();
+}
+
+function closeSnippetEditor(){
+  id("snippet-editor").classList.add("hidden");_editingSnipId=null;
+}
+
+function saveSnippet(){
+  const name=id("snip-name").value.trim(),code=id("snip-code").value;
+  if(!name){toast("Name is required","err");return}
+  if(!code){toast("Code is required","err");return}
+  const snips=getSnips();
+  if(_editingSnipId){
+    const i=snips.findIndex(x=>x.id===_editingSnipId);
+    if(i!==-1){snips[i].name=name;snips[i].code=code}
+  }else{
+    snips.push({id:"snip_"+Date.now(),name,code});
+  }
+  setSnips(snips);renderSnippets();closeSnippetEditor();toast("Snippet saved","ok");
+}
+
+function deleteSnippet(){
+  if(!_editingSnipId)return;
+  if(!confirm("Delete this snippet?"))return;
+  setSnips(getSnips().filter(x=>x.id!==_editingSnipId));
+  renderSnippets();closeSnippetEditor();toast("Snippet deleted","info");
+}
+
 function refreshPanel(){
   if(curPage==="dashboard")loadBots();
   else if(curPage==="workspace"){
@@ -2068,7 +2333,7 @@ function refreshPanel(){
 
   document.addEventListener("keydown",e=>{
     if(e.key==="Escape"){
-      ["auth-modal","addbot-modal","token-modal","fn-modal"].forEach(m=>{
+      ["auth-modal","addbot-modal","token-modal","fn-modal","hosting-modal","createvar-modal"].forEach(m=>{
         const el=id(m);if(el&&!el.classList.contains("hidden"))closeModal(m);
       });
     }
