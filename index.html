@@ -1616,7 +1616,7 @@ const VAR_REF={
   ],
 };
 
-let _varRefFilter="user",_liveVarFilter="all",_liveVars=[];
+let _varRefFilter="user",_liveVarFilter="all",_liveVars=[],_deletedVarKeys=new Set();
 
 function setVarRefFilter(f){
   _varRefFilter=f;renderVarRef();
@@ -1641,7 +1641,8 @@ async function loadLiveVars(){
     el.innerHTML=`<div style="color:var(--muted);font-size:13px;padding:12px 0">Connect to the server to manage live variables.</div>`;return;
   }
   try{
-    _liveVars=await api("/bots/"+currentBot.id+"/vars");
+    const fetched=await api("/bots/"+currentBot.id+"/vars");
+    _liveVars=fetched.filter(x=>!_deletedVarKeys.has(x.scope+"\0"+(x.scope_id??"")+"\0"+x.name));
     const dv=id("ds-vars");if(dv)dv.textContent=_liveVars.length;
     renderLiveVars();
   }catch(e){
@@ -1706,7 +1707,8 @@ async function deleteVar(v){
       ?`?scope_id=${encodeURIComponent(String(v.scope_id))}`
       :"";
     await api(base+qs,{method:"DELETE",body:JSON.stringify({scope_id:v.scope_id??null})});
-    // Use loose equality for scope_id (handles null/undefined/'')
+    const delKey=v.scope+"\0"+(v.scope_id??"")+"\0"+v.name;
+    _deletedVarKeys.add(delKey);
     const sid=w=>String(w.scope_id??'');
     const delSid=String(v.scope_id??'');
     _liveVars=_liveVars.filter(x=>!(
