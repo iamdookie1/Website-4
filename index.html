@@ -224,32 +224,76 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
 .topbar-title{font-family:var(--fh);font-size:16px;font-weight:700}
 .page{flex:1;padding:20px}
 
-/* ── Landing ── */
-#landing{min-height:100vh;display:flex;flex-direction:column}
-.land-nav{display:flex;align-items:center;justify-content:space-between;padding:16px 32px;border-bottom:1px solid var(--border);background:var(--surface)}
+/* ── Landing v2 (split) ── */
+#landing{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;height:100vh}
 .land-logo{font-family:var(--fh);font-size:21px;font-weight:800;display:flex;align-items:center;gap:8px}
 .land-logo span{color:var(--accent)}
-.hero{display:flex;flex-direction:column;align-items:center;text-align:center;padding:80px 20px 70px;flex:1}
-.hero-pill{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);background:var(--accent-lo);border:1px solid var(--accent-glo);padding:4px 14px;border-radius:20px;margin-bottom:28px}
-.hero h1{font-size:clamp(34px,6vw,64px);font-weight:800;line-height:1.08;letter-spacing:-2px;margin-bottom:18px;max-width:800px}
-.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{font-size:15px;color:var(--muted2);max-width:500px;margin-bottom:36px;line-height:1.75}
-.hero-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-.term{margin-top:60px;width:100%;max-width:660px;background:#030508;border:1px solid var(--border2);border-radius:8px;overflow:hidden;text-align:left;box-shadow:0 20px 60px rgba(0,0,0,.5)}
-.term-bar{background:var(--surface2);padding:10px 14px;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--border)}
-.dot{width:11px;height:11px;border-radius:50%}
-.dot-r{background:#ff5f56}.dot-y{background:#ffbd2e}.dot-g{background:#27c93f}
-.term-ttl{color:var(--muted);font-size:11px;margin-left:8px}
-.term-body{padding:16px 20px;font-size:12.5px;line-height:2.1}
-.tc{color:var(--accent)}.tk{color:var(--cyan)}.to{color:var(--muted2)}.tg{color:var(--green)}
-.feats{padding:70px 32px;background:var(--surface);border-top:1px solid var(--border)}
-.feats h2{text-align:center;font-size:clamp(26px,4vw,40px);font-weight:800;letter-spacing:-1.5px;margin-bottom:52px}
-.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;max-width:1080px;margin:0 auto}
-.feat-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:22px;transition:border-color .2s,transform .2s}
-.feat-card:hover{border-color:var(--border2);transform:translateY(-2px)}
-.feat-card h3{font-family:var(--fh);font-size:15px;font-weight:700;margin:12px 0 7px}
-.feat-card p{color:var(--muted);font-size:12.5px;line-height:1.65}
-.land-foot{padding:22px 32px;border-top:1px solid var(--border);color:var(--muted);font-size:12px;text-align:center}
+.land-console{background:#020306;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;position:relative}
+.land-console::after{content:'';position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(to bottom,transparent,#020306);pointer-events:none;z-index:2}
+.lc-topbar{display:flex;align-items:center;gap:7px;padding:13px 18px;border-bottom:1px solid var(--border);flex-shrink:0;background:#030409}
+.lc-wdot{width:11px;height:11px;border-radius:50%}
+.lc-wdot:nth-child(1){background:#ff5f56}.lc-wdot:nth-child(2){background:#ffbd2e}.lc-wdot:nth-child(3){background:#27c93f}
+.lc-wdots{display:flex;gap:5px}
+.lc-title{color:var(--muted);font-size:11px;margin-left:7px}
+.lc-body{flex:1;padding:16px 20px 0;font-family:var(--fm);font-size:12px;line-height:1.9;overflow:hidden;display:flex;flex-direction:column;gap:0;position:relative;z-index:1}
+.lc-line{display:flex;gap:10px;animation:lc-in .22s ease both;flex-shrink:0}
+@keyframes lc-in{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+.lc-ts{color:#2d3d52;flex-shrink:0;font-size:11px}
+.lc-ok{color:var(--green)}.lc-cmd{color:var(--cyan)}.lc-warn{color:var(--amber)}.lc-err{color:var(--red)}.lc-dim{color:#445566}.lc-acc{color:var(--accent)}
+.lc-footer{display:flex;align-items:center;gap:7px;padding:10px 20px 16px;font-family:var(--fm);font-size:12px;color:var(--accent);position:relative;z-index:3;flex-shrink:0}
+.lc-cur{width:7px;height:13px;background:var(--accent);animation:lc-blink .85s step-end infinite;align-self:center}
+@keyframes lc-blink{0%,100%{opacity:1}50%{opacity:0}}
+.land-auth{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 56px;background:var(--bg)}
+.la-logo{font-family:var(--fh);font-size:30px;font-weight:800;letter-spacing:-.5px;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.la-logo .la-dot{width:11px;height:11px;border-radius:50%;background:var(--accent);box-shadow:0 0 14px var(--accent);flex-shrink:0}
+.la-logo span{color:var(--accent)}
+.la-tag{color:var(--muted);font-size:13px;margin-bottom:48px;text-align:center;line-height:1.75;max-width:240px}
+.la-btns{display:flex;flex-direction:column;gap:10px;width:100%;max-width:260px}
+.la-btn{padding:13px 20px;font-size:14px;font-weight:600;justify-content:center;border-radius:6px}
+.la-sep{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:11px;margin:2px 0}
+.la-sep::before,.la-sep::after{content:'';flex:1;height:1px;background:var(--border)}
+.la-feats{display:flex;flex-direction:column;gap:9px;margin-top:44px;width:100%;max-width:260px;border-top:1px solid var(--border);padding-top:24px}
+.la-feat{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}
+.la-feat-ic{color:var(--accent);width:16px;text-align:center;flex-shrink:0}
+
+/* ── Dashboard v2 ── */
+.dv2-bot{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 20px;display:flex;align-items:center;gap:16px;margin-bottom:14px;cursor:pointer;transition:border-color .15s}
+.dv2-bot:hover{border-color:var(--border2)}
+.dv2-av{width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.dv2-info{flex:1;min-width:0}
+.dv2-name{font-family:var(--fh);font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:5px}
+.dv2-meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.dv2-acts{display:flex;gap:8px;flex-shrink:0}
+.dv2-cols{display:grid;grid-template-columns:1fr 280px;gap:14px;align-items:start}
+.dv2-cmds-panel{background:var(--surface);border:1px solid var(--border);border-radius:8px;display:flex;flex-direction:column;overflow:hidden}
+.dv2-head{padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0}
+.dv2-head-title{font-family:var(--fh);font-size:13px;font-weight:700;flex-shrink:0}
+.dv2-search{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:var(--fm);font-size:12px;padding:5px 10px;outline:none;transition:border-color .14s;min-width:0}
+.dv2-search:focus{border-color:var(--accent)}
+.dv2-clist{overflow-y:auto;max-height:380px}
+.dv2-crow{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
+.dv2-crow:last-child{border-bottom:none}
+.dv2-crow:hover{background:var(--surface2)}
+.dv2-crow.off{opacity:.38}
+.dv2-ctrig{font-family:var(--fm);font-size:12px;color:var(--cyan);font-weight:500;min-width:100px;flex-shrink:0}
+.dv2-cdesc{font-size:11.5px;color:var(--muted);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dv2-cfoot{padding:9px 14px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.dv2-side{display:flex;flex-direction:column;gap:12px}
+.dv2-stats{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.dv2-srow{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid var(--border)}
+.dv2-srow:last-child{border-bottom:none}
+.dv2-slbl{font-size:12px;color:var(--muted)}
+.dv2-sval{font-family:var(--fh);font-size:17px;font-weight:800}
+.dv2-quick{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px 6px}
+.dv2-qbtn{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:5px;cursor:pointer;transition:background .1s;font-size:12.5px;color:var(--muted2);user-select:none}
+.dv2-qbtn:hover{background:var(--surface2);color:var(--text)}
+.dv2-qic{width:18px;text-align:center;font-size:14px;flex-shrink:0}
+@media(max-width:900px){.dv2-cols{grid-template-columns:1fr}}
+@media(max-width:768px){
+  #landing{grid-template-columns:1fr;height:auto;min-height:100vh}
+  .land-console{display:none}
+  .land-auth{padding:60px 28px}
+}
 
 /* ── Auth modal tabs ── */
 .auth-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:22px}
@@ -457,43 +501,29 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
 
 <!-- ══ LANDING ══ -->
 <div id="landing">
-  <nav class="land-nav">
-    <div class="land-logo"><span class="logo-dot" style="display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--accent);margin-right:2px;flex-shrink:0"></span>bot<span>forge</span></div>
-    <div style="display:flex;gap:8px">
-      <button class="btn btn-ghost btn-sm" onclick="openAuth('login')">Log in</button>
-      <button class="btn btn-primary btn-sm" onclick="openAuth('register')">Get started →</button>
+  <div class="land-console">
+    <div class="lc-topbar">
+      <div class="lc-wdots"><div class="lc-wdot"></div><div class="lc-wdot"></div><div class="lc-wdot"></div></div>
+      <span class="lc-title">botforge — runtime</span>
     </div>
-  </nav>
-  <section class="hero fu">
-    <div class="hero-pill">⚡ Discord bot builder</div>
-    <h1>Build bots.<br>No code required.<br><em>Just your ideas.</em></h1>
-    <p>Create Discord bots with a visual dashboard. Supports Simple, CScript, and CScript+ — add commands, set responses, run your bot from the browser.</p>
-    <div class="hero-btns">
-      <button class="btn btn-primary" onclick="openAuth('register')" style="padding:10px 26px;font-size:14px;">Create free account</button>
-      <button class="btn btn-ghost" onclick="openAuth('login')" style="padding:10px 20px;font-size:14px;">I have an account</button>
+    <div class="lc-body" id="lc-body"></div>
+    <div class="lc-footer"><span>›</span><div class="lc-cur"></div></div>
+  </div>
+  <div class="land-auth">
+    <div class="la-logo"><div class="la-dot"></div>bot<span>forge</span></div>
+    <div class="la-tag">Build Discord bots without writing a single line of code.</div>
+    <div class="la-btns">
+      <button class="btn btn-primary la-btn" onclick="openAuth('register')">Create free account</button>
+      <div class="la-sep">or</div>
+      <button class="btn btn-ghost la-btn" onclick="openAuth('login')">Log in</button>
     </div>
-    <div class="term fu2">
-      <div class="term-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="term-ttl">botforge — console</span></div>
-      <div class="term-body">
-        <div><span class="tc">›</span> <span class="tk">Starting MyBot#1337...</span></div>
-        <div><span class="to">[08:12:01]</span> <span class="tg">[OK]  Connected as MyBot#1337</span></div>
-        <div><span class="to">[08:12:05]</span> [CMD] user123: !help</div>
-        <div><span class="to">[08:12:11]</span> [CMD] user456: !random</div>
-        <div><span class="to">[08:15:33]</span> <span style="color:var(--amber)">[!!]  Auto-stop in 25 min</span></div>
-        <div><span class="tc">›</span> <span class="tk" id="blink-cur">_</span></div>
-      </div>
+    <div class="la-feats">
+      <div class="la-feat"><span class="la-feat-ic">⚡</span>CScript &amp; CScript+ scripting engines</div>
+      <div class="la-feat"><span class="la-feat-ic">🔄</span>Hot reload — edits apply while bot runs</div>
+      <div class="la-feat"><span class="la-feat-ic">💾</span>Offline sync with conflict detection</div>
+      <div class="la-feat"><span class="la-feat-ic">📦</span>Persistent variables per user, server, global</div>
     </div>
-  </section>
-  <section class="feats">
-    <h2>Everything you need</h2>
-    <div class="feat-grid">
-      <div class="feat-card fu"><div style="font-size:24px">⚡</div><h3>CScript & CScript+</h3><p>Two custom scripting engines built from scratch. CScript is easy to pick up. CScript+ adds loops, switch, repeat, ternary, clamp, and more advanced control flow.</p></div>
-      <div class="feat-card fu fu1"><div style="font-size:24px">🔄</div><h3>Hot reload</h3><p>Edit commands while your bot is live. Changes apply instantly with no restart needed.</p></div>
-      <div class="feat-card fu fu2"><div style="font-size:24px">💾</div><h3>Offline sync</h3><p>Edit even when the server is down. Changes queue locally and sync with smart conflict detection.</p></div>
-      <div class="feat-card fu fu3"><div style="font-size:24px">⏱</div><h3>Auto-stop</h3><p>Bots stop automatically after 30 minutes. A live countdown keeps you informed.</p></div>
-    </div>
-  </section>
-  <footer class="land-foot">© 2025 BotForge. All rights reserved.</footer>
+  </div>
 </div>
 
 <!-- ══ AUTH MODAL ══ -->
@@ -667,16 +697,48 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
 
     <!-- Dashboard -->
     <div id="page-dashboard" class="page">
-      <div class="pg-hdr">
+      <div class="pg-hdr" style="margin-bottom:14px">
         <h2>Dashboard</h2>
-        <button class="btn btn-primary btn-sm" id="add-bot-btn" onclick="openAddBot()">+ Add Bot</button>
+        <button class="btn btn-ghost btn-sm" id="add-bot-btn" onclick="openAddBot()">+ Add Bot</button>
       </div>
-      <div class="dash-grid" id="dash-stats">
-        <div class="stat-card"><div class="stat-val" id="ds-cmds">—</div><div class="stat-lbl">Commands</div></div>
-        <div class="stat-card"><div class="stat-val" id="ds-status" style="font-size:14px;padding-top:6px">Offline</div><div class="stat-lbl">Bot status</div></div>
-        <div class="stat-card"><div class="stat-val" id="ds-prefix">—</div><div class="stat-lbl">Prefix</div></div>
-        <div class="stat-card"><div class="stat-val" id="ds-vars">—</div><div class="stat-lbl">Stored vars</div></div>
+      <!-- hidden compat spans for JS that reads these IDs -->
+      <span id="ds-cmds" style="display:none">—</span>
+      <span id="ds-status" style="display:none">Offline</span>
+      <span id="ds-prefix" style="display:none">—</span>
+      <span id="ds-vars" style="display:none">—</span>
+      <!-- bot card -->
+      <div id="dv2-bot-wrap"></div>
+      <!-- two-column layout, hidden until bot loads -->
+      <div class="dv2-cols" id="dv2-cols" style="display:none">
+        <div class="dv2-cmds-panel">
+          <div class="dv2-head">
+            <span class="dv2-head-title">Commands</span>
+            <input class="dv2-search" id="dash-cmd-search" placeholder="Search…" oninput="filterDashCmds()">
+            <button class="btn btn-primary btn-xs" onclick="goto('workspace');setTimeout(()=>{switchWsTab('commands');openCmdEditor(null)},150)">+ New</button>
+          </div>
+          <div class="dv2-clist" id="dash-cmd-list"></div>
+          <div class="dv2-cfoot">
+            <span style="font-size:11.5px;color:var(--muted)" id="dash-cmd-count">—</span>
+            <button class="btn btn-ghost btn-xs" onclick="goto('workspace');setTimeout(()=>switchWsTab('commands'),150)">All commands →</button>
+          </div>
+        </div>
+        <div class="dv2-side">
+          <div class="dv2-stats">
+            <div class="dv2-srow"><span class="dv2-slbl">Status</span><span class="dv2-sval" id="dv2-status">—</span></div>
+            <div class="dv2-srow"><span class="dv2-slbl">Prefix</span><span class="dv2-sval" id="dv2-prefix">—</span></div>
+            <div class="dv2-srow"><span class="dv2-slbl">Commands</span><span class="dv2-sval" id="dv2-cmds">—</span></div>
+            <div class="dv2-srow"><span class="dv2-slbl">Variables</span><span class="dv2-sval" id="dv2-vars">—</span></div>
+          </div>
+          <div class="dv2-quick">
+            <div class="dv2-qbtn" onclick="goto('workspace');setTimeout(()=>switchWsTab('overview'),150)"><span class="dv2-qic">▶</span>Start / stop bot</div>
+            <div class="dv2-qbtn" onclick="goto('workspace');setTimeout(()=>switchWsTab('variables'),150)"><span class="dv2-qic">📦</span>Manage variables</div>
+            <div class="dv2-qbtn" onclick="goto('workspace');setTimeout(()=>switchWsTab('logs'),150)"><span class="dv2-qic">📋</span>View logs</div>
+            <div class="dv2-qbtn" onclick="goto('workspace');setTimeout(()=>switchWsTab('botsettings'),150)"><span class="dv2-qic">⚙</span>Bot settings</div>
+            <div class="dv2-qbtn" onclick="openHostingApply()"><span class="dv2-qic">⏱</span>Request hosting</div>
+          </div>
+        </div>
       </div>
+      <!-- empty/offline state -->
       <div id="bot-list"></div>
     </div>
 
@@ -1169,9 +1231,11 @@ function logout(){
   lsr(LS_TOKEN);lsr(LS_USER);lsr(LS_BOT);
   stopPolling();
   id("app").classList.add("hidden");id("landing").classList.remove("hidden");
+  startConsoleAnim();
 }
 
 function enterApp(){
+  stopConsoleAnim();
   id("landing").classList.add("hidden");id("app").classList.remove("hidden");
   id("u-name").textContent=currentUser.username;
   id("u-av").textContent=currentUser.username[0].toUpperCase();
@@ -1197,20 +1261,16 @@ async function loadBots(){
     }
     const bot=bots[0];currentBot=bot;lss(LS_BOT,JSON.stringify(bot));
     id("ws-navitem").style.opacity="1";
-    id("add-bot-btn").classList.add("hidden");
     id("ds-prefix").textContent=bot.prefix||"!";
     id("ds-status").textContent=bot.is_running?"🟢 Running":"⚫ Offline";
+    renderDashBot(bot);
     loadCmdCountForDash();
-
-    const card=document.createElement("div");card.className="bot-card fu";card.onclick=()=>goto("workspace");
-    card.innerHTML=`<div class="bot-av">🤖</div><div class="bot-info"><div class="bot-name">${esc(bot.name)}</div><div class="bot-meta"><span>prefix: <strong>${esc(bot.prefix)}</strong></span><span>${bot.is_running?'<span class="badge b-green">● Running</span>':'<span class="badge b-muted">○ Offline</span>'}</span><span style="color:var(--muted)">${esc(bot.token_preview)}</span></div></div><div class="bot-actions" onclick="event.stopPropagation()"><button class="btn btn-ghost btn-sm" onclick="goto('workspace')">Manage →</button></div>`;
-    el.appendChild(card);
   }catch(e){
     if(currentBot){
       const bot=currentBot;
-      id("ws-navitem").style.opacity="1";id("add-bot-btn").classList.add("hidden");
+      id("ws-navitem").style.opacity="1";
       id("ds-prefix").textContent=bot.prefix||"!";id("ds-status").textContent="Cached";
-      el.innerHTML=`<div class="bot-card fu" onclick="goto('workspace')"><div class="bot-av">🤖</div><div class="bot-info"><div class="bot-name">${esc(bot.name)}</div><div class="bot-meta"><span>cached</span></div></div></div>`;
+      renderDashBot(bot);
     }else{
       el.innerHTML=`<div style="color:var(--muted);font-size:13px;padding:16px 0">${esc(e.message)}</div>`;
     }
@@ -1224,10 +1284,16 @@ async function loadCmdCountForDash(){
       api("/bots/"+currentBot.id+"/vars")
     ]);
     id("ds-cmds").textContent=cmds.length;
-    id("ds-vars").textContent=vars_.length;
+    const dv=id("ds-vars");if(dv)dv.textContent=vars_.length;
+    const dc=id("dv2-cmds"),dvar=id("dv2-vars");
+    if(dc)dc.textContent=cmds.length;if(dvar)dvar.textContent=vars_.length;
+    renderDashCmds(cmds);
   }catch{
-    id("ds-cmds").textContent=getCmds().length;
+    const fc=getCmds();
+    id("ds-cmds").textContent=fc.length;
+    const dc=id("dv2-cmds");if(dc)dc.textContent=fc.length;
     const dv=id("ds-vars");if(dv)dv.textContent="?";
+    renderDashCmds(fc);
   }
 }
 
@@ -2319,6 +2385,102 @@ function deleteSnippet(){
   renderSnippets();closeSnippetEditor();toast("Snippet deleted","info");
 }
 
+/* ── Landing console animation ── */
+const _LC_LINES=[
+  {t:"ok",  m:"[OK]  Connected as CoolBot#4242"},
+  {t:"dim", m:"[SYS] Logged in · id: 9823741029"},
+  {t:"cmd", m:"[CMD] user#1337: !help"},
+  {t:"dim", m:"[RES] Sent help embed → #general"},
+  {t:"cmd", m:"[CMD] user#8820: !bal"},
+  {t:"dim", m:"[RES] Balance: 1,240 coins"},
+  {t:"cmd", m:"[CMD] user#3301: !daily"},
+  {t:"ok",  m:"[OK]  Daily claimed · +150 coins"},
+  {t:"cmd", m:"[CMD] user#7712: !gamble 100"},
+  {t:"ok",  m:"[OK]  Win! +100 → balance 1,490"},
+  {t:"cmd", m:"[CMD] user#5541: !stats"},
+  {t:"dim", m:"[RES] RPG stats embed sent"},
+  {t:"warn",m:"[!!]  Auto-stop in 10 min"},
+  {t:"cmd", m:"[CMD] user#2209: !top"},
+  {t:"dim", m:"[RES] Leaderboard · 10 entries"},
+  {t:"ok",  m:"[OK]  Hot-reload — config applied"},
+  {t:"cmd", m:"[CMD] user#9901: !roll"},
+  {t:"dim", m:"[RES] You rolled 18!"},
+  {t:"cmd", m:"[CMD] user#4420: !ping"},
+  {t:"dim", m:"[RES] Pong · 38ms"},
+  {t:"ok",  m:"[OK]  Vars synced · 3 updated"},
+  {t:"warn",m:"[!!]  Auto-stop in 5 min"},
+  {t:"cmd", m:"[CMD] user#6631: !bal"},
+  {t:"dim", m:"[RES] Balance: 2,890 coins"},
+  {t:"cmd", m:"[CMD] user#3812: !gamble 500"},
+  {t:"err", m:"[ERR] Not enough coins (have 320)"},
+  {t:"cmd", m:"[CMD] user#1100: !server"},
+  {t:"dim", m:"[RES] Server info embed sent"},
+  {t:"ok",  m:"[OK]  CoolBot#4242 uptime 28 min"},
+];
+let _lcIdx=0,_lcTimer=null;
+
+function startConsoleAnim(){
+  const body=id("lc-body");if(!body)return;
+  body.innerHTML="";_lcIdx=0;
+  function tick(){
+    const e=_LC_LINES[_lcIdx%_LC_LINES.length];_lcIdx++;
+    const now=new Date();
+    const ts=String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0")+":"+String(now.getSeconds()).padStart(2,"0");
+    const d=document.createElement("div");d.className="lc-line";
+    d.innerHTML=`<span class="lc-ts">[${ts}]</span><span class="lc-${e.t}">${esc(e.m)}</span>`;
+    body.appendChild(d);
+    while(body.children.length>22)body.removeChild(body.firstChild);
+    _lcTimer=setTimeout(tick,Math.random()*800+420);
+  }
+  tick();
+}
+function stopConsoleAnim(){clearTimeout(_lcTimer);_lcTimer=null}
+
+/* ── Dashboard v2 render ── */
+function renderDashBot(bot){
+  const wrap=id("dv2-bot-wrap");if(!wrap)return;
+  const running=bot.is_running;
+  wrap.innerHTML=`<div class="dv2-bot" onclick="goto('workspace')"><div class="dv2-av">🤖</div><div class="dv2-info"><div class="dv2-name">${esc(bot.name)}</div><div class="dv2-meta"><span class="badge ${running?"b-green":"b-muted"}">${running?"● Running":"○ Offline"}</span><span style="font-size:12px;color:var(--muted)">prefix <strong style="color:var(--text)">${esc(bot.prefix||"!")}</strong></span>${bot.token_preview?`<span style="font-size:11px;color:var(--muted)">${esc(bot.token_preview)}</span>`:""}</div></div><div class="dv2-acts" onclick="event.stopPropagation()"><button class="btn btn-ghost btn-sm" onclick="goto('workspace')">Manage →</button></div></div>`;
+  const s=id("dv2-status"),p=id("dv2-prefix");
+  if(s)s.textContent=running?"🟢 Running":"⚫ Offline";
+  if(p)p.textContent=bot.prefix||"!";
+  const cols=id("dv2-cols");if(cols)cols.style.display="";
+  id("add-bot-btn").classList.add("hidden");
+}
+
+let _dashCmds=[];
+function renderDashCmds(cmds){
+  _dashCmds=cmds;
+  _applyDashCmdFilter();
+}
+function _applyDashCmdFilter(){
+  const q=(id("dash-cmd-search")?.value||"").toLowerCase();
+  const list=q?_dashCmds.filter(c=>
+    c.trigger.toLowerCase().includes(q)||
+    (c.description||"").toLowerCase().includes(q)||
+    (c.response||"").toLowerCase().includes(q)
+  ):_dashCmds;
+  const el=id("dash-cmd-list");if(!el)return;
+  el.innerHTML="";
+  if(!list.length){
+    el.innerHTML=`<div style="color:var(--muted);font-size:12.5px;padding:14px 16px">${q?"No commands match.":"No commands yet — click + New to add one."}</div>`;
+    const cc=id("dash-cmd-count");if(cc)cc.textContent=_dashCmds.length+" command"+(_dashCmds.length===1?"":"s");
+    return;
+  }
+  const SB={simple:'<span class="badge b-muted" style="font-size:10px">S</span>',cscript:'<span class="badge b-cyan" style="font-size:10px">CS</span>','cscript+':'<span class="badge b-purple" style="font-size:10px">CS+</span>'};
+  list.forEach(cmd=>{
+    const row=document.createElement("div");
+    row.className="dv2-crow"+(cmd.enabled?"":" off");
+    const st=cmd.script_type||"simple";
+    row.innerHTML=`<span class="dv2-ctrig">${esc((currentBot?.prefix||"!")+cmd.trigger)}</span><span class="dv2-cdesc">${esc(cmd.description||cmd.response||"")}</span>${SB[st]||SB.simple}`;
+    row.onclick=()=>{goto("workspace");setTimeout(()=>{switchWsTab("commands");openCmdEditor(String(cmd.id))},150)};
+    el.appendChild(row);
+  });
+  const cc=id("dash-cmd-count");
+  if(cc)cc.textContent=_dashCmds.length+" command"+(_dashCmds.length===1?"":"s")+(q&&list.length<_dashCmds.length?` · ${list.length} shown`:"");
+}
+function filterDashCmds(){_applyDashCmdFilter()}
+
 function refreshPanel(){
   if(curPage==="dashboard")loadBots();
   else if(curPage==="workspace"){
@@ -2341,10 +2503,12 @@ function refreshPanel(){
   if(token&&currentUser){
     if(online){
       try{await api("/auth/me");enterApp()}
-      catch{token=null;lsr(LS_TOKEN);currentUser=null;lsr(LS_USER)}
+      catch{token=null;lsr(LS_TOKEN);currentUser=null;lsr(LS_USER);startConsoleAnim()}
     }else{
       enterApp();
     }
+  }else{
+    startConsoleAnim();
   }
 
   filterFns("cscript");
