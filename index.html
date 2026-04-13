@@ -100,6 +100,56 @@ body.theme-rose{
   --accent-glo:rgba(232,146,124,.28);--cyan:#f4c4b0;--green:#a8d8a8;--red:#ff8a80;
   --amber:#ffd580;--purple:#d4a0c8;--text:#fdeee8;--muted:#6b3040;--muted2:#b07068
 }
+
+body.theme-catppuccin{
+  --bg:#1e1e2e;--surface:#181825;--surface2:#313244;--surface3:#45475a;
+  --border:#45475a;--border2:#585b70;--accent:#cba6f7;--accent-lo:rgba(203,166,247,.13);
+  --accent-glo:rgba(203,166,247,.28);--cyan:#89dceb;--green:#a6e3a1;--red:#f38ba8;
+  --amber:#f9e2af;--purple:#f5c2e7;--text:#cdd6f4;--muted:#585b70;--muted2:#7f849c
+}
+body.theme-gruvbox{
+  --bg:#282828;--surface:#3c3836;--surface2:#504945;--surface3:#665c54;
+  --border:#504945;--border2:#665c54;--accent:#d79921;--accent-lo:rgba(215,153,33,.13);
+  --accent-glo:rgba(215,153,33,.28);--cyan:#689d6a;--green:#98971a;--red:#cc241d;
+  --amber:#d65d0e;--purple:#b16286;--text:#ebdbb2;--muted:#928374;--muted2:#a89984
+}
+body.theme-ayu{
+  --bg:#0b0e14;--surface:#0d1017;--surface2:#131721;--surface3:#1a2130;
+  --border:#1d2535;--border2:#273040;--accent:#e6b450;--accent-lo:rgba(230,180,80,.12);
+  --accent-glo:rgba(230,180,80,.25);--cyan:#36a3d9;--green:#aad94c;--red:#f07178;
+  --amber:#ffb454;--purple:#d2a6ff;--text:#bfbdb6;--muted:#3a4a5c;--muted2:#6b7a8d
+}
+body.theme-github{
+  --bg:#0d1117;--surface:#161b22;--surface2:#21262d;--surface3:#30363d;
+  --border:#30363d;--border2:#3d444d;--accent:#58a6ff;--accent-lo:rgba(88,166,255,.13);
+  --accent-glo:rgba(88,166,255,.28);--cyan:#39c5cf;--green:#3fb950;--red:#f85149;
+  --amber:#d29922;--purple:#bc8cff;--text:#e6edf3;--muted:#484f58;--muted2:#7d8590
+}
+body.theme-palenight{
+  --bg:#0c0e1a;--surface:#1a1b2e;--surface2:#212338;--surface3:#2a2c44;
+  --border:#2e3054;--border2:#3e4070;--accent:#82aaff;--accent-lo:rgba(130,170,255,.13);
+  --accent-glo:rgba(130,170,255,.28);--cyan:#89ddff;--green:#c3e88d;--red:#ff5370;
+  --amber:#ffcb6b;--purple:#c792ea;--text:#d0d0ff;--muted:#3c4066;--muted2:#676e95
+}
+body.theme-tokyonight{
+  --bg:#13141c;--surface:#1a1b26;--surface2:#24283b;--surface3:#2f3549;
+  --border:#2f3549;--border2:#3b4261;--accent:#7aa2f7;--accent-lo:rgba(122,162,247,.13);
+  --accent-glo:rgba(122,162,247,.28);--cyan:#7dcfff;--green:#9ece6a;--red:#f7768e;
+  --amber:#e0af68;--purple:#bb9af7;--text:#c0caf5;--muted:#3b4261;--muted2:#565f89
+}
+body.theme-synthwave{
+  --bg:#0a0015;--surface:#120020;--surface2:#1c0030;--surface3:#260040;
+  --border:#3d006b;--border2:#5c0090;--accent:#fe53bb;--accent-lo:rgba(254,83,187,.12);
+  --accent-glo:rgba(254,83,187,.3);--cyan:#08f7fe;--green:#09fbd3;--red:#ff2f6e;
+  --amber:#ffe500;--purple:#d63af9;--text:#f9f4ff;--muted:#4a0080;--muted2:#9030c0
+}
+body.theme-solarized{
+  --bg:#001b22;--surface:#002b36;--surface2:#073642;--surface3:#0d4050;
+  --border:#164554;--border2:#205060;--accent:#268bd2;--accent-lo:rgba(38,139,210,.13);
+  --accent-glo:rgba(38,139,210,.28);--cyan:#2aa198;--green:#859900;--red:#dc322f;
+  --amber:#b58900;--purple:#6c71c4;--text:#93a1a1;--muted:#2d5060;--muted2:#4d7080
+}
+
 /* ── Theme swatches ── */
 .theme-swatch{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:var(--radius);font-size:12px;cursor:pointer;border:2px solid transparent;background:var(--surface2);color:var(--muted2);transition:all .15s}
 .theme-swatch::before{content:'';width:10px;height:10px;border-radius:50%;background:var(--c);flex-shrink:0}
@@ -143,6 +193,12 @@ body.layout-cozy .fn-card{padding:16px 18px}
 body.layout-cozy .section-card{padding:24px 28px}
 body.layout-cozy .nav-item{padding:11px 12px;font-size:14px}
 body.layout-cozy .bot-card{padding:22px 24px}
+body.layout-focused .page{max-width:780px;margin:0 auto}
+body.layout-focused .fn-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+body.layout-focused .dv2-cols{grid-template-columns:1fr}
+body.layout-minimal .sidebar-sec{display:none}
+body.layout-minimal .sidebar-logo{padding:12px 14px}
+body.layout-minimal .nav-item{padding:8px 8px;font-size:12px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:8px 18px;border-radius:var(--radius);font-family:var(--fm);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .14s;white-space:nowrap;text-decoration:none}
 .btn:disabled{opacity:.38;cursor:not-allowed;pointer-events:none}
 .btn-primary{background:var(--accent);color:#fff}
@@ -204,7 +260,7 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
 .sidebar-logo .logo-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px var(--accent)}
 .sidebar-sec{padding:14px 10px 4px 14px;color:var(--muted);font-size:10px;letter-spacing:.12em;text-transform:uppercase}
 .sidebar-nav{padding:4px 8px}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--radius);cursor:pointer;color:var(--muted2);font-size:13px;transition:all .12s;border:1px solid transparent;user-select:none;margin-bottom:2px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 10px;border-radius:var(--radius);cursor:pointer;color:var(--muted2);font-size:13px;transition:all .12s;border:1px solid transparent;user-select:none;margin-bottom:2px}
 .nav-item:hover{background:var(--surface2);color:var(--text)}
 .nav-item.active{background:var(--accent-lo);color:var(--accent);border-color:var(--accent-glo)}
 .nav-item .ni{width:18px;text-align:center;flex-shrink:0}
@@ -293,7 +349,14 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
 @media(max-width:768px){
   #landing{grid-template-columns:1fr;height:auto;min-height:100vh}
   .land-console{display:none}
-  .land-auth{padding:60px 28px}
+  .land-auth{padding:48px 24px}
+  .la-tag{margin-bottom:32px}
+  .la-btns{max-width:100%}
+}
+@media(max-width:380px){
+  .land-auth{padding:36px 18px}
+  .la-logo{font-size:26px}
+  .la-btn{padding:12px 16px;font-size:13px}
 }
 
 /* ── Auth modal tabs ── */
@@ -323,7 +386,7 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
 /* ── Workspace tabs ── */
 .ws-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--surface);padding:0 20px;flex-shrink:0;overflow-x:auto}
 .ws-tabs::-webkit-scrollbar{height:0}
-.ws-tab{padding:12px 15px;cursor:pointer;color:var(--muted);font-size:13px;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .13s;white-space:nowrap;flex-shrink:0}
+.ws-tab{padding:12px 15px;cursor:pointer;color:var(--muted);font-size:13px;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .13s;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:6px}
 .ws-tab:hover{color:var(--muted2)}
 .ws-tab.active{color:var(--text);border-bottom-color:var(--accent)}
 .ws-panel{display:none}
@@ -463,14 +526,15 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
 
 /* ── Mobile ── */
 @media(max-width:768px){
-  :root{--sidebar:260px}
+  :root{--sidebar:280px}
   #sidebar{position:fixed;top:0;bottom:0;left:0;z-index:100;transform:translateX(-100%)}
   #sidebar.open{transform:translateX(0)}
   #sidebar-overlay.show{display:block}
   #hamburger{display:flex;align-items:center}
-  #topbar{padding-left:50px}
-  .page{padding:14px}
-  .ov-grid{grid-template-columns:repeat(2,1fr)}
+  #topbar{padding-left:54px;padding-right:12px}
+  #topbar .topbar-title{font-size:14px}
+  .page{padding:12px}
+  .ov-grid{grid-template-columns:repeat(2,1fr);gap:8px}
   .two-col{grid-template-columns:1fr}
   .sg{grid-template-columns:1fr}
   .sg-full{grid-column:span 1}
@@ -478,16 +542,38 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
   .bot-card{flex-wrap:wrap}
   .bot-actions{width:100%}
   .dash-grid{grid-template-columns:repeat(2,1fr)}
+  .dv2-bot{flex-wrap:wrap;gap:12px}
+  .dv2-acts{width:100%}
+  .dv2-acts button{flex:1;justify-content:center}
+  .status-card{flex-wrap:wrap;gap:10px}
+  .status-card>div:last-child{width:100%}
+  .cmd-toolbar{flex-direction:column;align-items:flex-start;gap:8px}
+  .cmd-toolbar>div:last-child{width:100%;display:flex;flex-wrap:wrap;gap:6px}
+  .cmd-toolbar>div:last-child>*{flex:1;min-width:auto}
+  .cmd-row{flex-wrap:wrap}
+  .cmd-acts{width:100%;justify-content:flex-end}
+  .section-card{padding:14px}
+  .mbox{margin:8px;padding:18px}
+  .ws-tabs{padding:0 12px}
+  .ws-tab{padding:10px 10px;font-size:12px}
+  .dv2-sval{font-size:14px}
+  .lv-row{flex-wrap:wrap}
+  .lv-acts{width:100%;justify-content:flex-end}
+  .toast{min-width:auto;max-width:calc(100vw - 40px)}
+  #toast-wrap{right:10px;bottom:10px;left:10px}
+  .dv2-clist{max-height:260px}
 }
 @media(max-width:480px){
-  .hero h1{font-size:32px;letter-spacing:-1px}
-  .feat-grid{grid-template-columns:1fr}
   .fn-grid{grid-template-columns:1fr}
-  .cmd-toolbar{flex-direction:column;align-items:flex-start}
   .ov-grid{grid-template-columns:1fr}
   .dash-grid{grid-template-columns:1fr}
-  .land-nav{padding:12px 16px}
-  .feats{padding:50px 16px}
+  .stype-tabs{flex-wrap:wrap}
+  .stype-tab{flex:1;text-align:center}
+  .page{padding:10px}
+  .la-logo{font-size:24px}
+  .la-feats{display:none}
+  .hours-val{font-size:18px}
+  .log-box{height:300px}
 }
 
 @keyframes fade-up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
@@ -582,7 +668,7 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
     <p style="color:var(--muted);font-size:12.5px;margin-bottom:16px">Stop the bot before changing the token. You must enter your account password to confirm.</p>
     <div class="field"><label class="lbl">New bot token</label><input class="input" id="new-token" type="password" placeholder="New token from Discord Dev Portal"></div>
     <div class="field"><label class="lbl">Your account password</label><input class="input" id="token-pw" type="password" placeholder="••••••••"></div>
-    <button class="btn btn-primary btn-sm" onclick="doChangeToken()">Confirm change</button>
+    <button class="btn btn-primary btn-sm" onclick="doChangeToken()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Confirm change</button>
     <div id="token-err" style="font-size:12px;margin-top:8px;color:var(--red)"></div>
   </div>
 </div>
@@ -608,7 +694,7 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
       <div class="fp-ex" id="fp-ex"></div>
     </div>
     <div class="fp-insert">
-      <button class="btn btn-primary btn-sm" onclick="insertFnIntoEditor()">Insert into editor</button>
+      <button class="btn btn-primary btn-sm" onclick="insertFnIntoEditor()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><polyline points="16 3 21 3 21 8"/><line x1="4" x2="21" y1="3" y2="3"/><line x1="4" x2="13" y1="12" y2="12"/><polyline points="16 8 21 3"/></svg> Insert into editor</button>
       <button class="btn btn-ghost btn-sm" onclick="closeModal('fn-modal')">Close</button>
     </div>
   </div>
@@ -628,7 +714,7 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
     <div class="field" id="cv-sid-field"><label class="lbl">Scope ID <span style="color:var(--muted)">(Discord user ID for user scope, guild ID for server)</span></label><input class="input" id="cv-sid" placeholder="Discord ID…"></div>
     <div class="field"><label class="lbl">Variable name</label><input class="input" id="cv-name" placeholder="coins"></div>
     <div class="field"><label class="lbl">Initial value</label><input class="input" id="cv-value" placeholder="0" value="0"></div>
-    <button class="btn btn-primary btn-sm" onclick="doCreateVar()">Create variable</button>
+    <button class="btn btn-primary btn-sm" onclick="doCreateVar()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M5 12h14"/><path d="M12 5v14"/></svg> Create variable</button>
     <div id="cv-err" style="font-size:12px;margin-top:8px;color:var(--red)"></div>
   </div>
 </div>
@@ -709,7 +795,7 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
     <div id="page-dashboard" class="page">
       <div class="pg-hdr" style="margin-bottom:14px">
         <h2>Dashboard</h2>
-        <button class="btn btn-ghost btn-sm" id="add-bot-btn" onclick="openAddBot()">+ Add Bot</button>
+        <button class="btn btn-ghost btn-sm" id="add-bot-btn" onclick="openAddBot()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M5 12h14"/><path d="M12 5v14"/></svg> Add Bot</button>
       </div>
       <!-- hidden compat spans for JS that reads these IDs -->
       <span id="ds-cmds" style="display:none">—</span>
@@ -755,12 +841,12 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
     <!-- Workspace -->
     <div id="page-workspace" class="hidden">
       <div class="ws-tabs">
-        <div class="ws-tab active" data-panel="overview" onclick="switchWsTab('overview')">Overview</div>
-        <div class="ws-tab" data-panel="commands" onclick="switchWsTab('commands')">Commands</div>
-        <div class="ws-tab" data-panel="functions" onclick="switchWsTab('functions')">Functions</div>
-        <div class="ws-tab" data-panel="variables" onclick="switchWsTab('variables')">Variables</div>
-        <div class="ws-tab" data-panel="botsettings" onclick="switchWsTab('botsettings')">Bot Settings</div>
-        <div class="ws-tab" data-panel="logs" onclick="switchWsTab('logs')">Logs</div>
+        <div class="ws-tab active" data-panel="overview" onclick="switchWsTab('overview')"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg> Overview</div>
+        <div class="ws-tab" data-panel="commands" onclick="switchWsTab('commands')"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg> Commands</div>
+        <div class="ws-tab" data-panel="functions" onclick="switchWsTab('functions')"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Functions</div>
+        <div class="ws-tab" data-panel="variables" onclick="switchWsTab('variables')"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" x2="7.01" y1="7" y2="7"/></svg> Variables</div>
+        <div class="ws-tab" data-panel="botsettings" onclick="switchWsTab('botsettings')"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg> Bot Settings</div>
+        <div class="ws-tab" data-panel="logs" onclick="switchWsTab('logs')"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/></svg> Logs</div>
       </div>
       <div class="page" style="padding-top:18px">
 
@@ -791,10 +877,10 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
             <div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center">
               <input class="input" id="cmd-search" placeholder="Search…" style="width:160px;padding:5px 10px;font-size:12px" oninput="filterCmds()">
               <div style="position:relative">
-                <button class="btn btn-ghost btn-sm" onclick="toggleTemplates()">Templates ▾</button>
+                <button class="btn btn-ghost btn-sm" onclick="toggleTemplates()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg> Templates</button>
                 <div id="templates-menu" class="hidden" style="position:absolute;top:110%;right:0;background:var(--surface);border:1px solid var(--border2);border-radius:6px;z-index:50;min-width:210px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.4)"></div>
               </div>
-              <button class="btn btn-primary btn-sm" onclick="openCmdEditor(null)">+ New</button>
+              <button class="btn btn-primary btn-sm" onclick="openCmdEditor(null)"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M5 12h14"/><path d="M12 5v14"/></svg> New</button>
             </div>
           </div>
           <div id="cmd-list" class="cmd-list"></div>
@@ -820,10 +906,10 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
               <div id="bds-hint" class="hidden" style="font-size:11.5px;color:var(--muted);margin-top:7px">Browse the <strong style="color:var(--cyan)">Functions</strong> and <strong style="color:var(--purple)">Variables</strong> tabs for everything available. Click any item to insert at cursor.</div>
             </div>
             <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:4px">
-              <button class="btn btn-primary btn-sm" onclick="saveCommand()">Save command</button>
-              <button class="btn btn-ghost btn-sm" onclick="closeCmdEditor()">Cancel</button>
-              <button class="btn btn-ghost btn-sm hidden" id="dup-cmd-btn" onclick="dupCmd()">Duplicate</button>
-              <button class="btn btn-danger btn-sm hidden" id="del-cmd-btn" onclick="deleteCmd()">Delete</button>
+              <button class="btn btn-primary btn-sm" onclick="saveCommand()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Save command</button>
+              <button class="btn btn-ghost btn-sm" onclick="closeCmdEditor()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg> Cancel</button>
+              <button class="btn btn-ghost btn-sm hidden" id="dup-cmd-btn" onclick="dupCmd()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Duplicate</button>
+              <button class="btn btn-danger btn-sm hidden" id="del-cmd-btn" onclick="deleteCmd()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg> Delete</button>
             </div>
           </div>
           <div id="conflicts-wrap" class="hidden" style="margin-top:18px">
@@ -852,7 +938,7 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
                 <div style="font-family:var(--fh);font-size:15px;font-weight:700">My Snippets</div>
                 <div style="color:var(--muted);font-size:12px;margin-top:2px">Save reusable code fragments. Click any to insert into the editor.</div>
               </div>
-              <button class="btn btn-ghost btn-sm" onclick="openSnippetEditor(null)">+ New snippet</button>
+              <button class="btn btn-ghost btn-sm" onclick="openSnippetEditor(null)"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M5 12h14"/><path d="M12 5v14"/></svg> New snippet</button>
             </div>
             <div id="snippets-list"></div>
           </div>
@@ -863,9 +949,9 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
             <div class="field"><label class="lbl">Snippet name</label><input class="input" id="snip-name" placeholder="e.g. embed-template"></div>
             <div class="field"><label class="lbl">Code</label><textarea class="textarea" id="snip-code" rows="5" placeholder="{embed.title:Title}\n{embed.desc:Description}\n{embed.color:#3b82f6}"></textarea></div>
             <div style="display:flex;gap:7px;flex-wrap:wrap">
-              <button class="btn btn-primary btn-sm" onclick="saveSnippet()">Save snippet</button>
-              <button class="btn btn-ghost btn-sm" onclick="closeSnippetEditor()">Cancel</button>
-              <button class="btn btn-danger btn-sm hidden" id="del-snip-btn" onclick="deleteSnippet()">Delete</button>
+              <button class="btn btn-primary btn-sm" onclick="saveSnippet()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Save snippet</button>
+              <button class="btn btn-ghost btn-sm" onclick="closeSnippetEditor()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg> Cancel</button>
+              <button class="btn btn-danger btn-sm hidden" id="del-snip-btn" onclick="deleteSnippet()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg> Delete</button>
             </div>
           </div>
         </div>
@@ -918,9 +1004,9 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
             <div class="field"><label class="lbl">Activity type</label><select class="select" id="s-activity"><option value="playing">Playing</option><option value="watching">Watching</option><option value="listening">Listening to</option><option value="competing">Competing in</option></select></div>
           </div>
           <div style="display:flex;gap:8px;padding-top:16px;border-top:1px solid var(--border);flex-wrap:wrap">
-            <button class="btn btn-primary btn-sm" onclick="saveBotSettings()">Save settings</button>
-            <button class="btn btn-ghost btn-sm" onclick="openModal('token-modal')">Change token</button>
-            <button class="btn btn-danger btn-sm" onclick="confirmDeleteBot()">Delete bot</button>
+            <button class="btn btn-primary btn-sm" onclick="saveBotSettings()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Save settings</button>
+            <button class="btn btn-ghost btn-sm" onclick="openModal('token-modal')"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg> Change token</button>
+            <button class="btn btn-danger btn-sm" onclick="confirmDeleteBot()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg> Delete bot</button>
           </div>
         </div>
 
@@ -928,7 +1014,7 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
         <div class="ws-panel" id="panel-logs">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
             <h3 style="font-family:var(--fh);font-size:17px;font-weight:700">Bot Logs</h3>
-            <div style="display:flex;gap:7px"><button class="btn btn-ghost btn-sm" onclick="loadLogs()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Refresh</button><button class="btn btn-ghost btn-sm" onclick="clearLogs()">Clear</button></div>
+            <div style="display:flex;gap:7px"><button class="btn btn-ghost btn-sm" onclick="loadLogs()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg> Refresh</button><button class="btn btn-ghost btn-sm" onclick="clearLogs()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg> Clear</button></div>
           </div>
           <div class="log-box" id="log-box"><div style="color:var(--muted);font-size:12px">Start your bot to see logs here.</div></div>
         </div>
@@ -959,6 +1045,14 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
               <option value="mocha">☕ Mocha</option>
               <option value="neon">⚡ Neon</option>
               <option value="rose">🌹 Rose Gold</option>
+              <option value="catppuccin">💖 Catppuccin</option>
+              <option value="gruvbox">🪴 Gruvbox</option>
+              <option value="ayu">🌟 Ayu</option>
+              <option value="github">🖤 GitHub Dark</option>
+              <option value="palenight">🌌 Palenight</option>
+              <option value="tokyonight">🌃 Tokyo Night</option>
+              <option value="synthwave">🎧 Synthwave</option>
+              <option value="solarized">☀ Solarized</option>
             </select>
           </div>
           <div class="field">
@@ -971,6 +1065,8 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
               <option value="icon-rail">Icon Rail</option>
               <option value="ultra-wide">Ultra Wide</option>
               <option value="cozy">Cozy</option>
+              <option value="focused">Focused</option>
+              <option value="minimal">Minimal</option>
             </select>
           </div>
         </div>
@@ -987,14 +1083,22 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
           <div onclick="applyTheme('dracula')"  class="theme-swatch" style="--c:#bd93f9"  title="Dracula">Dracula</div>
           <div onclick="applyTheme('mocha')"    class="theme-swatch" style="--c:#c08040"  title="Mocha">Mocha</div>
           <div onclick="applyTheme('neon')"     class="theme-swatch" style="--c:#00ff88"  title="Neon">Neon</div>
-          <div onclick="applyTheme('rose')"     class="theme-swatch" style="--c:#e8927c"  title="Rose">Rose Gold</div>
+          <div onclick="applyTheme('rose')"        class="theme-swatch" style="--c:#e8927c"  title="Rose">Rose Gold</div>
+          <div onclick="applyTheme('catppuccin')"  class="theme-swatch" style="--c:#cba6f7"  title="Catppuccin">Catppuccin</div>
+          <div onclick="applyTheme('gruvbox')"     class="theme-swatch" style="--c:#d79921"  title="Gruvbox">Gruvbox</div>
+          <div onclick="applyTheme('ayu')"         class="theme-swatch" style="--c:#e6b450"  title="Ayu">Ayu</div>
+          <div onclick="applyTheme('github')"      class="theme-swatch" style="--c:#58a6ff"  title="GitHub Dark">GitHub Dark</div>
+          <div onclick="applyTheme('palenight')"   class="theme-swatch" style="--c:#82aaff"  title="Palenight">Palenight</div>
+          <div onclick="applyTheme('tokyonight')"  class="theme-swatch" style="--c:#7aa2f7"  title="Tokyo Night">Tokyo Night</div>
+          <div onclick="applyTheme('synthwave')"   class="theme-swatch" style="--c:#fe53bb"  title="Synthwave">Synthwave</div>
+          <div onclick="applyTheme('solarized')"   class="theme-swatch" style="--c:#268bd2"  title="Solarized">Solarized</div>
         </div>
       </div>
 
       <div class="section-card">
         <h3>Account <button class="sec-toggle" onclick="toggleSection(this)" title="Collapse"><svg class="chev" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button></h3>
         <div class="sg">
-          <div class="field"><label class="lbl">Username</label><div style="display:flex;gap:7px"><input class="input" id="acc-name" placeholder="username"><button class="btn btn-ghost btn-sm" style="flex-shrink:0" onclick="changeUsername()">Save</button></div></div>
+          <div class="field"><label class="lbl">Username</label><div style="display:flex;gap:7px"><input class="input" id="acc-name" placeholder="username"><button class="btn btn-ghost btn-sm" style="flex-shrink:0" onclick="changeUsername()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Save</button></div></div>
           <div class="field"><label class="lbl">Email</label><input class="input" id="acc-email" disabled style="opacity:.45"></div>
         </div>
         <div style="border-top:1px solid var(--border);padding-top:16px;margin-top:4px">
@@ -1003,7 +1107,7 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
             <div class="field"><label class="lbl">Current password</label><input class="input" id="pw-cur" type="password" placeholder="••••••••"></div>
             <div class="field"><label class="lbl">New password</label><input class="input" id="pw-new" type="password" placeholder="••••••••"></div>
           </div>
-          <button class="btn btn-primary btn-sm" onclick="changePassword()">Update password</button>
+          <button class="btn btn-primary btn-sm" onclick="changePassword()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Update password</button>
         </div>
       </div>
 
@@ -1015,14 +1119,14 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
           <div class="field sg-full"><label class="lbl">Status message</label><input class="input" id="sb-status" placeholder="with commands | !help"></div>
           <div class="field"><label class="lbl">Activity type</label><select class="select" id="sb-activity"><option value="playing">Playing</option><option value="watching">Watching</option><option value="listening">Listening to</option><option value="competing">Competing in</option></select></div>
         </div>
-        <button class="btn btn-primary btn-sm" onclick="saveBotFromSettings()">Save bot settings</button>
+        <button class="btn btn-primary btn-sm" onclick="saveBotFromSettings()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Save bot settings</button>
       </div>
 
       <div class="section-card danger-card">
         <h3>Danger zone <button class="sec-toggle" onclick="toggleSection(this)" title="Collapse"><svg class="chev" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button></h3>
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
           <div><div style="font-size:13px;font-weight:500">Delete account</div><div style="color:var(--muted);font-size:12px">Permanently removes your account and bot.</div></div>
-          <button class="btn btn-danger btn-sm" onclick="toast('Contact the administrator to delete your account.','info')">Delete account</button>
+          <button class="btn btn-danger btn-sm" onclick="toast('Contact the administrator to delete your account.','info')"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg> Delete account</button>
         </div>
       </div>
     </div>
@@ -1272,13 +1376,13 @@ function enterApp(){
 async function loadBots(){
   const el=id("bot-list");
   if(!online&&!currentBot){
-    el.innerHTML=`<div class="empty"><div class="empty-icon">📡</div><h3>Server offline</h3><p>Connect to the server to manage your bot.</p></div>`;return;
+    el.innerHTML=`<div class="empty"><div class="empty-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="2" x2="22" y2="22"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M5 13a10 10 0 0 1 5.24-2.76"/><path d="M10.71 5.05A16 16 0 0 1 22.56 9"/><path d="M2 8.82a15 15 0 0 1 4.49-2.33"/><line x1="12" x2="12.01" y1="20" y2="20"/></svg></div><h3>Server offline</h3><p>Connect to the server to manage your bot.</p></div>`;return;
   }
   el.innerHTML=`<div style="color:var(--muted);font-size:13px;padding:16px 0">Loading…</div>`;
   try{
     const bots=await api("/bots");el.innerHTML="";
     if(!bots.length){
-      el.innerHTML=`<div class="empty fu"><div class="empty-icon">🤖</div><h3>No bot yet</h3><p>Add your first Discord bot to get started.</p><button class="btn btn-primary btn-sm" onclick="openAddBot()">+ Add Bot</button></div>`;
+      el.innerHTML=`<div class="empty fu"><div class="empty-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg></div><h3>No bot yet</h3><p>Add your first Discord bot to get started.</p><button class="btn btn-primary btn-sm" onclick="openAddBot()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M5 12h14"/><path d="M12 5v14"/></svg> Add Bot</button></div>`;
       id("add-bot-btn").classList.remove("hidden");
       id("ws-navitem").style.opacity=".45";
       currentBot=null;lsr(LS_BOT);
@@ -2140,7 +2244,7 @@ function ls_get(k){return localStorage.getItem(k)}
 function ls_set(k,v){localStorage.setItem(k,v)}
 
 function applyTheme(t){
-  const themes=["dark","midnight","ocean","forest","crimson","slate","pink","sunset","nord","dracula","mocha","neon","rose"];
+  const themes=["dark","midnight","ocean","forest","crimson","slate","pink","sunset","nord","dracula","mocha","neon","rose","catppuccin","gruvbox","ayu","github","palenight","tokyonight","synthwave","solarized"];
   themes.forEach(n=>document.body.classList.remove("theme-"+n));
   if(t!=="dark") document.body.classList.add("theme-"+t);
   ls_set("bf_theme",t);
@@ -2155,7 +2259,7 @@ function _markActiveSwatch(t){
 }
 
 function applyLayout(l){
-  ["compact","wide","sidebar-right","icon-rail","ultra-wide","cozy"].forEach(n=>document.body.classList.remove("layout-"+n));
+  ["compact","wide","sidebar-right","icon-rail","ultra-wide","cozy","focused","minimal"].forEach(n=>document.body.classList.remove("layout-"+n));
   if(l!=="default") document.body.classList.add("layout-"+l);
   ls_set("bf_layout",l);
   const sel=id("layout-select");if(sel)sel.value=l;
@@ -2478,7 +2582,7 @@ function stopConsoleAnim(){clearTimeout(_lcTimer);_lcTimer=null}
 function renderDashBot(bot){
   const wrap=id("dv2-bot-wrap");if(!wrap)return;
   const running=bot.is_running;
-  wrap.innerHTML=`<div class="dv2-bot" onclick="goto('workspace')"><div class="dv2-av">🤖</div><div class="dv2-info"><div class="dv2-name">${esc(bot.name)}</div><div class="dv2-meta"><span class="badge ${running?"b-green":"b-muted"}">${running?"● Running":"○ Offline"}</span><span style="font-size:12px;color:var(--muted)">prefix <strong style="color:var(--text)">${esc(bot.prefix||"!")}</strong></span>${bot.token_preview?`<span style="font-size:11px;color:var(--muted)">${esc(bot.token_preview)}</span>`:""}</div></div><div class="dv2-acts" onclick="event.stopPropagation()"><button class="btn btn-ghost btn-sm" onclick="goto('workspace')">Manage →</button></div></div>`;
+  wrap.innerHTML=`<div class="dv2-bot" onclick="goto('workspace')"><div class="dv2-av"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg></div><div class="dv2-info"><div class="dv2-name">${esc(bot.name)}</div><div class="dv2-meta"><span class="badge ${running?"b-green":"b-muted"}">${running?"● Running":"○ Offline"}</span><span style="font-size:12px;color:var(--muted)">prefix <strong style="color:var(--text)">${esc(bot.prefix||"!")}</strong></span>${bot.token_preview?`<span style="font-size:11px;color:var(--muted)">${esc(bot.token_preview)}</span>`:""}</div></div><div class="dv2-acts" onclick="event.stopPropagation()"><button class="btn btn-ghost btn-sm" onclick="goto('workspace')">Manage →</button></div></div>`;
   const s=id("dv2-status"),p=id("dv2-prefix");
   if(s)s.textContent=running?"🟢 Running":"⚫ Offline";
   if(p)p.textContent=bot.prefix||"!";
