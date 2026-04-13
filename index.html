@@ -20,7 +20,6 @@
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--fm);font-size:14px;line-height:1.6;min-height:100vh;overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");pointer-events:none;z-index:0}
-*{position:relative;z-index:1}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:var(--surface)}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
@@ -270,11 +269,16 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
 .ua{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--cyan));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
 .u-name{font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100px}
 
-/* ── Mobile overlay sidebar toggle ── */
-#sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:149;pointer-events:none}
-#sidebar-overlay.show{pointer-events:all}
-#hamburger{display:none;position:fixed;top:12px;left:12px;z-index:151;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:8px 10px;cursor:pointer;color:var(--text);font-size:18px}
+/* ── Mobile sidebar toggle ── */
+#hamburger{display:none;position:fixed;top:10px;left:10px;z-index:300;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:7px 9px;cursor:pointer;color:var(--text)}
 #hamburger.hidden{display:none!important}
+
+/* ── Mobile bottom nav ── */
+#mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--surface);border-top:1px solid var(--border);padding:0;height:56px;align-items:stretch}
+.mob-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:var(--muted);font-size:10px;transition:color .12s;border:none;background:none;padding:0}
+.mob-tab svg{flex-shrink:0}
+.mob-tab.active{color:var(--accent)}
+.mob-tab span{line-height:1}
 
 /* ── Main area ── */
 #main{flex:1;overflow-y:auto;display:flex;flex-direction:column;min-width:0}
@@ -287,14 +291,14 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
 #landing{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;height:100vh}
 .land-logo{font-family:var(--fh);font-size:21px;font-weight:800;display:flex;align-items:center;gap:8px}
 .land-logo span{color:var(--accent)}
-.land-console{background:#020306;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;position:relative}
-.land-console::after{content:'';position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(to bottom,transparent,#020306);pointer-events:none;z-index:2}
+.land-console{background:#020306;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;position:relative;z-index:0}
+.land-console::after{content:'';position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(to bottom,transparent,#020306);pointer-events:none;z-index:1}
 .lc-topbar{display:flex;align-items:center;gap:7px;padding:13px 18px;border-bottom:1px solid var(--border);flex-shrink:0;background:#030409}
 .lc-wdot{width:11px;height:11px;border-radius:50%}
 .lc-wdot:nth-child(1){background:#ff5f56}.lc-wdot:nth-child(2){background:#ffbd2e}.lc-wdot:nth-child(3){background:#27c93f}
 .lc-wdots{display:flex;gap:5px}
 .lc-title{color:var(--muted);font-size:11px;margin-left:7px}
-.lc-body{flex:1;padding:16px 20px 0;font-family:var(--fm);font-size:12px;line-height:1.9;overflow:hidden;display:flex;flex-direction:column;gap:0;position:relative;z-index:1}
+.lc-body{flex:1;padding:16px 20px 0;font-family:var(--fm);font-size:12px;line-height:1.9;overflow:hidden;display:flex;flex-direction:column;gap:0}
 .lc-line{display:flex;gap:10px;animation:lc-in .22s ease both;flex-shrink:0}
 @keyframes lc-in{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
 .lc-ts{color:#2d3d52;flex-shrink:0;font-size:11px}
@@ -349,16 +353,17 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
 .dv2-qic{width:18px;text-align:center;font-size:14px;flex-shrink:0}
 @media(max-width:900px){.dv2-cols{grid-template-columns:1fr}}
 @media(max-width:768px){
-  #landing{grid-template-columns:1fr;height:auto;min-height:100vh}
+  #landing{grid-template-columns:1fr;height:auto;min-height:100svh}
   .land-console{display:none}
-  .land-auth{padding:48px 24px}
+  .land-auth{padding:48px 24px;min-height:100svh;justify-content:center}
   .la-tag{margin-bottom:32px}
   .la-btns{max-width:100%}
 }
 @media(max-width:380px){
-  .land-auth{padding:36px 18px}
-  .la-logo{font-size:26px}
-  .la-btn{padding:12px 16px;font-size:13px}
+  .land-auth{padding:32px 16px}
+  .la-logo{font-size:24px}
+  .la-btn{padding:12px 14px;font-size:13px}
+  .la-tag{font-size:12px;margin-bottom:24px}
 }
 
 /* ── Auth modal tabs ── */
@@ -528,54 +533,62 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
 
 /* ── Mobile ── */
 @media(max-width:768px){
-  :root{--sidebar:280px}
-  #sidebar{position:fixed;top:0;bottom:0;left:0;z-index:150;transform:translateX(-100%)}
-  #sidebar.open{transform:translateX(0)}
-  #sidebar-overlay.show{display:block}
-  #hamburger{display:flex;align-items:center}
-  #topbar{padding-left:54px;padding-right:12px}
-  #topbar .topbar-title{font-size:14px}
+  /* hide desktop sidebar, show bottom nav */
+  #sidebar{display:none!important}
+  #mobile-nav{display:flex}
+  #hamburger{display:none!important}
+  /* topbar no longer needs left pad */
+  #topbar{padding:0 12px}
+  /* push content above bottom nav */
+  #main{padding-bottom:56px}
   .page{padding:12px}
+  /* grids */
   .ov-grid{grid-template-columns:repeat(2,1fr);gap:8px}
   .two-col{grid-template-columns:1fr}
   .sg{grid-template-columns:1fr}
   .sg-full{grid-column:span 1}
   .conf-grid{grid-template-columns:1fr}
+  /* cards */
   .bot-card{flex-wrap:wrap}
   .bot-actions{width:100%}
   .dash-grid{grid-template-columns:repeat(2,1fr)}
   .dv2-bot{flex-wrap:wrap;gap:12px}
   .dv2-acts{width:100%}
   .dv2-acts button{flex:1;justify-content:center}
+  .dv2-cols{grid-template-columns:1fr}
   .status-card{flex-wrap:wrap;gap:10px}
-  .status-card>div:last-child{width:100%}
+  .section-card{padding:14px}
+  .mbox{margin:6px;padding:16px;max-height:94vh}
+  /* commands */
   .cmd-toolbar{flex-direction:column;align-items:flex-start;gap:8px}
   .cmd-toolbar>div:last-child{width:100%;display:flex;flex-wrap:wrap;gap:6px}
-  .cmd-toolbar>div:last-child>*{flex:1;min-width:auto}
   .cmd-row{flex-wrap:wrap}
-  .cmd-acts{width:100%;justify-content:flex-end}
-  .section-card{padding:14px}
-  .mbox{margin:8px;padding:18px}
-  .ws-tabs{padding:0 12px}
-  .ws-tab{padding:10px 10px;font-size:12px}
+  .cmd-acts{width:100%;justify-content:flex-end;margin-top:4px}
+  /* tabs */
+  .ws-tabs{padding:0 8px}
+  .ws-tab{padding:10px 8px;font-size:11px;gap:4px}
+  /* vars */
   .dv2-sval{font-size:14px}
   .lv-row{flex-wrap:wrap}
-  .lv-acts{width:100%;justify-content:flex-end}
-  .toast{min-width:auto;max-width:calc(100vw - 40px)}
-  #toast-wrap{right:10px;bottom:10px;left:10px}
+  .lv-acts{width:100%;justify-content:flex-end;margin-top:4px}
   .dv2-clist{max-height:260px}
+  /* toast */
+  .toast{min-width:auto;max-width:calc(100vw - 24px)}
+  #toast-wrap{right:12px;bottom:68px;left:12px}
 }
 @media(max-width:480px){
   .fn-grid{grid-template-columns:1fr}
   .ov-grid{grid-template-columns:1fr}
   .dash-grid{grid-template-columns:1fr}
   .stype-tabs{flex-wrap:wrap}
-  .stype-tab{flex:1;text-align:center}
+  .stype-tab{flex:1;text-align:center;padding:6px 8px}
   .page{padding:10px}
-  .la-logo{font-size:24px}
   .la-feats{display:none}
   .hours-val{font-size:18px}
-  .log-box{height:300px}
+  .log-box{height:260px}
+  .ws-tab span{display:none}
+  .ws-tab{padding:10px 6px}
+  .dv2-quick{display:grid;grid-template-columns:1fr 1fr}
 }
 
 @keyframes fade-up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
@@ -594,8 +607,21 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
 </head>
 <body>
 
-<div id="hamburger" class="hidden" onclick="toggleSidebar()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg></div>
-<div id="sidebar-overlay" onclick="closeSidebar()"></div>
+<!-- mobile bottom nav (shown on ≤768px, only in app) -->
+<nav id="mobile-nav" style="display:none">
+  <button class="mob-tab active" data-page="dashboard" onclick="goto('dashboard')">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+    <span>Home</span>
+  </button>
+  <button class="mob-tab" data-page="workspace" id="mob-ws" onclick="goto('workspace')">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+    <span>Bot</span>
+  </button>
+  <button class="mob-tab" data-page="settings" onclick="goto('settings')">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>Settings</span>
+  </button>
+</nav>
 
 <!-- ══ LANDING ══ -->
 <div id="landing">
@@ -1286,9 +1312,9 @@ function toast(msg,type="info"){
 function id(x){return document.getElementById(x)}
 function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
 
-/* ── Mobile sidebar ── */
-function toggleSidebar(){id("sidebar").classList.toggle("open");id("sidebar-overlay").classList.toggle("show")}
-function closeSidebar(){id("sidebar").classList.remove("open");id("sidebar-overlay").classList.remove("show")}
+/* ── Mobile sidebar (desktop only now — mobile uses bottom nav) ── */
+function toggleSidebar(){const s=id("sidebar");s.classList.toggle("open")}
+function closeSidebar(){const s=id("sidebar");if(s)s.classList.remove("open")}
 
 /* ── Routing ── */
 const PAGES=["dashboard","workspace","settings"];
@@ -1362,7 +1388,7 @@ function logout(){
   lsr(LS_TOKEN);lsr(LS_USER);lsr(LS_BOT);lsr(LS_DEL_VARS);
   _deletedVarKeys.clear();
   stopPolling();
-  id("hamburger").classList.add("hidden");
+  id("mobile-nav").style.display="none";
   id("app").classList.add("hidden");id("landing").classList.remove("hidden");
   startConsoleAnim();
 }
@@ -1370,7 +1396,7 @@ function logout(){
 function enterApp(){
   stopConsoleAnim();
   id("landing").classList.add("hidden");id("app").classList.remove("hidden");
-  id("hamburger").classList.remove("hidden");
+  id("mobile-nav").style.display="";
   id("u-name").textContent=currentUser.username;
   id("u-av").textContent=currentUser.username[0].toUpperCase();
   loadBots();goto("dashboard");
@@ -1388,13 +1414,13 @@ async function loadBots(){
     if(!bots.length){
       el.innerHTML=`<div class="empty fu"><div class="empty-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg></div><h3>No bot yet</h3><p>Add your first Discord bot to get started.</p><button class="btn btn-primary btn-sm" onclick="openAddBot()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M5 12h14"/><path d="M12 5v14"/></svg> Add Bot</button></div>`;
       id("add-bot-btn").classList.remove("hidden");
-      id("ws-navitem").style.opacity=".45";
+      id("ws-navitem").style.opacity=".45";const mw=id("mob-ws");if(mw)mw.style.opacity=".4";
       currentBot=null;lsr(LS_BOT);
       id("ds-cmds").textContent="—";id("ds-status").textContent="—";id("ds-prefix").textContent="—";
       return;
     }
     const bot=bots[0];currentBot=bot;lss(LS_BOT,JSON.stringify(bot));
-    id("ws-navitem").style.opacity="1";
+    id("ws-navitem").style.opacity="1";const _mw=id("mob-ws");if(_mw)_mw.style.opacity="1";
     id("ds-prefix").textContent=bot.prefix||"!";
     id("ds-status").textContent=bot.is_running?"🟢 Running":"⚫ Offline";
     renderDashBot(bot);
