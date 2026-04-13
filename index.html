@@ -271,8 +271,10 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
 .u-name{font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100px}
 
 /* ── Mobile overlay sidebar toggle ── */
-#sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
-#hamburger{display:none;position:fixed;top:12px;left:12px;z-index:201;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:8px 10px;cursor:pointer;color:var(--text);font-size:18px}
+#sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:149;pointer-events:none}
+#sidebar-overlay.show{pointer-events:all}
+#hamburger{display:none;position:fixed;top:12px;left:12px;z-index:151;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:8px 10px;cursor:pointer;color:var(--text);font-size:18px}
+#hamburger.hidden{display:none!important}
 
 /* ── Main area ── */
 #main{flex:1;overflow-y:auto;display:flex;flex-direction:column;min-width:0}
@@ -527,7 +529,7 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
 /* ── Mobile ── */
 @media(max-width:768px){
   :root{--sidebar:280px}
-  #sidebar{position:fixed;top:0;bottom:0;left:0;z-index:100;transform:translateX(-100%)}
+  #sidebar{position:fixed;top:0;bottom:0;left:0;z-index:150;transform:translateX(-100%)}
   #sidebar.open{transform:translateX(0)}
   #sidebar-overlay.show{display:block}
   #hamburger{display:flex;align-items:center}
@@ -592,7 +594,7 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
 </head>
 <body>
 
-<div id="hamburger" onclick="toggleSidebar()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg></div>
+<div id="hamburger" class="hidden" onclick="toggleSidebar()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg></div>
 <div id="sidebar-overlay" onclick="closeSidebar()"></div>
 
 <!-- ══ LANDING ══ -->
@@ -1360,6 +1362,7 @@ function logout(){
   lsr(LS_TOKEN);lsr(LS_USER);lsr(LS_BOT);lsr(LS_DEL_VARS);
   _deletedVarKeys.clear();
   stopPolling();
+  id("hamburger").classList.add("hidden");
   id("app").classList.add("hidden");id("landing").classList.remove("hidden");
   startConsoleAnim();
 }
@@ -1367,6 +1370,7 @@ function logout(){
 function enterApp(){
   stopConsoleAnim();
   id("landing").classList.add("hidden");id("app").classList.remove("hidden");
+  id("hamburger").classList.remove("hidden");
   id("u-name").textContent=currentUser.username;
   id("u-av").textContent=currentUser.username[0].toUpperCase();
   loadBots();goto("dashboard");
@@ -2635,6 +2639,9 @@ function refreshPanel(){
 /* ── Init ── */
 (async()=>{
   _restorePreferences();
+  // Start console anim immediately so landing never looks blank while API loads
+  startConsoleAnim();
+
   await loadAPIURL();
   await checkAPI();
   await loadMeta();   // fetch functions / var-ref / templates from Python server
@@ -2645,12 +2652,10 @@ function refreshPanel(){
   if(token&&currentUser){
     if(online){
       try{await api("/auth/me");enterApp()}
-      catch{token=null;lsr(LS_TOKEN);currentUser=null;lsr(LS_USER);startConsoleAnim()}
+      catch{token=null;lsr(LS_TOKEN);currentUser=null;lsr(LS_USER)}
     }else{
       enterApp();
     }
-  }else{
-    startConsoleAnim();
   }
 
   filterFns("cscript");
