@@ -603,6 +603,29 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
 .sec-toggle{display:inline-flex;align-items:center;background:none;border:none;cursor:pointer;color:var(--muted);padding:0 2px;margin-left:6px;vertical-align:middle}
 .sec-toggle svg{transition:transform .18s}
 .section-card.collapsed .sec-toggle svg{transform:rotate(-90deg)}
+
+/* ── Fonts panel ── */
+.font-group{margin-bottom:22px}
+.font-group-label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.font-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.font-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;display:flex;flex-direction:column;gap:6px;position:relative}
+.font-card.custom-font{border-color:var(--accent-glo)}
+.font-preview{font-size:22px;line-height:1.2;color:var(--text);min-height:32px;word-break:break-all}
+.font-name{font-family:var(--fm);font-size:11px;font-weight:600;color:var(--cyan)}
+.font-aliases{font-size:10.5px;color:var(--muted)}
+.font-del-btn{position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;color:var(--muted);padding:2px;border-radius:3px;display:flex;align-items:center;transition:color .12s}
+.font-del-btn:hover{color:var(--red)}
+.font-map-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:4px;margin-top:4px}
+.font-map-cell{background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:4px 6px;display:flex;flex-direction:column;align-items:center;gap:1px}
+.font-map-cell .fmc-k{font-size:9px;color:var(--muted);font-family:var(--fm)}
+.font-map-cell .fmc-v{font-size:15px;color:var(--text)}
+/* custom font creator */
+#font-creator{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;margin-top:16px}
+.fmap-row{display:flex;gap:6px;align-items:center;margin-bottom:6px;flex-wrap:wrap}
+.fmap-key{width:52px;flex-shrink:0}
+.fmap-val{width:80px;flex-shrink:0}
+#fmap-pairs{display:flex;flex-direction:column;gap:5px;max-height:260px;overflow-y:auto;margin-bottom:10px}
+
 </style>
 </head>
 <body>
@@ -1148,6 +1171,63 @@ label.lbl{display:block;color:var(--muted2);font-size:11.5px;margin-bottom:5px;f
           <div class="field"><label class="lbl">Activity type</label><select class="select" id="sb-activity"><option value="playing">Playing</option><option value="watching">Watching</option><option value="listening">Listening to</option><option value="competing">Competing in</option></select></div>
         </div>
         <button class="btn btn-primary btn-sm" onclick="saveBotFromSettings()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Save bot settings</button>
+      </div>
+
+
+      <div class="section-card" id="settings-fonts-card">
+        <h3>Text Fonts <button class="sec-toggle" onclick="toggleSection(this)" title="Collapse"><svg class="chev" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button></h3>
+        <p style="color:var(--muted);font-size:12px;margin-bottom:16px">Fonts transform text in bot responses. Use <code style="background:var(--surface2);padding:1px 5px;border-radius:3px;font-family:var(--fm)">[fontname]text[/fontname]</code> syntax in commands.</p>
+        <div id="fonts-list"><div style="color:var(--muted);font-size:13px">Loading fonts…</div></div>
+        <div style="margin-top:14px">
+          <button class="btn btn-ghost btn-sm" onclick="openFontCreator()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            New custom font
+          </button>
+        </div>
+        <div id="font-creator" class="hidden">
+          <h4 style="font-family:var(--fh);font-size:14px;font-weight:700;margin-bottom:14px">Create custom font</h4>
+          <div class="sg" style="margin-bottom:12px">
+            <div class="field">
+              <label class="lbl">Font name <span style="color:var(--muted)">(no spaces)</span></label>
+              <input class="input" id="fc-name" placeholder="e.g. greek" oninput="updateFontPreview()">
+            </div>
+            <div class="field">
+              <label class="lbl">Aliases <span style="color:var(--muted)">(comma separated)</span></label>
+              <input class="input" id="fc-aliases" placeholder="e.g. gr, grk">
+            </div>
+          </div>
+          <div style="margin-bottom:10px">
+            <label class="lbl">Character map</label>
+            <div id="fmap-pairs"></div>
+            <button class="btn btn-ghost btn-xs" onclick="addFmapRow()" style="margin-top:4px">
+              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+              Add mapping
+            </button>
+          </div>
+          <div style="margin-bottom:12px">
+            <label class="lbl">Preview</label>
+            <div id="fc-preview" style="font-size:20px;min-height:28px;color:var(--text);padding:8px 0;letter-spacing:1px">—</div>
+          </div>
+          <div style="display:flex;gap:7px;flex-wrap:wrap">
+            <button class="btn btn-primary btn-sm" onclick="saveCustomFont()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg>
+              Save font
+            </button>
+            <button class="btn btn-ghost btn-sm" onclick="closeFontCreator()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              Cancel
+            </button>
+          </div>
+          <div id="fc-err" style="font-size:12px;margin-top:8px;color:var(--red)"></div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <h3>Session</h3>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+          <div><div style="font-size:13px;font-weight:500" id="sess-user-display">Logged in</div><div style="color:var(--muted);font-size:12px" id="sess-email-display"></div></div>
+          <button class="btn btn-ghost btn-sm" onclick="confirmLogout()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg> Log out</button>
+        </div>
       </div>
 
       <div class="section-card danger-card">
@@ -2268,6 +2348,13 @@ function loadSettingsPage(){
   if(ts)ts.value=ls_get("bf_theme")||"dark";
   if(ls)ls.value=ls_get("bf_layout")||"default";
   _markActiveSwatch(ls_get("bf_theme")||"dark");
+
+  // populate session card
+  if(currentUser){
+    const sd=id("sess-user-display");if(sd)sd.textContent="Logged in as "+currentUser.username;
+    const se=id("sess-email-display");if(se)se.textContent=currentUser.email||"";
+  }
+  loadFonts();
 }
 
 function ls_get(k){return localStorage.getItem(k)}
@@ -2351,14 +2438,16 @@ let VAR_REF_OVERRIDE = null;   // null = use built-in VAR_REF below
 async function loadMeta() {
   if (!API) return;
   try {
-    const [fns, vr, tmpl] = await Promise.all([
+    const [fns, vr, tmpl, fonts] = await Promise.all([
       fetch(API.replace(/\/+$/,"") + "/meta/functions").then(r => r.ok ? r.json() : null).catch(() => null),
       fetch(API.replace(/\/+$/,"") + "/meta/var-ref").then(r => r.ok ? r.json() : null).catch(() => null),
       fetch(API.replace(/\/+$/,"") + "/meta/templates").then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(API.replace(/\/+$/,"") + "/meta/fonts").then(r => r.ok ? r.json() : null).catch(() => null),
     ]);
     if (fns)  FN_DEFS_OVERRIDE = fns;
     if (vr)   VAR_REF_OVERRIDE = vr;
     if (tmpl) TEMPLATES = tmpl;
+    if (fonts) _cachedFonts = fonts;
     // Re-render if already on these panels
     if (curWsTab === "functions")  renderFns();
     if (curWsTab === "variables")  renderVarRef();
@@ -2653,6 +2742,121 @@ function _applyDashCmdFilter(){
 }
 function filterDashCmds(){_applyDashCmdFilter()}
 
+
+/* ── Fonts ── */
+let _cachedFonts = null;
+
+async function loadFonts(){
+  const el=id("fonts-list");if(!el)return;
+  try{
+    const data=await api("/meta/fonts");
+    _cachedFonts=data;
+    renderFonts(data);
+  }catch(e){
+    if(_cachedFonts)renderFonts(_cachedFonts);
+    else el.innerHTML=`<div style="color:var(--muted);font-size:13px">${esc(e.message)}</div>`;
+  }
+}
+
+function renderFonts(data){
+  const el=id("fonts-list");if(!el||!data)return;
+  const groups=[...(data.builtin||[]),...(data.custom||[])];
+  if(!groups.length){el.innerHTML='<div style="color:var(--muted);font-size:13px">No fonts available.</div>';return;}
+  el.innerHTML="";
+  groups.forEach(g=>{
+    const isCustom=g.group==="Custom";
+    const wrap=document.createElement("div");wrap.className="font-group";
+    const lbl=document.createElement("div");lbl.className="font-group-label";
+    lbl.textContent=g.group;wrap.appendChild(lbl);
+    const grid=document.createElement("div");grid.className="font-grid";
+    (g.fonts||[]).forEach(f=>{
+      const card=document.createElement("div");
+      card.className="font-card"+(isCustom?" custom-font":"");
+      const prev=document.createElement("div");prev.className="font-preview";prev.textContent=f.preview||"";
+      const nm=document.createElement("div");nm.className="font-name";nm.textContent=f.name;
+      const al=document.createElement("div");al.className="font-aliases";
+      al.textContent=(f.aliases&&f.aliases.length)?"aliases: "+f.aliases.join(", "):"";
+      card.appendChild(prev);card.appendChild(nm);if(f.aliases&&f.aliases.length)card.appendChild(al);
+      if(isCustom){
+        // show char map
+        if(f.map&&Object.keys(f.map).length){
+          const mg=document.createElement("div");mg.className="font-map-grid";
+          Object.entries(f.map).slice(0,12).forEach(([k,v])=>{
+            const cell=document.createElement("div");cell.className="font-map-cell";
+            cell.innerHTML=`<span class="fmc-k">${esc(k)}</span><span class="fmc-v">${esc(v)}</span>`;
+            mg.appendChild(cell);
+          });
+          if(Object.keys(f.map).length>12){
+            const more=document.createElement("div");more.style.cssText="font-size:10px;color:var(--muted);margin-top:3px";
+            more.textContent="+"+(Object.keys(f.map).length-12)+" more";mg.appendChild(more);
+          }
+          card.appendChild(mg);
+        }
+        const del=document.createElement("button");del.className="font-del-btn";del.title="Delete font";
+        del.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>';
+        del.onclick=()=>deleteCustomFont(f.name);
+        card.appendChild(del);
+      }
+      grid.appendChild(card);
+    });
+    wrap.appendChild(grid);el.appendChild(wrap);
+  });
+}
+
+function openFontCreator(){
+  id("font-creator").classList.remove("hidden");
+  id("fmap-pairs").innerHTML="";
+  id("fc-name").value="";id("fc-aliases").value="";id("fc-err").textContent="";
+  id("fc-preview").textContent="—";
+  addFmapRow();addFmapRow();addFmapRow();
+}
+function closeFontCreator(){id("font-creator").classList.add("hidden")}
+
+function addFmapRow(){
+  const wrap=document.createElement("div");wrap.className="fmap-row";
+  wrap.innerHTML=`<input class="input fmap-key" placeholder="a" maxlength="4" oninput="updateFontPreview()"><span style="color:var(--muted);font-size:13px;flex-shrink:0">→</span><input class="input fmap-val" placeholder="α" maxlength="6" oninput="updateFontPreview()"><button onclick="this.parentElement.remove();updateFontPreview()" style="background:none;border:none;cursor:pointer;color:var(--muted);padding:4px;flex-shrink:0"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>`;
+  id("fmap-pairs").appendChild(wrap);
+}
+
+function getFmapObj(){
+  const map={};
+  id("fmap-pairs").querySelectorAll(".fmap-row").forEach(row=>{
+    const k=row.querySelector(".fmap-key").value.trim();
+    const v=row.querySelector(".fmap-val").value.trim();
+    if(k&&v)map[k]=v;
+  });
+  return map;
+}
+
+function updateFontPreview(){
+  const map=getFmapObj();
+  const sample="hello world";
+  const out=sample.split("").map(c=>map[c]||c).join("");
+  id("fc-preview").textContent=out||"—";
+}
+
+async function saveCustomFont(){
+  const name=id("fc-name").value.trim();
+  const err=id("fc-err");err.textContent="";
+  if(!name){err.textContent="Font name is required";return}
+  if(/\s/.test(name)){err.textContent="Font name cannot contain spaces";return}
+  const aliases=id("fc-aliases").value.split(",").map(s=>s.trim()).filter(Boolean);
+  const map=getFmapObj();
+  if(!Object.keys(map).length){err.textContent="Add at least one character mapping";return}
+  try{
+    await api("/meta/fonts",{method:"POST",body:JSON.stringify({name,aliases,map})});
+    toast("Font saved","ok");closeFontCreator();loadFonts();
+  }catch(e){err.textContent=e.message}
+}
+
+async function deleteCustomFont(name){
+  if(!confirm(`Delete font "${name}"?`))return;
+  try{
+    await api("/meta/fonts",{method:"DELETE",body:JSON.stringify({name})});
+    toast("Font deleted","info");loadFonts();
+  }catch(e){toast("Delete failed: "+e.message,"err")}
+}
+
 function refreshPanel(){
   if(curPage==="dashboard")loadBots();
   else if(curPage==="workspace"){
@@ -2697,4 +2901,3 @@ function refreshPanel(){
 </script>
 </body>
 </html>
-
